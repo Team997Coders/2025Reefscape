@@ -5,6 +5,9 @@
 package frc.robot;
 
 import swervelib.SwerveModuleConfig;
+
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -44,10 +47,21 @@ public final class Constants {
       public static final double kD = 0;
       public static final double kF = 0;
     }
-    
-    
   }
 
+  public static final class Coral {
+    public static final int leftMotorID = 0;
+    public static final int rightMotorID = 0;
+    public static final int beamBrake1ID = 0;
+    public static final int beamBrake2ID = 0;
+  }
+  
+  public static final class Algae{
+    public static final int spinnyMotorID = 0;
+    public static final int spinnyMotorConfig = 15;
+    public static final int proximitySensorID = 0;
+  }
+  
   public static final class DriveConstants {
     public static final double deadband = 0.08;
     public static final int currentLimit = 40;
@@ -188,3 +202,4 @@ public final class Constants {
     public static final int ledCount = 50;
   }
 }
+
