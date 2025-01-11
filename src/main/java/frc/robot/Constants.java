@@ -27,6 +27,7 @@ public final class Constants {
   public static final class Algae{
     public static final int spinnyMotorID = 0;
     public static final int spinnyMotorConfig = 15;
+    public static final int proximitySensorID = 0;
   }
   public static final class DriveConstants {
     public static final double deadband = 0.08;
