@@ -26,18 +26,26 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 public class Camera
 {
     private PhotonCamera camera;
-    private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
+    private AprilTagFieldLayout aprilTagFieldLayout;
     private PhotonPoseEstimator photonPoseEstimator;
 
     private List<PhotonPipelineResult> results;
 
     public Camera(String cameraName, Transform3d robotToCamera)
     {
+        try{
+            aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource("/Users/Robotics/Documents/Reefscape2.0/2025Reefscape/src/main/java/frc/robot/subsystems/vision/apriltagFieldLayout.json");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
         this.camera = new PhotonCamera(cameraName);
 
         this.photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCamera);
 
         this.results = null;
+
+        
     }
 
     public void update(SwerveDrivePoseEstimator poseEstimator, List<PhotonPipelineResult> results)
