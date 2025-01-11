@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import java.security.spec.EncodedKeySpec;
+
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -8,6 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,7 +26,9 @@ public class Elevator extends SubsystemBase{
     private final SparkBaseConfig leftConfig;
     private final SparkBaseConfig rightConfig;
 
-    private final AbsoluteEncoder absoluteEncoder; 
+    private final RelativeEncoder relativeEncoder;
+
+    private final DigitalInput bottomSwitch;
 
     private final PIDController pid;
 
@@ -43,7 +49,9 @@ public class Elevator extends SubsystemBase{
         leftSparkMax.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         rightSparkMax.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        absoluteEncoder = leftSparkMax.getAbsoluteEncoder();
+        relativeEncoder = leftSparkMax.getEncoder();
+
+        bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchPort);
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD, Constants.ElevatorConstants.PID.kF);
     
@@ -51,15 +59,18 @@ public class Elevator extends SubsystemBase{
 
     }
 
- 
-
+    
     //pidloop
+    private double encoderPosition;
     private double goal; 
     @Override
     public void periodic() {
-        setOutput(pid.calculate(getEncoderAbsolutePosition(), goal));
+        setOutput(pid.calculate(encoderPosition, goal));
     
         loggers();
+
+        encoderPosition = bottomSwitch.get() ? 0 : encoderPosition;
+        setEncoderPosition(encoderPosition);   
     }
 
 
@@ -92,10 +103,17 @@ public class Elevator extends SubsystemBase{
         goal = input;
     }
 
-    //get absolute encoder rotations 
-    public double getEncoderAbsolutePosition() {
-    return absoluteEncoder.getPosition();
+    public void setEncoderPosition(double position) {
+        relativeEncoder.setPosition(position);
     }
+
+    public double getEncoderPosition() {
+        return relativeEncoder.getPosition();
+    }
+
+    // public double getEncoderAbsPosition() {
+    // return relativeEncoder.getPosition();
+    // }
 
  
     //move elevator to DOWN position
@@ -138,8 +156,8 @@ public class Elevator extends SubsystemBase{
 /*LOGGERS*/
 
     private void loggers() {
-        SmartDashboard.putNumber("absolute encoder position", getEncoderAbsolutePosition());
-        SmartDashboard.putNumber("pid goal", goal);
+        SmartDashboard.putNumber("elevator encoder position", getEncoderPosition());
+        SmartDashboard.putNumber("elevator pid goal", goal);
         SmartDashboard.putString("elevatorstate", elevatorState.toString());
         SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);

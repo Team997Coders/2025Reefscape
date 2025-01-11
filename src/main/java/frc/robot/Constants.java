@@ -28,6 +28,8 @@ public final class Constants {
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
 
+    public static final int bottomSwitchPort = 0;
+
     public static final class SetpointRotations {
     public static final double DOWN = 0;
     public static final double L1 = 0;
