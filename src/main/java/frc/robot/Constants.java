@@ -26,7 +26,7 @@ public final class Constants {
     public static final int rightSparkMaxID = 0;
 
     public static final boolean leftSparkMaxInverted = false;
-    public static final boolean rightSparkMaxInverted = false;
+    public static final boolean rightSparkMaxInverted = true;
 
     public static final class SetpointRotations {
     public static final double DOWN = 0;
