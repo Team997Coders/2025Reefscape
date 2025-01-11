@@ -65,11 +65,19 @@ public class Elevator extends SubsystemBase{
 
    //elevator states
     public enum ElevatorState {
-        DOWN,
-        L1,
-        L2,
-        L3,
-        L4
+        DOWN("DOWN", Constants.ElevatorConstants.SetpointRotations.DOWN),
+        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1),
+        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2),
+        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3),
+        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4);
+
+        double rotations; 
+        String name;
+
+        ElevatorState(String name, double rotations) {
+            this.rotations = rotations;
+            this.name = name;
+        }
     }
 
 
@@ -78,7 +86,6 @@ public class Elevator extends SubsystemBase{
     //set motor outputs
     public void setOutput(double output) {
         leftSparkMax.set(output);
-        rightSparkMax.set(output);
     }
 
     //get absolute encoder rotations 
@@ -90,35 +97,38 @@ public class Elevator extends SubsystemBase{
     //move elevator to DOWN position
     public void goToDOWN() {
         elevatorState = ElevatorState.DOWN;
-        goal = Constants.ElevatorConstants.SetpointRotations.DOWN;
+        goal = elevatorState.rotations;
     }
 
 
     //move elevator to L1 position 
     public void goToL1() {
         elevatorState = ElevatorState.L1;
-        goal = Constants.ElevatorConstants.SetpointRotations.L1;
+        goal = elevatorState.rotations;
     }
 
 
     //move elevator to L2 position
     public void goToL2() {
         elevatorState = ElevatorState.L2;
-        goal = Constants.ElevatorConstants.SetpointRotations.L2;
+        goal = elevatorState.rotations;
     }
 
     //move elevator to L3 position
     public void goToL3() {
         elevatorState = ElevatorState.L3;
-        goal = Constants.ElevatorConstants.SetpointRotations.L3;
+        goal = elevatorState.rotations;
     }
 
     //move elevator to L4 position
     public void goToL4() {
         elevatorState = ElevatorState.L4;
-        goal = Constants.ElevatorConstants.SetpointRotations.L4;
+        goal = elevatorState.rotations;
     }
 
+    public String getElevatorState() {
+        return elevatorState.name;
+    }
     
 /*LOGGERS*/
 }
