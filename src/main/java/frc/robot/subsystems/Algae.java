@@ -27,8 +27,6 @@ public class Algae extends SubsystemBase{
         spinnyMotor.set(speed);
     }
     
-    public int
-    
 }
 
 
