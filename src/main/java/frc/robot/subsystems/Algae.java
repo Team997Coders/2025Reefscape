@@ -24,7 +24,7 @@ public class Algae extends SubsystemBase{
 
         proximitySensor = new DigitalInput(Constants.Algae.proximitySensorID);
     
-
+    }
     @Override
     public void periodic() {
         loggers();
@@ -42,5 +42,4 @@ public class Algae extends SubsystemBase{
         SmartDashboard.putBoolean("algae proximity sensor", getProximitySensor());
     }
 }
-
 
