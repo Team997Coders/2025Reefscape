@@ -1,16 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkBaseConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -50,6 +48,7 @@ public class Elevator extends SubsystemBase{
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD, Constants.ElevatorConstants.PID.kF);
     
         elevatorState = ElevatorState.DOWN;
+
     }
 
  
@@ -59,7 +58,8 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         setOutput(pid.calculate(getEncoderAbsolutePosition(), goal));
-         
+    
+        loggers();
     }
 
 
@@ -86,6 +86,10 @@ public class Elevator extends SubsystemBase{
     //set motor outputs
     public void setOutput(double output) {
         leftSparkMax.set(output);
+    }
+
+    public void manualControl(double input) {
+        goal = input;
     }
 
     //get absolute encoder rotations 
@@ -129,6 +133,18 @@ public class Elevator extends SubsystemBase{
     public String getElevatorState() {
         return elevatorState.name;
     }
-    
+
+
 /*LOGGERS*/
+
+    private void loggers() {
+        SmartDashboard.putNumber("absolute encoder position", getEncoderAbsolutePosition());
+        SmartDashboard.putNumber("pid goal", goal);
+        SmartDashboard.putString("elevatorstate", elevatorState.toString());
+        SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
+        SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
+        SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
+        SmartDashboard.putNumber("elevator kf", Constants.ElevatorConstants.PID.kF);
+    }
+
 }
