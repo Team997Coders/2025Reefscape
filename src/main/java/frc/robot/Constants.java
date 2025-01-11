@@ -21,6 +21,13 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class Coral {
+    public static final int leftMotorID = 0;
+    public static final int rightMotorID = 0;
+    public static final int beamBrake1ID = 0;
+    public static final int beamBrake2ID = 0;
+  }
+  
   public static final class DriveConstants {
     public static final double deadband = 0.08;
     public static final int currentLimit = 40;
