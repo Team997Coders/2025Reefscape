@@ -6,9 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorAutomaticControl;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
@@ -69,6 +71,8 @@ public class RobotContainer {
   private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(frontCamera, backCamera));
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
+  private final Elevator elevator = new Elevator();
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -83,6 +87,8 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
+
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, driveStick.povUp(null).getAsBoolean(), driveStick.povDown(null).getAsBoolean()));
 
     configureBindings();
   }
@@ -183,6 +189,9 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
     JoystickButton button_a = new JoystickButton(driveStick, 1);
     button_a.onTrue(goToTag).onFalse(stop);
+
+    
+
   }
 
   /**

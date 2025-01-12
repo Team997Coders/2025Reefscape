@@ -76,18 +76,33 @@ public class Elevator extends SubsystemBase{
 
    //elevator states
     public enum ElevatorState {
-        DOWN("DOWN", Constants.ElevatorConstants.SetpointRotations.DOWN),
-        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1),
-        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2),
-        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3),
-        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4);
+        DOWN("DOWN", Constants.ElevatorConstants.SetpointRotations.DOWN, 0),
+        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 1),
+        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 2),
+        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 3),
+        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 4);
 
         double rotations; 
         String name;
+        int index;
 
-        ElevatorState(String name, double rotations) {
+        ElevatorState(String name, double rotations, int index) {
             this.rotations = rotations;
             this.name = name;
+            this.index = index;
+        }
+
+        public static ElevatorState findByIndex(int index)
+        {
+            ElevatorState[] values = ElevatorState.values();
+            for(int i = 0; i < values.length; i++)
+            {
+                if(values[i].index == index)
+                {
+                    return values[i];
+                }
+            }
+            throw new Error();
         }
     }
 
@@ -148,8 +163,17 @@ public class Elevator extends SubsystemBase{
         goal = elevatorState.rotations;
     }
 
-    public String getElevatorState() {
-        return elevatorState.name;
+    public ElevatorState getElevatorState() {
+        return elevatorState;
+    }
+
+    public int getElevatorStateIndex() {
+        return elevatorState.index;
+    }
+
+    public void setStateByIndex(int desiredIndex) {
+        elevatorState = ElevatorState.findByIndex(desiredIndex);
+        goal = elevatorState.rotations;
     }
 
 
@@ -158,7 +182,7 @@ public class Elevator extends SubsystemBase{
     private void loggers() {
         SmartDashboard.putNumber("elevator encoder position", getEncoderPosition());
         SmartDashboard.putNumber("elevator pid goal", goal);
-        SmartDashboard.putString("elevatorstate", elevatorState.toString());
+        SmartDashboard.putString("elevatorstate", getElevatorState().toString());
         SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
