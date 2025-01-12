@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase{
 
     public Elevator() {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
-        rightSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
+        rightSparkMax = new SparkMax(Constants.ElevatorConstants.rightSparkMaxID, MotorType.kBrushless);
 
         leftConfig = new SparkMaxConfig();
         rightConfig = new SparkMaxConfig();
@@ -51,9 +51,9 @@ public class Elevator extends SubsystemBase{
 
         relativeEncoder = leftSparkMax.getEncoder();
 
-        bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchPort);
+        bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
 
-        pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD, Constants.ElevatorConstants.PID.kF);
+        pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
     
         elevatorState = ElevatorState.DOWN;
 
@@ -186,7 +186,6 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
-        SmartDashboard.putNumber("elevator kf", Constants.ElevatorConstants.PID.kF);
     }
 
 }

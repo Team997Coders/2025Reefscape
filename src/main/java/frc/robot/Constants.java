@@ -25,13 +25,13 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class ElevatorConstants{
-    public static final int leftSparkMaxID = 0;
+    public static final int leftSparkMaxID = 0; //CAN
     public static final int rightSparkMaxID = 0;
 
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
 
-    public static final int bottomSwitchPort = 0;
+    public static final int bottomSwitchID = 0; //DIO
 
     public static final class SetpointRotations {
     public static final double DOWN = 0;
@@ -45,21 +45,20 @@ public final class Constants {
       public static final double kP = 0;
       public static final double kI = 0;
       public static final double kD = 0;
-      public static final double kF = 0;
     }
   }
 
   public static final class Coral {
-    public static final int leftMotorID = 0;
+    public static final int leftMotorID = 0; //CAN
     public static final int rightMotorID = 0;
-    public static final int beamBrake1ID = 0;
+    public static final int beamBrake1ID = 0; //DIO
     public static final int beamBrake2ID = 0;
   }
   
   public static final class Algae{
-    public static final int spinnyMotorID = 0;
+    public static final int spinnyMotorID = 0; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 0;
+    public static final int proximitySensorID = 0; //DIO
   }
   
   public static final class DriveConstants {
