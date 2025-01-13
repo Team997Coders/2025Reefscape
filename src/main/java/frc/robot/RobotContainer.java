@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorAutomaticControl;
+import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
@@ -72,6 +73,8 @@ public class RobotContainer {
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
   private final Elevator elevator = new Elevator();
+
+  private boolean isManualElevatorControl = false;
   
 
   /**
@@ -88,7 +91,7 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
 
-    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, driveStick.povUp(null).getAsBoolean(), driveStick.povDown(null).getAsBoolean()));
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp().getAsBoolean(), c_driveStick.povDown().getAsBoolean()));
 
     configureBindings();
   }
@@ -182,6 +185,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
+  boolean lastLeftBumper = false;
   private void configureBindings() {
     // Gyro Reset
     //c_driveStick.povUp().onTrue(Commands.runOnce(gyro::reset));
@@ -190,8 +195,7 @@ public class RobotContainer {
     JoystickButton button_a = new JoystickButton(driveStick, 1);
     button_a.onTrue(goToTag).onFalse(stop);
 
-    
-
+   c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, c_driveStick.povUp().getAsBoolean(), c_driveStick.povDown().getAsBoolean()));
   }
 
   /**
