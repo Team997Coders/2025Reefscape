@@ -13,6 +13,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -126,43 +127,6 @@ public class Elevator extends SubsystemBase{
         return relativeEncoder.getPosition();
     }
 
-    // public double getEncoderAbsPosition() {
-    // return relativeEncoder.getPosition();
-    // }
-
- 
-    //move elevator to DOWN position
-    public void goToDOWN() {
-        elevatorState = ElevatorState.DOWN;
-        goal = elevatorState.rotations;
-    }
-
-
-    //move elevator to L1 position 
-    public void goToL1() {
-        elevatorState = ElevatorState.L1;
-        goal = elevatorState.rotations;
-    }
-
-
-    //move elevator to L2 position
-    public void goToL2() {
-        elevatorState = ElevatorState.L2;
-        goal = elevatorState.rotations;
-    }
-
-    //move elevator to L3 position
-    public void goToL3() {
-        elevatorState = ElevatorState.L3;
-        goal = elevatorState.rotations;
-    }
-
-    //move elevator to L4 position
-    public void goToL4() {
-        elevatorState = ElevatorState.L4;
-        goal = elevatorState.rotations;
-    }
-
     public ElevatorState getElevatorState() {
         return elevatorState;
     }
@@ -187,5 +151,13 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
     }
+
+/*RUNNABLE ACTIONS FOR BUTTON BOX*/
+
+    public Command goToStateCommand(ElevatorState state) {
+    return this.runOnce(() -> setStateByIndex(state.index));
+  }
+
+
 
 }

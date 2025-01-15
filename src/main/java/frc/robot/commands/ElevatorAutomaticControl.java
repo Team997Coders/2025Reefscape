@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class ElevatorAutomaticControl extends Command{
     private Elevator elevator;
@@ -56,6 +57,6 @@ public class ElevatorAutomaticControl extends Command{
         upPrevious = upCurrent;
         downPrevious = downCurrent;
 
-        elevator.setStateByIndex(state);
+        elevator.goToStateCommand(ElevatorState.findByIndex(state));
     }    
 }
