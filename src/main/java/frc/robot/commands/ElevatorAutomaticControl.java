@@ -36,14 +36,24 @@ public class ElevatorAutomaticControl extends Command{
     public void execute() {
         boolean upCurrent = up;
         if (upCurrent != upPrevious) {
+            if (state < 4) {
             state = state+1;
+            } else if (state >= 4) {
+                state = 4;
+            }
         } 
-        upPrevious = upCurrent;
+        
 
         boolean downCurrent = down;
         if(downCurrent != downPrevious) {
+            if (state > 0) {
             state = state-1;
+            } else if (state <= 0) {
+                state = 0;
+            }
         }
+
+        upPrevious = upCurrent;
         downPrevious = downCurrent;
 
         elevator.setStateByIndex(state);
