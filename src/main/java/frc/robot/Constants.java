@@ -54,6 +54,8 @@ public final class Constants {
     public static final int rightMotorID = 0;
     public static final int beamBrake1ID = 0;
     public static final int beamBrake2ID = 0;
+    public static final double motorSpeedIntake = 0;
+    public static final double motorSpeedOutTake = 0;
   }
   
   public static final class Algae{

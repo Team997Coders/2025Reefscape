@@ -5,9 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.CoralIntake;
+import frc.robot.commands.CoralOutTake;
 import frc.robot.commands.Drive;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
+import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
@@ -84,9 +87,14 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
 
+
+
     configureBindings();
   }
 
+  private final Coral m_coral = new Coral();
+  private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
+  private final CoralOutTake m_CoralOutTake = new CoralOutTake(m_coral);
   /**
    * {@link edu.wpi.first.math.MathUtil}
    */
