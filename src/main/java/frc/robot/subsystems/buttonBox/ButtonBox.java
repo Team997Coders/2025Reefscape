@@ -8,9 +8,12 @@ import frc.robot.subsystems.buttonBox.buttonCommands.SetPressed;
 public class ButtonBox 
 {
     public FlippySwitch autoDrive;
+    public FlippySwitch autoElevator;
     public FlippySwitch fullAutoCycles;
-    public FlippySwitch scoreSide;
     public FlippySwitch spareFlippySwitch;
+
+    public ButtonyBit leftScore;
+    public ButtonyBit rightScore;
 
     private ButtonyBit level1;
     private ButtonyBit level2;
@@ -53,7 +56,8 @@ public class ButtonBox
         leftSource = new ButtonyBit(joystick, 13);
         rightSource = new ButtonyBit(joystick, 14);
 
-        scoreSide = new FlippySwitch(joystick, 15);
+        rightScore = new ButtonyBit(joystick, 15);
+        leftScore = new ButtonyBit(joystick, 16);
         //-----------------------------------------------------------
 
         reefSide = new ButtonyList(Arrays.asList(side1, side2, side3, side4, side5, side6));

@@ -11,14 +11,16 @@ import frc.robot.subsystems.buttonBox.FlippySwitch;
 public class Pathplanning 
 {
     private ButtonyList reefy;
-    private FlippySwitch scoreySide;
+    private ButtonyBit rightScorey;
+    private ButtonyBit leftScorey;
     private ButtonyBit rightSourcey;
     private ButtonyBit leftSourcey;
 
-    public Pathplanning(ButtonyList reef, FlippySwitch scoreSide, ButtonyBit rightSource, ButtonyBit leftSource)
+    public Pathplanning(ButtonyList reef, ButtonyBit rightScore, ButtonyBit leftScore, ButtonyBit rightSource, ButtonyBit leftSource)
     {
         reefy = reef;
-        scoreySide = scoreSide;
+        rightScorey = rightScore;
+        leftScorey = leftScore;
         rightSourcey = rightSource;
         leftSourcey = leftSource;
     }    
@@ -87,7 +89,32 @@ public class Pathplanning
 
         if (alliance == Alliance.Blue)
         {
-            if (scoreySide.Flipped())
+            if (rightScorey.pressed())
+            {
+                switch (selectedSide)
+                {
+                    case 7:
+                    //side 1
+                    return new Pose2d();
+                    case 8:
+                    //side 2
+                    return new Pose2d();
+                    case 9:
+                    //side 3
+                    return new Pose2d();
+                    case 10:
+                    //side 4
+                    return new Pose2d();
+                    case 11:
+                    //side 5
+                    return new Pose2d();
+                    case 12:
+                    //side 6
+                    return new Pose2d();
+                    default:
+                    throw new noSelectedButton("None of the sides of the reef are selected");
+                }
+            } else if (leftScorey.pressed())
             {
                 switch (selectedSide)
                 {
@@ -114,33 +141,11 @@ public class Pathplanning
                 }
             } else
             {
-                switch (selectedSide)
-                {
-                    case 7:
-                    //side 1
-                    return new Pose2d();
-                    case 8:
-                    //side 2
-                    return new Pose2d();
-                    case 9:
-                    //side 3
-                    return new Pose2d();
-                    case 10:
-                    //side 4
-                    return new Pose2d();
-                    case 11:
-                    //side 5
-                    return new Pose2d();
-                    case 12:
-                    //side 6
-                    return new Pose2d();
-                    default:
-                    throw new noSelectedButton("None of the sides of the reef are selected");
-                }
+                throw new noSelectedButton("Right or left score side has not been selected");
             }
         } else if (alliance == Alliance.Red)   
         {
-            if (scoreySide.Flipped())
+            if (rightScorey.pressed())
             {
                 switch (selectedSide)
                 {
@@ -165,7 +170,7 @@ public class Pathplanning
                     default:
                     throw new noSelectedButton("None of the sides of the reef are selected");
                 }
-            } else
+            } else if (leftScorey.pressed())
             {
                 switch (selectedSide)
                 {
@@ -190,6 +195,9 @@ public class Pathplanning
                     default:
                     throw new noSelectedButton("None of the sides of the reef are selected");
                 }
+            }else
+            {
+                throw new noSelectedButton("Right or left score side has not been selected");
             }
         } else 
         {

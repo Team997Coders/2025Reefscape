@@ -26,7 +26,7 @@ public class AutomaticSystems extends SubsystemBase
     public AutomaticSystems(Joystick joystick, Drivebase _drivebase)
     {
         buttonBox = new ButtonBox(joystick);
-        pathplanny = new Pathplanning(buttonBox.reefSide, buttonBox.scoreSide, buttonBox.rightSource, buttonBox.leftSource);
+        pathplanny = new Pathplanning(buttonBox.reefSide, buttonBox.rightScore, buttonBox.leftScore, buttonBox.rightSource, buttonBox.leftSource);
         status = new Status();
         drivebase = _drivebase;
         alliance = DriverStation.getAlliance().orElseThrow();
@@ -109,7 +109,10 @@ public class AutomaticSystems extends SubsystemBase
         {
             try
             {
-            nextAction(false);
+            nextAction(true);
+            } catch(elevatorNotAtTarget e)
+            {
+                status.callNextAction = true;
             } catch(Exception e)
             {
                 e.printStackTrace();
@@ -255,6 +258,19 @@ public class AutomaticSystems extends SubsystemBase
                 {
                     throw new elevatorNotAtTarget("next command called while elevator not at target");
                 }
+            } else if (status.currentDriveLocation == "source")
+            {
+                if (status.elevatorAction == "finished")
+                {
+                    status.coralIndexGoal = "intake";
+                    status.callNextAction = false;
+                } else
+                {
+                    throw new elevatorNotAtTarget("next command called while elevator not at target");
+                }
+            } else 
+            {
+                throw new noNextAction("current drive location not reef or source");
             }
         }
     }
@@ -263,5 +279,18 @@ public class AutomaticSystems extends SubsystemBase
     public void periodic() {
         automaticDriving();
         automaticSubsystems();
+        if (status.callNextAction)
+        {
+            try
+            {
+            nextAction(false);
+            } catch(elevatorNotAtTarget e)
+            {
+                status.callNextAction = true;
+            } catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }
