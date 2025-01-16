@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Coral extends SubsystemBase{
@@ -17,7 +18,23 @@ public class Coral extends SubsystemBase{
         rightMotor = new SparkMax(Constants.Coral.rightMotorID, MotorType.kBrushless);
         beamBrake1 = new DigitalInput(Constants.Coral.beamBrake1ID);
         beamBrake2 = new DigitalInput(Constants.Coral.beamBrake2ID);
+
     }
+
+    public Command manualMoveCoralMotorsIntake() {
+        return this.runOnce(() -> spinBothMotors(Constants.Coral.motorSpeedIntake));
+
+    }
+    public Command manualMoveCoralMotorsOutake() {
+        return this.runOnce(() -> spinBothMotors(Constants.Coral.motorSpeedOutTake));
+    
+    }
+        
+    public void spinBothMotors(double speed) {
+        SpinLeftMotor(speed);
+        SpinRightMotor(speed);
+    }
+
     public void SpinLeftMotor(double speed){
         leftMotor.set(speed);
     }
