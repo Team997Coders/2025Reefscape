@@ -75,11 +75,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the trigger bindings
-    drivebase.setDefaultCommand(
-        new Drive(
-            drivebase,
-            () -> getScaledXY(),
-            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
+    //drivebase.setDefaultCommand(
+    //    new Drive(
+    //        drivebase,
+    //        () -> getScaledXY(),
+    //        () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);

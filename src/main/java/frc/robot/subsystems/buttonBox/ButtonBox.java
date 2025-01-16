@@ -12,6 +12,8 @@ public class ButtonBox
     public FlippySwitch fullAutoCycles;
     public FlippySwitch spareFlippySwitch;
 
+    public ButtonyBit go;
+
     public ButtonyBit leftScore;
     public ButtonyBit rightScore;
 
@@ -58,6 +60,9 @@ public class ButtonBox
 
         rightScore = new ButtonyBit(joystick, 15);
         leftScore = new ButtonyBit(joystick, 16);
+
+        go = new ButtonyBit(joystick, 17);
+
         //-----------------------------------------------------------
 
         reefSide = new ButtonyList(Arrays.asList(side1, side2, side3, side4, side5, side6));

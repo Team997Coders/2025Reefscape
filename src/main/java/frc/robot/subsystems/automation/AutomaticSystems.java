@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.Drive;
 import frc.robot.commands.goToLocation;
 import frc.robot.exceptions.elevatorNotAtTarget;
 import frc.robot.exceptions.noNextAction;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.buttonBox.ButtonBox;
+import frc.robot.subsystems.buttonBox.buttonCommands.goPressed;
 
 public class AutomaticSystems extends SubsystemBase
 {
@@ -22,14 +24,21 @@ public class AutomaticSystems extends SubsystemBase
     private Drivebase drivebase;
     private Alliance alliance;
     private Command currentDriveCommand;
+    private Command manualDriveCommand;
+    public boolean goClick;
+    private Command goPressedCommand;
 
-    public AutomaticSystems(Joystick joystick, Drivebase _drivebase)
+    public AutomaticSystems(Joystick joystick, Drivebase _drivebase, Command driveCommand)
     {
         buttonBox = new ButtonBox(joystick);
         pathplanny = new Pathplanning(buttonBox.reefSide, buttonBox.rightScore, buttonBox.leftScore, buttonBox.rightSource, buttonBox.leftSource);
         status = new Status();
         drivebase = _drivebase;
         alliance = DriverStation.getAlliance().orElseThrow();
+        manualDriveCommand = driveCommand;
+        goPressedCommand = new goPressed(this);
+        buttonBox.go.onTrue(goPressedCommand);
+        goClick = false;
     }
 
     public void automaticDriving()
@@ -51,6 +60,7 @@ public class AutomaticSystems extends SubsystemBase
                         {
                             currentDriveCommand = new goToLocation(drivebase, pathplanny.getSourceLocation(alliance));
                             status.currentDriveAction = "source";
+                            status.currentDriveLocation = "moving";
                         } catch(Exception e)
                         {
                             e.printStackTrace();
@@ -65,6 +75,7 @@ public class AutomaticSystems extends SubsystemBase
                     {
                         status.currentDriveAction = "finished";
                         status.currentDriveLocation = "reef";
+                        status.currentDriveLocation = "moving";
                     }
                 } else
                 {
@@ -74,6 +85,7 @@ public class AutomaticSystems extends SubsystemBase
                         {
                             currentDriveCommand = new goToLocation(drivebase, pathplanny.getReefLocation(alliance));
                             status.currentDriveAction = "reef";
+                            status.currentDriveLocation = "moving";
                         } catch(Exception e)
                         {
                             e.printStackTrace();
@@ -277,19 +289,51 @@ public class AutomaticSystems extends SubsystemBase
 
     @Override
     public void periodic() {
-        automaticDriving();
-        automaticSubsystems();
+        if (!buttonBox.autoDrive.Flipped())
+        {
+            manualDriveCommand.schedule();
+        } else
+        {
+            manualDriveCommand.cancel();
+            automaticDriving();
+        }
+        if (!buttonBox.autoElevator.Flipped())
+        {
+            //Manual Elevator command schedule 
+            //Manual Intake command schedule
+        } else
+        {
+            //Manual Elevator command cancel 
+            //Manual Intake command cancel
+            automaticSubsystems();
+        }
         if (status.callNextAction)
         {
-            try
+            if (buttonBox.fullAutoCycles.Flipped())
             {
-            nextAction(false);
-            } catch(elevatorNotAtTarget e)
+                try
+                {
+                nextAction(false);
+                } catch(elevatorNotAtTarget e)
+                {
+                    status.callNextAction = true;
+                } catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            } else
             {
-                status.callNextAction = true;
-            } catch(Exception e)
-            {
-                e.printStackTrace();
+                if (goClick)
+                {
+                    goClick = false;
+                    try{
+                    nextAction(true);
+                    nextAction(false);
+                    } catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
