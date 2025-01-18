@@ -9,6 +9,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
@@ -70,6 +71,8 @@ public class RobotContainer {
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
 
+  private final AutomaticSystems systems;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -80,6 +83,13 @@ public class RobotContainer {
     //        drivebase,
     //        () -> getScaledXY(),
     //        () -> scaleRotationAxis(driveStick.getRawAxis(4))));
+
+    systems = new AutomaticSystems(driveStick, drivebase, new Drive(
+      drivebase,
+      () -> getScaledXY(),
+      () -> scaleRotationAxis(driveStick.getRawAxis(4))));
+
+    
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);

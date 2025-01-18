@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.Drive;
@@ -28,7 +29,7 @@ public class AutomaticSystems extends SubsystemBase
     public boolean goClick;
     private Command goPressedCommand;
 
-    public AutomaticSystems(Joystick joystick, Drivebase _drivebase, Command driveCommand)
+    public AutomaticSystems(XboxController joystick, Drivebase _drivebase, Command driveCommand)
     {
         buttonBox = new ButtonBox(joystick);
         pathplanny = new Pathplanning(buttonBox.reefSide, buttonBox.rightScore, buttonBox.leftScore, buttonBox.rightSource, buttonBox.leftSource);
