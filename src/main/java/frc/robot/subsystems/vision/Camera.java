@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
@@ -32,25 +33,35 @@ public class Camera
 
     public Camera(String cameraName, Transform3d robotToCamera)
     {
-        aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        try{
+            aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource("/Users/Robotics/Documents/Reefscape2.0/2025Reefscape/src/main/java/frc/robot/subsystems/vision/apriltagFieldLayout.json");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
 
         this.camera = new PhotonCamera(cameraName);
 
         this.photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCamera);
 
         this.results = null;
+
+        
     }
 
     public void update(SwerveDrivePoseEstimator poseEstimator, List<PhotonPipelineResult> results)
     {
         this.results = results;
-        for (PhotonPipelineResult result: results)
+        SmartDashboard.putNumber("result size", this.results.size());
+        if (!this.results.isEmpty())
         {
-            Optional<EstimatedRobotPose> estimatedRobotPose = this.photonPoseEstimator.update(result);
-            if (estimatedRobotPose.isPresent())
+            for (PhotonPipelineResult result: results)
             {
-                poseEstimator.addVisionMeasurement(estimatedRobotPose.orElseThrow().estimatedPose.toPose2d(), result.getTimestampSeconds());
-            }        
+                Optional<EstimatedRobotPose> estimatedRobotPose = this.photonPoseEstimator.update(result);
+                if (estimatedRobotPose.isPresent())
+                {
+                    poseEstimator.addVisionMeasurement(estimatedRobotPose.orElseThrow().estimatedPose.toPose2d(), result.getTimestampSeconds());
+                }
+            }
         } 
     }
 
