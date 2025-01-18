@@ -8,39 +8,28 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.CoralOutTake;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorAutomaticControl;
+import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
-
 import java.util.Arrays;
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.events.PointTowardsZoneTrigger;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -66,12 +55,17 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser;
 
-  private static final Camera frontCamera = new Camera("pineapple", new Transform3d(new Translation3d(0.254, 0, 0.1524), new Rotation3d(0, -0.785, 0)));
-  private static final Camera backCamera = new Camera("dragonfruit", new Transform3d(new Translation3d(-0.254, 0, 0.1524), new Rotation3d(Math.PI, -0.785, 0)));
+  private static final Camera frontCamera = new Camera("pineapple",
+      new Transform3d(new Translation3d(0.254, 0, 0.1524), new Rotation3d(0, -0.785, 0)));
+  private static final Camera backCamera = new Camera("dragonfruit",
+      new Transform3d(new Translation3d(-0.254, 0, 0.1524), new Rotation3d(Math.PI, -0.785, 0)));
 
   private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(frontCamera, backCamera));
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
+  private final Elevator elevator = new Elevator();
+
+  private boolean isManualElevatorControl = false;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -87,7 +81,12 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
 
+<<<<<<< HEAD
 
+=======
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp().getAsBoolean(),
+        c_driveStick.povDown().getAsBoolean()));
+>>>>>>> dev
 
     configureBindings();
   }
@@ -184,13 +183,19 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
+  boolean lastLeftBumper = false;
+
   private void configureBindings() {
     // Gyro Reset
-    //c_driveStick.povUp().onTrue(Commands.runOnce(gyro::reset));
+    // c_driveStick.povUp().onTrue(Commands.runOnce(gyro::reset));
     Command goToTag = new goToTag(drivebase, frontCamera, 0.0);
     Command stop = new stop(goToTag);
     JoystickButton button_a = new JoystickButton(driveStick, 1);
     button_a.onTrue(goToTag).onFalse(stop);
+
+    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, c_driveStick.povUp().getAsBoolean(),
+        c_driveStick.povDown().getAsBoolean()));
   }
 
   /**
