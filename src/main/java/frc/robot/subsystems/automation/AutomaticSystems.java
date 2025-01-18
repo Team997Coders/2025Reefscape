@@ -11,10 +11,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.CoralIntake;
+import frc.robot.commands.CoralManualControl;
 import frc.robot.commands.CoralOutTake;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorAutomaticControl;
+import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToLocation;
 import frc.robot.exceptions.elevatorNotAtTarget;
 import frc.robot.exceptions.noNextAction;
@@ -27,25 +31,31 @@ import frc.robot.subsystems.buttonBox.buttonCommands.goPressed;
 
 public class AutomaticSystems extends SubsystemBase
 {
-    private Pathplanning pathplanny;
+    private Pathplanning pathplanning;
     private ButtonBox buttonBox;
     private Status status;
     private Drivebase drivebase;
     private Alliance alliance;
-    private Command currentDriveCommand;
-    private Command manualDriveCommand;
+    
     public boolean goClick;
-    private Command goPressedCommand;
+    
     private Coral coral;
     private Elevator elevator;
-    private Command coralIntakeCommand;
+    
     private boolean beamBreakTriggered;
     private Command coralShootCommand;
     private XboxController driveController;
+    private Command coralIntakeCommand;
+    private Command goPressedCommand;
+    private Command currentDriveCommand;
+    private Command manualDriveCommand;
+    private Command manualElevatorCommand;
+    private Command semiAutomaticElevatorCommand;
+    private Command manualCoralCommand;
 
-    public AutomaticSystems(XboxController joystick, Drivebase _drivebase, Command driveCommand, Coral coraly, Elevator elevatory, XboxController driveyController)
+    public AutomaticSystems(XboxController box, Drivebase _drivebase, Command driveCommand, Coral coraly, Elevator elevatory, XboxController driveyController, CommandXboxController c_driveyController)
     {
-        buttonBox = new ButtonBox(joystick);
+        buttonBox = new ButtonBox(box);
         pathplanny = new Pathplanning(buttonBox.reefSide, buttonBox.rightScore, buttonBox.leftScore, buttonBox.rightSource, buttonBox.leftSource);
         status = new Status();
         drivebase = _drivebase;
@@ -60,6 +70,9 @@ public class AutomaticSystems extends SubsystemBase
         coralShootCommand = new CoralOutTake(coral);
         beamBreakTriggered = false;
         driveController = driveyController;
+        manualElevatorCommand = new ElevatorManualControl(elevator, () -> c_driveyController.povUp().getAsBoolean(), () -> c_driveyController.povDown().getAsBoolean());
+        semiAutomaticElevatorCommand = new ElevatorAutomaticControl(elevator, () -> c_driveyController.povUp().getAsBoolean(), () -> c_driveyController.povDown().getAsBoolean());
+        manualCoralCommand = new CoralManualControl(coral, driveController);
     }
 
     public void automaticDriving()
@@ -319,40 +332,33 @@ public class AutomaticSystems extends SubsystemBase
 
         if (!buttonBox.fullAutoElevator.Flipped())
         {
-            if (driveController.getAButton())
-            {
-                coral.spinBothMotors(Constants.Coral.motorSpeedIntake);
-            } else if (driveController.getBButton())
-            {
-                coral.spinBothMotors(Constants.Coral.motorSpeedOutTake);
-            } else if (driveController.getXButton())
-            {
-                coral.spinBothMotors(-Constants.Coral.motorSpeedIntake);
-            } else
-            {
-                coral.spinBothMotors(0);
-            }
+            manualCoralCommand.schedule();
 
             if (buttonBox.semiAutoElevator.Flipped())
             {
-                //Elevator goes to specific levels
+                manualElevatorCommand.cancel();
+                semiAutomaticElevatorCommand.schedule();
+                elevator.pidControl();
             } else
             {
-                //Elevator fully manual: spin motors
+                manualElevatorCommand.schedule();
+                semiAutomaticElevatorCommand.cancel();
             }
         } else
         {
-            //Manual Elevator command cancel 
-            //Manual Intake command cancel
+            manualCoralCommand.cancel();
+            manualElevatorCommand.cancel();
+            semiAutomaticElevatorCommand.cancel();
             automaticSubsystems();
+            elevator.pidControl();
         }
-        if (status.callNextAction)
+        if (buttonBox.fullAutoCycles.Flipped())
         {
-            if (buttonBox.fullAutoCycles.Flipped())
+            if (status.callNextAction)
             {
                 try
                 {
-                nextAction(false);
+                    nextAction(false);
                 } catch(elevatorNotAtTarget e)
                 {
                     status.callNextAction = true;
@@ -360,18 +366,21 @@ public class AutomaticSystems extends SubsystemBase
                 {
                     e.printStackTrace();
                 }
-            } else
+            }        
+        } else
+        {
+            if (goClick)
             {
-                if (goClick)
-                {
-                    goClick = false;
-                    try{
+                goClick = false;
+                try{
                     nextAction(true);
                     nextAction(false);
-                    } catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+                } catch(elevatorNotAtTarget e)
+                {
+                    status.callNextAction = true;
+                } catch(Exception e)
+                {
+                    e.printStackTrace();
                 }
             }
         }

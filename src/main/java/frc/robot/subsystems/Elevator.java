@@ -67,12 +67,14 @@ public class Elevator extends SubsystemBase{
     private double goal; 
     @Override
     public void periodic() {
-        setOutput(pid.calculate(encoderPosition, goal));
-    
         loggers();
-
         encoderPosition = bottomSwitch.get() ? 0 : encoderPosition;
         setEncoderPosition(encoderPosition);   
+    }
+
+    public void pidControl()
+    {
+        setOutput(pid.calculate(encoderPosition, goal));
     }
 
 

@@ -9,6 +9,7 @@ public class CoralIntake extends Command {
 
     public CoralIntake(Coral coral){
         m_coral = coral;
+        addRequirements(coral);
     }
 
 

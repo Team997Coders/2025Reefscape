@@ -41,15 +41,6 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.vision.Camera;
-import frc.robot.subsystems.vision.CameraBlock;
-import java.util.Arrays;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -105,9 +96,11 @@ public class RobotContainer {
   final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private boolean isManualElevatorControl = false;
-
-  private final AutomaticSystems systems;
+  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
+      drivebase,
+      () -> getScaledXY(),
+      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
+      m_coral, elevator, driveStick, c_driveStick);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -120,17 +113,8 @@ public class RobotContainer {
     //        () -> getScaledXY(),
     //        () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    systems = new AutomaticSystems(driveStick, drivebase, new Drive(
-      drivebase,
-      () -> getScaledXY(),
-      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
-      m_coral, elevator, box);
-
     //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
     //   () -> c_driveStick.povDown().getAsBoolean()));
-
-    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
-       () -> c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -237,8 +221,8 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_algaeCommandIntake);
     m_driverController.b().whileTrue(m_algaeCommandOutTake);
 
-    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-        ()->c_driveStick.povDown().getAsBoolean()));
+    //c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    //    ()->c_driveStick.povDown().getAsBoolean()));
   }
 
   /**

@@ -8,6 +8,7 @@ public class CoralOutTake extends Command{
 
     public CoralOutTake(Coral coral){
         m_coral = coral;
+        addRequirements(coral);
     }
 
 

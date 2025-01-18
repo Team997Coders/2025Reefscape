@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -7,7 +9,7 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 public class ElevatorAutomaticControl extends Command{
     private Elevator elevator;
 
-    private int state; // elevator state: (0, down) (1, L1)... etc
+    private int state; // elevator state: (0, down) (1, Source) (2, L1)... etc
 
     private BooleanSupplier up;
     private BooleanSupplier down;
@@ -34,17 +36,17 @@ public class ElevatorAutomaticControl extends Command{
     @Override
     public void execute() {
         boolean upCurrent = up.getAsBoolean();
-        if (upCurrent != upPrevious) {
-            if (state < 4) {
+        if (upCurrent && !upPrevious) {
+            if (state < 5) {
             state = state+1;
-            } else if (state >= 4) {
-                state = 4;
+            } else if (state >= 5) {
+                state = 5;
             }
         } 
         
 
         boolean downCurrent = down.getAsBoolean();
-        if(downCurrent != downPrevious) {
+        if(downCurrent && !downPrevious) {
             if (state > 0) {
             state = state-1;
             } else if (state <= 0) {
