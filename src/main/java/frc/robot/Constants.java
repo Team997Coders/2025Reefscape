@@ -63,6 +63,7 @@ public final class Constants {
     public static final int spinnyMotorID = 0; //CAN
     public static final int spinnyMotorConfig = 15;
     public static final int proximitySensorID = 0; //DIO
+    public static final double motorSpin = 0;
   }
   
   public static final class DriveConstants {
