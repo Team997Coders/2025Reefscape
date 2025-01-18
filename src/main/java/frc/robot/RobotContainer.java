@@ -91,7 +91,7 @@ public class RobotContainer {
   private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(frontCamera, backCamera));
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
-  private final Elevator elevator = new Elevator();
+  // private final Elevator elevator = new Elevator();
 
   private boolean isManualElevatorControl = false;
 
@@ -99,15 +99,15 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the trigger bindings
-    //drivebase.setDefaultCommand(
-    //    new Drive(
-    //        drivebase,
-    //        () -> getScaledXY(),
-    //        () -> scaleRotationAxis(driveStick.getRawAxis(4))));
+   // Configure the trigger bindings
+    drivebase.setDefaultCommand(
+       new Drive(
+           drivebase,
+           () -> getScaledXY(),
+           () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
-       () -> c_driveStick.povDown().getAsBoolean()));
+    // elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
+    //    () -> c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -116,15 +116,15 @@ public class RobotContainer {
   }
 
 
-  private final Coral m_coral = new Coral();
-  private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
-  private final CoralOutTake m_CoralOutTake = new CoralOutTake(m_coral);
+  // private final Coral m_coral = new Coral();
+  // private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
+  // private final CoralOutTake m_CoralOutTake = new CoralOutTake(m_coral);
   
-  private final Algae m_algae = new Algae();
-  private final AlgaeCommandIntake m_algaeCommandIntake = new AlgaeCommandIntake(m_algae);
-  private final AlgaeCommandOutTake m_algaeCommandOutTake = new AlgaeCommandOutTake(m_algae);
-  final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  // private final Algae m_algae = new Algae();
+  // private final AlgaeCommandIntake m_algaeCommandIntake = new AlgaeCommandIntake(m_algae);
+  // private final AlgaeCommandOutTake m_algaeCommandOutTake = new AlgaeCommandOutTake(m_algae);
+  // final CommandXboxController m_driverController =
+  //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /**
    * {@link edu.wpi.first.math.MathUtil}
@@ -225,11 +225,11 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
     JoystickButton button_a = new JoystickButton(driveStick, 1);
     button_a.onTrue(goToTag).onFalse(stop);
-    m_driverController.a().whileTrue(m_algaeCommandIntake);
-    m_driverController.b().whileTrue(m_algaeCommandOutTake);
+    // m_driverController.a().whileTrue(m_algaeCommandIntake);
+    // m_driverController.b().whileTrue(m_algaeCommandOutTake);
 
-    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-        ()->c_driveStick.povDown().getAsBoolean()));
+    // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    //     ()->c_driveStick.povDown().getAsBoolean()));
   }
 
   /**
