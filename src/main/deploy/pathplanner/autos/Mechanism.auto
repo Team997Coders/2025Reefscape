@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rotato2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "fly"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rotato2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
