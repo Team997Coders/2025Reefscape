@@ -3,6 +3,7 @@ package frc.robot.subsystems.buttonBox;
 import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.buttonBox.buttonCommands.SetPressed;
 
 public class ButtonBox 
@@ -35,7 +36,7 @@ public class ButtonBox
     public ButtonyList reefSide;
     public ButtonyList elevatorLevel;
 
-    public ButtonBox(Joystick joystick)
+    public ButtonBox(XboxController joystick)
     {
         //TODO: NEED TO SET BUTTON NUMBERS TO BE CORRECT, THEY ARE NOT
         //----------------------------------------------------------
