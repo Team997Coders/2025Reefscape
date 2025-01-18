@@ -9,13 +9,13 @@ public class ElevatorAutomaticControl extends Command{
 
     private int state; // elevator state: (0, down) (1, L1)... etc
 
-    private boolean up;
-    private boolean down;
+    private BooleanSupplier up;
+    private BooleanSupplier down;
     
     private boolean upPrevious;
     private boolean downPrevious;
 
-    public ElevatorAutomaticControl(Elevator elevator, boolean up, boolean down) {
+    public ElevatorAutomaticControl(Elevator elevator, BooleanSupplier up, BooleanSupplier down) {
         this.elevator = elevator; 
         this.up = up;
         this.down = down;
@@ -27,13 +27,13 @@ public class ElevatorAutomaticControl extends Command{
     public void initialize() {
         state = elevator.getElevatorStateIndex();
 
-        upPrevious = up;
-        downPrevious = down;
+        upPrevious = up.getAsBoolean();
+        downPrevious = down.getAsBoolean();
     }
 
     @Override
     public void execute() {
-        boolean upCurrent = up;
+        boolean upCurrent = up.getAsBoolean();
         if (upCurrent != upPrevious) {
             if (state < 4) {
             state = state+1;
@@ -43,7 +43,7 @@ public class ElevatorAutomaticControl extends Command{
         } 
         
 
-        boolean downCurrent = down;
+        boolean downCurrent = down.getAsBoolean();
         if(downCurrent != downPrevious) {
             if (state > 0) {
             state = state-1;

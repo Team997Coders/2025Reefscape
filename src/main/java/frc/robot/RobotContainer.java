@@ -126,7 +126,11 @@ public class RobotContainer {
       () -> scaleRotationAxis(driveStick.getRawAxis(4))),
       m_coral, elevator, box);
 
-    
+    //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
+    //   () -> c_driveStick.povDown().getAsBoolean()));
+
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
+       () -> c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -233,8 +237,8 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_algaeCommandIntake);
     m_driverController.b().whileTrue(m_algaeCommandOutTake);
 
-    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, c_driveStick.povUp().getAsBoolean(),
-        c_driveStick.povDown().getAsBoolean()));
+    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+        ()->c_driveStick.povDown().getAsBoolean()));
   }
 
   /**
