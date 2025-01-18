@@ -25,13 +25,13 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class ElevatorConstants{
-    public static final int leftSparkMaxID = 0;
+    public static final int leftSparkMaxID = 0; //CAN
     public static final int rightSparkMaxID = 0;
 
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
 
-    public static final int bottomSwitchPort = 0;
+    public static final int bottomSwitchID = 0; //DIO
 
     public static final class SetpointRotations {
     public static final double DOWN = 0;
@@ -45,21 +45,22 @@ public final class Constants {
       public static final double kP = 0;
       public static final double kI = 0;
       public static final double kD = 0;
-      public static final double kF = 0;
     }
+
+    public static final double defaultManualOutput = 0;
   }
 
   public static final class Coral {
-    public static final int leftMotorID = 0;
+    public static final int leftMotorID = 0; //CAN
     public static final int rightMotorID = 0;
-    public static final int beamBrake1ID = 0;
+    public static final int beamBrake1ID = 0; //DIO
     public static final int beamBrake2ID = 0;
   }
   
   public static final class Algae{
-    public static final int spinnyMotorID = 0;
+    public static final int spinnyMotorID = 0; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 0;
+    public static final int proximitySensorID = 0; //DIO
     public static final double motorSpin = 0;
   }
   
@@ -130,32 +131,6 @@ public final class Constants {
       public static final Translation2d backLeft = new Translation2d(-dist, dist);
       public static final Translation2d backRight = new Translation2d(-dist, -dist);
     }
-  }
-
-  public static final class IntakeConstants {
-    public static final int intakeMotorId = 15;
-    public static final int indexMotorId = 10;
-    public static final double indexSpeed = 0.4;
-    public static final double intakeSpeed = 0.7;
-    public static final int noteSensorId = 0;
-
-    public static final int currentLimit = 30;
-  }
-
-  public static final class ClimberConstants {
-    public static final int leftClimberMotorId = 16;
-    public static final int rightClimberMotorId = 14;
-    public static final int leftClimberSensorId = 2;
-    public static final int rightClimberSensorId = 3;
-  }
-
-  public static final class ShooterConstants {
-    public static final int leftShootMotorID = 11;
-    public static final int rightShootMotorID = 12;
-    public static final double shooterSpeed = -1;
-
-    public static final double targetFlywheelVelocity = 3700;
-    public static final int currentLimit = 50;
   }
 
   public static final class AutoConstants {
