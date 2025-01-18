@@ -34,17 +34,18 @@ public class AutomaticSystems extends SubsystemBase
     private Pathplanning pathplanning;
     private ButtonBox buttonBox;
     private Status status;
-    private Drivebase drivebase;
     private Alliance alliance;
-    
-    public boolean goClick;
-    
+
+    private Drivebase drivebase;
     private Coral coral;
     private Elevator elevator;
     
     private boolean beamBreakTriggered;
-    private Command coralShootCommand;
+    public boolean goClick;
+    
     private XboxController driveController;
+
+    private Command coralShootCommand;
     private Command coralIntakeCommand;
     private Command goPressedCommand;
     private Command currentDriveCommand;
@@ -53,26 +54,30 @@ public class AutomaticSystems extends SubsystemBase
     private Command semiAutomaticElevatorCommand;
     private Command manualCoralCommand;
 
-    public AutomaticSystems(XboxController box, Drivebase _drivebase, Command driveCommand, Coral coraly, Elevator elevatory, XboxController driveyController, CommandXboxController c_driveyController)
+    public AutomaticSystems(XboxController buttonBox, Drivebase drivebase, Command driveCommand, Coral coral, Elevator elevator, XboxController driveController, CommandXboxController c_driveyController)
     {
-        buttonBox = new ButtonBox(box);
-        pathplanny = new Pathplanning(buttonBox.reefSide, buttonBox.rightScore, buttonBox.leftScore, buttonBox.rightSource, buttonBox.leftSource);
-        status = new Status();
-        drivebase = _drivebase;
-        alliance = DriverStation.getAlliance().orElseThrow();
-        manualDriveCommand = driveCommand;
-        goPressedCommand = new goPressed(this);
-        buttonBox.go.onTrue(goPressedCommand);
-        goClick = false;
-        coral = coraly;
-        elevator = elevatory;
-        coralIntakeCommand = new CoralIntake(coral);
-        coralShootCommand = new CoralOutTake(coral);
-        beamBreakTriggered = false;
-        driveController = driveyController;
-        manualElevatorCommand = new ElevatorManualControl(elevator, () -> c_driveyController.povUp().getAsBoolean(), () -> c_driveyController.povDown().getAsBoolean());
-        semiAutomaticElevatorCommand = new ElevatorAutomaticControl(elevator, () -> c_driveyController.povUp().getAsBoolean(), () -> c_driveyController.povDown().getAsBoolean());
-        manualCoralCommand = new CoralManualControl(coral, driveController);
+        this.buttonBox = new ButtonBox(buttonBox);
+        this.pathplanning = new Pathplanning(this.buttonBox.reefSide, this.buttonBox.rightScore, this.buttonBox.leftScore, this.buttonBox.rightSource, this.buttonBox.leftSource);
+        this.status = new Status();
+        this.alliance = DriverStation.getAlliance().orElseThrow();
+
+        this.drivebase = drivebase;
+        this.coral = coral;
+        this.elevator = elevator;
+
+        this.goClick = false;
+        this.beamBreakTriggered = false;
+        this.driveController = driveController;
+
+        this.coralIntakeCommand = new CoralIntake(coral);
+        this.coralShootCommand = new CoralOutTake(coral);
+        this.goPressedCommand = new goPressed(this);
+        this.manualDriveCommand = driveCommand;
+        this.currentDriveCommand = null;
+        this.buttonBox.go.onTrue(this.goPressedCommand);
+        this.manualElevatorCommand = new ElevatorManualControl(elevator, () -> c_driveyController.povUp().getAsBoolean(), () -> c_driveyController.povDown().getAsBoolean());
+        this.semiAutomaticElevatorCommand = new ElevatorAutomaticControl(elevator, () -> c_driveyController.povUp().getAsBoolean(), () -> c_driveyController.povDown().getAsBoolean());
+        this.manualCoralCommand = new CoralManualControl(coral, driveController);
     }
 
     public void automaticDriving()
@@ -87,7 +92,7 @@ public class AutomaticSystems extends SubsystemBase
                 {
                     try
                     {
-                        currentDriveCommand = new goToLocation(drivebase, pathplanny.getSourceLocation(alliance));
+                        currentDriveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(alliance));
                         currentDriveCommand.schedule();
                         status.currentDriveAction = "source";
                         status.currentDriveLocation = "moving";
@@ -106,7 +111,7 @@ public class AutomaticSystems extends SubsystemBase
             {
                 try
                 {
-                    currentDriveCommand = new goToLocation(drivebase, pathplanny.getReefLocation(alliance));
+                    currentDriveCommand = new goToLocation(drivebase, pathplanning.getReefLocation(alliance));
                     currentDriveCommand.schedule();
                     status.currentDriveAction = "reef";
                     status.currentDriveLocation = "moving";
@@ -125,7 +130,7 @@ public class AutomaticSystems extends SubsystemBase
             {
                 try
                 {
-                    currentDriveCommand = new goToLocation(drivebase, pathplanny.getProcessorLocation(alliance));
+                    currentDriveCommand = new goToLocation(drivebase, pathplanning.getProcessorLocation(alliance));
                     currentDriveCommand.schedule();
                     status.currentDriveAction = "processor";
                     status.currentDriveLocation = "moving";
