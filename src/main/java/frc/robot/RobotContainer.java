@@ -81,12 +81,8 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
 
-<<<<<<< HEAD
-
-=======
     elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp().getAsBoolean(),
         c_driveStick.povDown().getAsBoolean()));
->>>>>>> dev
 
     configureBindings();
   }
