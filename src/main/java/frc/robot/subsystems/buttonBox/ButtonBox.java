@@ -3,14 +3,15 @@ package frc.robot.subsystems.buttonBox;
 import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.buttonBox.buttonCommands.SetPressed;
 
 public class ButtonBox 
 {
     public FlippySwitch autoDrive;
-    public FlippySwitch autoElevator;
+    public FlippySwitch fullAutoElevator;
     public FlippySwitch fullAutoCycles;
-    public FlippySwitch spareFlippySwitch;
+    public FlippySwitch semiAutoElevator;
 
     public ButtonyBit go;
 
@@ -35,13 +36,14 @@ public class ButtonBox
     public ButtonyList reefSide;
     public ButtonyList elevatorLevel;
 
-    public ButtonBox(Joystick joystick)
+    public ButtonBox(XboxController joystick)
     {
         //TODO: NEED TO SET BUTTON NUMBERS TO BE CORRECT, THEY ARE NOT
         //----------------------------------------------------------
         autoDrive = new FlippySwitch(joystick, 0);
         fullAutoCycles = new FlippySwitch(joystick, 1);
-        spareFlippySwitch = new FlippySwitch(joystick, 2);
+        fullAutoElevator = new FlippySwitch(joystick, 2);
+        semiAutoElevator = new FlippySwitch(joystick, 18);
 
         level1 = new ButtonyBit(joystick, 3);
         level2 = new ButtonyBit(joystick, 4);

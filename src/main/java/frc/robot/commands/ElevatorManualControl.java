@@ -13,7 +13,7 @@ public class ElevatorManualControl extends Command {
     public ElevatorManualControl(Elevator elevator, boolean up, boolean down) {
         this.elevator = elevator;
         this.up = up;
-        this. down = down;
+        this.down = down;
 
         addRequirements(elevator);
     }

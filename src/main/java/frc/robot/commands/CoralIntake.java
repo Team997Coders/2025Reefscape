@@ -17,10 +17,10 @@ public class CoralIntake extends Command {
 
   @Override
   public void execute() {
-    if (m_coral.BeamBrake1() == true) {
-        m_coral.SpinLeftMotor(Constants.Coral.motorSpeedIntake);
+    if (m_coral.BeamBrake1()) {
+        m_coral.SpinLeftMotor(-Constants.Coral.motorSpeedIntake);
         m_coral.SpinRightMotor(Constants.Coral.motorSpeedIntake);
-  } else if (m_coral.BeamBrake1() == false) {
+  } else {
         m_coral.SpinLeftMotor(0);
         m_coral.SpinRightMotor(0);
     }

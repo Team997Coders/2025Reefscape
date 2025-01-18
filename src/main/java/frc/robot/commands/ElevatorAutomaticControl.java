@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;

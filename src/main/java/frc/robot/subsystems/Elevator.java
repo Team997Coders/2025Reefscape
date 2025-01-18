@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.exceptions.unfilledConstant;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
 
@@ -78,10 +79,11 @@ public class Elevator extends SubsystemBase{
    //elevator states
     public enum ElevatorState {
         DOWN("DOWN", Constants.ElevatorConstants.SetpointRotations.DOWN, 0),
-        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 1),
-        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 2),
-        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 3),
-        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 4);
+        SOURCE("SOURCE", Constants.ElevatorConstants.SetpointRotations.SOURCE, 1),
+        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 2),
+        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 3),
+        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 4),
+        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 5);
 
         double rotations; 
         String name;
@@ -138,6 +140,20 @@ public class Elevator extends SubsystemBase{
     public void setStateByIndex(int desiredIndex) {
         elevatorState = ElevatorState.findByIndex(desiredIndex);
         goal = elevatorState.rotations;
+    }
+
+    public boolean elevatorAtTarget() throws unfilledConstant
+    {
+        int offset = Constants.ElevatorConstants.atTargetOffset;
+        if (offset == 0)
+        {
+            throw new unfilledConstant("The atTargetOffset elevator constants is set to zero meaning nothing will work ever");
+        }
+        if (encoderPosition > goal-offset && encoderPosition < goal+offset)
+        {
+            return true;
+        }
+        return false;
     }
 
 

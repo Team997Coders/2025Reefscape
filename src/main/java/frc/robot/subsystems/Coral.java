@@ -18,7 +18,6 @@ public class Coral extends SubsystemBase{
         rightMotor = new SparkMax(Constants.Coral.rightMotorID, MotorType.kBrushless);
         beamBrake1 = new DigitalInput(Constants.Coral.beamBrake1ID);
         beamBrake2 = new DigitalInput(Constants.Coral.beamBrake2ID);
-
     }
 
     public Command manualMoveCoralMotorsIntake() {
@@ -31,7 +30,7 @@ public class Coral extends SubsystemBase{
     }
         
     public void spinBothMotors(double speed) {
-        SpinLeftMotor(speed);
+        SpinLeftMotor(-speed);
         SpinRightMotor(speed);
     }
 
