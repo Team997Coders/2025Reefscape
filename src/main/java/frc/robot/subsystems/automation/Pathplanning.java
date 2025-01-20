@@ -1,6 +1,7 @@
 package frc.robot.subsystems.automation;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.exceptions.allianceNotInitialized;
 import frc.robot.exceptions.noSelectedButton;
@@ -33,10 +34,10 @@ public class Pathplanning
         {
             if (alliance == Alliance.Blue)
             {
-                return new Pose2d();
+                return new Pose2d(1.083,.974, new Rotation2d(.9425));
             } else if (alliance == Alliance.Red)
             {
-                return new Pose2d();
+                return new Pose2d(16.379,7.078, new Rotation2d(4.084));
             } else 
             {
                 throw new allianceNotInitialized("The alliance is neither blue nor red");
@@ -46,10 +47,10 @@ public class Pathplanning
         {
             if (alliance == Alliance.Blue)
             {
-                return new Pose2d();
+                return new Pose2d(1.083,7.078, new Rotation2d(5.341));
             } else if (alliance == Alliance.Red)
             {
-                return new Pose2d();
+                return new Pose2d(16.379,0.974, new Rotation2d(2.199));
             } else 
             {
                 throw new allianceNotInitialized("The alliance is neither blue nor red");
@@ -95,22 +96,22 @@ public class Pathplanning
                 {
                     case 7:
                     //side 1
-                    return new Pose2d();
+                    return new Pose2d(3.264,3.861,new Rotation2d(0));
                     case 8:
                     //side 2
-                    return new Pose2d();
+                    return new Pose2d(3.734,5.004,new Rotation2d(5.236));
                     case 9:
                     //side 3
-                    return new Pose2d();
+                    return new Pose2d(4.851,5.169,new Rotation2d(4.189));
                     case 10:
                     //side 4
-                    return new Pose2d();
+                    return new Pose2d(5.714,4.191,new Rotation2d(3.142));
                     case 11:
                     //side 5
-                    return new Pose2d();
+                    return new Pose2d(5.245,3.048,new Rotation2d(2.094));
                     case 12:
                     //side 6
-                    return new Pose2d();
+                    return new Pose2d(4.128,2.883,new Rotation2d(1.047));
                     default:
                     throw new noSelectedButton("None of the sides of the reef are selected");
                 }
@@ -120,22 +121,22 @@ public class Pathplanning
                 {
                     case 7:
                     //side 1
-                    return new Pose2d();
+                    return new Pose2d(3.264,4.191,new Rotation2d(0));
                     case 8:
                     //side 2
-                    return new Pose2d();
+                    return new Pose2d(4.128,5.169,new Rotation2d(5.236));
                     case 9:
                     //side 3
-                    return new Pose2d();
+                    return new Pose2d(5.245,5.004,new Rotation2d(4.189));
                     case 10:
                     //side 4
-                    return new Pose2d();
+                    return new Pose2d(5.714,3.861,new Rotation2d(3.142));
                     case 11:
                     //side 5
-                    return new Pose2d();
+                    return new Pose2d(4.851,2.883,new Rotation2d(2.094));
                     case 12:
                     //side 6
-                    return new Pose2d();
+                    return new Pose2d(3.734,3.048,new Rotation2d(1.047));
                     default:
                     throw new noSelectedButton("None of the sides of the reef are selected");
                 }
