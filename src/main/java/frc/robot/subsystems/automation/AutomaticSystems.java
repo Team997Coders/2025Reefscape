@@ -330,6 +330,7 @@ public class AutomaticSystems extends SubsystemBase
                     status.driveGoal = "reef";
                 } else 
                 {
+                    //Something has gone horribly wrong
                     status.coralIndexAction = "";
                     throw new noNextAction("The coral index action was finished but neither index goal was selected (index and shoot)");
                 }
@@ -342,26 +343,37 @@ public class AutomaticSystems extends SubsystemBase
         {
             if (status.currentDriveLocation == "reef")
             {
+                //The robot is at the reef
                 if (status.elevatorAction == "finished")
                 {
+                    //Shoot the coral onto the reef
                     status.coralIndexGoal = "shoot";
+                    //Stop the repeated trying to shoot because the elevator is now at target
                     status.callNextAction = false;
                 } else
                 {
+                    //If the elevator is not at the target (or within range to still work) 
+                    //It will then try again until the elevator gets to the target
                     throw new elevatorNotAtTarget("next command called while elevator not at target");
                 }
             } else if (status.currentDriveLocation == "source")
             {
+                //robot is at the source
                 if (status.elevatorAction == "finished")
                 {
+                    //Intake the coral (this wont do anything until the first beam break is triggered)
                     status.coralIndexGoal = "intake";
+                    //Stop the repeated trying to shoot because the elevator is now at target
                     status.callNextAction = false;
                 } else
                 {
+                    //If the elevator is not at the target (or within range to still work) 
+                    //It will then try again until the elevator gets to the target
                     throw new elevatorNotAtTarget("next command called while elevator not at target");
                 }
             } else 
             {
+                //If the robot is not at the reef or the source it wont do anything automatically
                 //throw new noNextAction("current drive location not reef or source");
             }
         }
@@ -369,67 +381,97 @@ public class AutomaticSystems extends SubsystemBase
 
     @Override
     public void periodic() {
+        //This is called every 20ms
         if (!buttonBox.autoDrive.Flipped())
         {
+            //The robot will be driving through joystick (no automation (sad))
             manualDriveCommand.schedule();
             currentDriveCommand.cancel();
         } else
         {
+            //The robot will be driving automatically through pathplanner
             manualDriveCommand.cancel();
             automaticDriving();
         }
 
         if (!buttonBox.fullAutoElevator.Flipped())
         {
+            //The subsystems will not be fully automatic
+            //The coral will be full manual: A/B/X control: intake/shoot/reverse
             manualCoralCommand.schedule();
 
             if (buttonBox.semiAutoElevator.Flipped())
             {
+                //The elevator will be able to just go to specific levels with dpad up/down
                 manualElevatorCommand.cancel();
                 semiAutomaticElevatorCommand.schedule();
                 elevator.pidControl();
             } else
             {
+                //The elevator will just spin the motor; very basic but can be used for minor adjustments
                 manualElevatorCommand.schedule();
                 semiAutomaticElevatorCommand.cancel();
             }
-        } else
+        } else if (buttonBox.fullAutoCycles.Flipped())
         {
+            //Elevator and coral indexer are entirely automatic and require no human control whatsoever
             manualCoralCommand.cancel();
             manualElevatorCommand.cancel();
             semiAutomaticElevatorCommand.cancel();
             automaticSubsystems();
             elevator.pidControl();
-        }
-        if (buttonBox.fullAutoCycles.Flipped())
-        {
+
             if (status.callNextAction)
             {
                 try
                 {
-                    nextAction(false);
+                //This will happen if robot is waiting on elevator to get to the correct level
+                nextAction(false);
                 } catch(elevatorNotAtTarget e)
                 {
-                    status.callNextAction = true;
+                //Elevator not yet at level so try again next loop
+                status.callNextAction = true;
                 } catch(Exception e)
                 {
-                    e.printStackTrace();
+                //something else has gone horribly wrong and you should probably switch to manual
+                e.printStackTrace();
                 }
             }        
         } else
         {
+            //Semi automatic commands (will only run the commands on clicking go)
+            //Example: once the robot picks up coral you click go to make it go to reef and move elevator 
+            //  Once it reaches the reef it will wait for you to click go again to shoot coral
+            if (status.callNextAction)
+            {
+                try
+                {
+                //This will happen if robot is waiting on elevator to get to the correct level
+                nextAction(false);
+                } catch(elevatorNotAtTarget e)
+                {
+                //Elevator not yet at level so try again next loop
+                status.callNextAction = true;
+                } catch(Exception e)
+                {
+                //something else has gone horribly wrong and you should probably switch to manual
+                e.printStackTrace();
+                }
+            }     
+            
             if (goClick)
             {
                 goClick = false;
                 try{
-                    nextAction(true);
-                    nextAction(false);
+                //Calls both the drive and subsystem command to check if they have available actions
+                nextAction(true);
+                nextAction(false);
                 } catch(elevatorNotAtTarget e)
                 {
-                    status.callNextAction = true;
+                status.callNextAction = true;
                 } catch(Exception e)
                 {
-                    e.printStackTrace();
+                e.printStackTrace();
                 }
             }
         }
