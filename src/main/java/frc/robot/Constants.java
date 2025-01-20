@@ -70,7 +70,7 @@ public final class Constants {
     public static final double slewRate = 20; // lower number for higher center of mass
 
     public static final class SwervePID {
-      public static final double p = 0.1;
+      public static final double p = 0.01;
       public static final double i = 0;
       public static final double d = 0;
     }
@@ -79,8 +79,8 @@ public final class Constants {
 
       // Front Left Module
       public static final SwerveModuleConfig frontLeft = new SwerveModuleConfig(
-          8,
-          1,
+          5,
+          6,
           true,
           true,
           false,
@@ -90,8 +90,8 @@ public final class Constants {
 
       // Front Right
       public static final SwerveModuleConfig frontRight= new SwerveModuleConfig(
-          6,
-          7,
+          3,
+          4,
           true,
           true,
           false,
@@ -101,8 +101,8 @@ public final class Constants {
 
       // Back Right
       public static final SwerveModuleConfig backRight = new SwerveModuleConfig(
-          4,
-          5,
+          1,
+          2,
           true,
           true,
           false,
@@ -112,8 +112,8 @@ public final class Constants {
 
       // Back Left
       public static final SwerveModuleConfig backLeft = new SwerveModuleConfig(
-          2,
-          3,
+          7,
+          8,
           true,
           true,
           false,
@@ -124,7 +124,7 @@ public final class Constants {
     }
 
     public static final class ModuleLocations {
-      public static final double dist = Units.inchesToMeters(11.0);
+      public static final double dist = Units.inchesToMeters(14.5);
       public static final double robotRaduius = Math.sqrt(2 * Math.pow(dist, 2));
       public static final Translation2d frontLeft = new Translation2d(dist, dist);
       public static final Translation2d frontRight = new Translation2d(dist, -dist);
