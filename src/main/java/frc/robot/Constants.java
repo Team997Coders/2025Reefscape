@@ -31,8 +31,11 @@ public final class Constants {
 
     public static final int bottomSwitchID = 0; //DIO
 
+    public static final int atTargetOffset = 0; //The encoder ticks to determine whether the elevator is at the target position
+
     public static final class SetpointRotations {
     public static final double DOWN = 0;
+    public static final double SOURCE = 0;
     public static final double L1 = 0;
     public static final double L2 = 0;
     public static final double L3 = 0;

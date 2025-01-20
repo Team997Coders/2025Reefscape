@@ -15,7 +15,7 @@ public class ElevatorManualControl extends Command {
     public ElevatorManualControl(Elevator elevator, BooleanSupplier up, BooleanSupplier down) {
         this.elevator = elevator;
         this.up = up;
-        this. down = down;
+        this.down = down;
 
         addRequirements(elevator);
     }

@@ -9,6 +9,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
@@ -40,15 +41,6 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.vision.Camera;
-import frc.robot.subsystems.vision.CameraBlock;
-import java.util.Arrays;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -76,10 +68,13 @@ public class RobotContainer {
   private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
   private static XboxController driveStick = new XboxController(0);
+  private static XboxController box = new XboxController(1);
 
   // private static CommandXboxController c_driveStick2 = new
   // CommandXboxController(1);
   private static CommandXboxController c_driveStick = new CommandXboxController(0);
+
+  private final Elevator elevator = new Elevator();
 
   private SendableChooser<Command> autoChooser;
 
@@ -93,7 +88,21 @@ public class RobotContainer {
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
   // private final Elevator elevator = new Elevator();
 
-  private boolean isManualElevatorControl = false;
+  private final Coral m_coral = new Coral();
+  private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
+  private final CoralOutTake m_CoralOutTake = new CoralOutTake(m_coral);
+  
+  private final Algae m_algae = new Algae();
+  private final AlgaeCommandIntake m_algaeCommandIntake = new AlgaeCommandIntake(m_algae);
+  private final AlgaeCommandOutTake m_algaeCommandOutTake = new AlgaeCommandOutTake(m_algae);
+  final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
+  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
+      drivebase,
+      () -> getScaledXY(),
+      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
+      m_coral, elevator, driveStick, c_driveStick);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -106,8 +115,8 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    // elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
-    //    () -> c_driveStick.povDown().getAsBoolean()));
+    //// elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, () -> c_driveStick.povUp().getAsBoolean(),
+    // //   () -> c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -225,11 +234,11 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
     JoystickButton button_a = new JoystickButton(driveStick, 1);
     button_a.onTrue(goToTag).onFalse(stop);
-    // m_driverController.a().whileTrue(m_algaeCommandIntake);
-    // m_driverController.b().whileTrue(m_algaeCommandOutTake);
+    m_driverController.a().whileTrue(m_algaeCommandIntake);
+    m_driverController.b().whileTrue(m_algaeCommandOutTake);
 
-    // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    //     ()->c_driveStick.povDown().getAsBoolean()));
+    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+        ()->c_driveStick.povDown().getAsBoolean()));
   }
 
   /**

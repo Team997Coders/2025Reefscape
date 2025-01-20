@@ -8,6 +8,7 @@ public class CoralOutTake extends Command{
 
     public CoralOutTake(Coral coral){
         m_coral = coral;
+        addRequirements(coral);
     }
 
 
@@ -18,12 +19,13 @@ public class CoralOutTake extends Command{
 
   @Override
   public void execute() {
-    if (m_coral.BeamBrake2() == true) {
+    if (m_coral.BeamBrake2()) {
         m_coral.SpinRightMotor(Constants.Coral.motorSpeedOutTake);
-        m_coral.SpinLeftMotor(Constants.Coral.motorSpeedOutTake);
-    } else if (m_coral.BeamBrake2() == false) {
+        m_coral.SpinLeftMotor(-Constants.Coral.motorSpeedOutTake);
+    } else {
         m_coral.SpinRightMotor(0);
         m_coral.SpinLeftMotor(0);
+        this.cancel();
     }
     }
 
