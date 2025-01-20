@@ -65,10 +65,10 @@ public class Pathplanning
     
         if (alliance == Alliance.Blue)
         {
-            return new Pose2d();
+            return new Pose2d(5.988,0.39,new Rotation2d(4.712));
         } else if (alliance == Alliance.Red)
         {
-            return new Pose2d();
+            return new Pose2d(11.56,7.662,new Rotation2d(1.571));
         } else 
         {
             throw new allianceNotInitialized("The alliance is neither blue nor red");
@@ -152,22 +152,22 @@ public class Pathplanning
                 {
                     case 7:
                     //side 1
-                    return new Pose2d();
+                    return new Pose2d(14.284,4.191,new Rotation2d(3.142));
                     case 8:
                     //side 2
-                    return new Pose2d();
+                    return new Pose2d(13.815,3.048,new Rotation2d(2.094));
                     case 9:
                     //side 3
-                    return new Pose2d();
+                    return new Pose2d(12.698,2.883,new Rotation2d(1.047));
                     case 10:
                     //side 4
-                    return new Pose2d();
+                    return new Pose2d(11.834,3.861,new Rotation2d(0));
                     case 11:
                     //side 5
-                    return new Pose2d();
+                    return new Pose2d(12.304,5.004,new Rotation2d(5.236));
                     case 12:
                     //side 6
-                    return new Pose2d();
+                    return new Pose2d(13.421,5.169,new Rotation2d(4.189));
                     default:
                     throw new noSelectedButton("None of the sides of the reef are selected");
                 }
@@ -177,22 +177,22 @@ public class Pathplanning
                 {
                     case 7:
                     //side 1
-                    return new Pose2d();
+                    return new Pose2d(14.284,3.861,new Rotation2d(3.142));
                     case 8:
                     //side 2
-                    return new Pose2d();
+                    return new Pose2d(13.442,2.883,new Rotation2d(2.094));
                     case 9:
                     //side 3
-                    return new Pose2d();
+                    return new Pose2d(12.304,3.048,new Rotation2d(1.047));
                     case 10:
                     //side 4
-                    return new Pose2d();
+                    return new Pose2d(11.834,4.191,new Rotation2d(0));
                     case 11:
                     //side 5
-                    return new Pose2d();
+                    return new Pose2d(12.698,5.169,new Rotation2d(5.236));
                     case 12:
                     //side 6
-                    return new Pose2d();
+                    return new Pose2d(13.815,5.004,new Rotation2d(4.189));
                     default:
                     throw new noSelectedButton("None of the sides of the reef are selected");
                 }
