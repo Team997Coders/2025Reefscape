@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.events.PointTowardsZoneTrigger;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -41,6 +42,7 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -120,6 +122,17 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
+
+    NamedCommands.registerCommand("Pick Up Coral", new CoralIntake(m_coral));
+    NamedCommands.registerCommand("Place Coral", new CoralOutTake(m_coral));
+    NamedCommands.registerCommand("Elevator Down", elevator.goToStateCommand(ElevatorState.DOWN));
+    NamedCommands.registerCommand("Elevator L1", elevator.goToStateCommand(ElevatorState.L1));
+    NamedCommands.registerCommand("Elevator L2", elevator.goToStateCommand(ElevatorState.L2));
+    NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
+    NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
+
+    
+
 
     configureBindings();
   }

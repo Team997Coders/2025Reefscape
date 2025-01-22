@@ -1,0 +1,148 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Taxi"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to processor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pick Up Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to reef 1"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Place Coral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Down"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Come back 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pick Up Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to reef 2"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Place Coral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Down"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Come back 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pick Up Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to reef 3"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Place Coral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Down"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2025 Autos",
+  "choreoAuto": false
+}
