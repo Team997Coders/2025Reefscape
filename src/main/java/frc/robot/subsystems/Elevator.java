@@ -68,7 +68,7 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         loggers();
-        encoderPosition = bottomSwitch.get() ? 0 : encoderPosition;
+        encoderPosition = bottomSwitch.get() ? 0 : getEncoderPosition();
         setEncoderPosition(encoderPosition);   
     }
 
@@ -120,7 +120,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public void manualControl(double input) {
-        goal = input;
+        goal += input;
     }
 
     public void setEncoderPosition(double position) {
