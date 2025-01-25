@@ -43,6 +43,8 @@ import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -67,6 +69,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  
+  AddressableLED m_led;
+  AddressableLEDBuffer m_ledBuffer;
+
+
   private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
   private static XboxController driveStick = new XboxController(0);
@@ -87,6 +94,8 @@ public class RobotContainer {
 
   private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(frontCamera, backCamera));
 
+
+
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
   // private final Elevator elevator = new Elevator();
 
@@ -105,6 +114,8 @@ public class RobotContainer {
       () -> getScaledXY(),
       () -> scaleRotationAxis(driveStick.getRawAxis(4))),
       m_coral, elevator, driveStick, c_driveStick);
+
+      
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -131,8 +142,19 @@ public class RobotContainer {
     NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
     NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
 
-    
 
+    m_led = new AddressableLED(9);
+
+  // Reuse buffer
+  // Default to a length of 60, start empty output
+  // Length is expensive to set, so only set it once, then just update data
+    m_ledBuffer = new AddressableLEDBuffer(60);
+    m_led.setLength(m_ledBuffer.getLength());
+
+  // Set the data
+    m_led.setData(m_ledBuffer);
+    m_led.start();
+  
 
     configureBindings();
   }
@@ -158,6 +180,8 @@ public class RobotContainer {
       return input;
     }
   }
+
+  
 
   private double[] getXY() {
     double[] xy = new double[2];

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9297560138764593,
-        "y": 1.76492382876024
+        "x": 2.9082238817460473,
+        "y": 3.405804309766914
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.128,
-        "y": 2.883
+        "x": 3.734,
+        "y": 3.048
       },
       "prevControl": {
-        "x": 2.0336568343412598,
-        "y": 2.595767989380195
+        "x": 2.4794524364486854,
+        "y": 1.9655175186903342
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "2025 paths",
+  "folder": "South Coral Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -130.0

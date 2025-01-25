@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Taxi"
+            "pathName": "First Coral Level 4"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to Source"
+            "pathName": "Pick Up First Coral"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to reef 1"
+            "pathName": "Second Coral Level 4"
           }
         },
         {
@@ -81,7 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Come back 1"
+            "pathName": "Pick Up Second Coral"
           }
         },
         {
@@ -93,7 +93,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to reef 2"
+            "pathName": "Third Coral Level 4"
           }
         },
         {
@@ -124,7 +124,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Come back 2"
+            "pathName": "Pick Up Third Coral"
           }
         },
         {
@@ -136,7 +136,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to reef 3"
+            "pathName": "Fourth Coral Level 4"
           }
         },
         {

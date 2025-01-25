@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Taxi"
+            "pathName": "Place Coral Level 4 - 1"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to Source"
+            "pathName": "Go to source - 0"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to reef 1"
+            "pathName": "Place Coral Level 4 - 2"
           }
         },
         {
@@ -81,7 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Come back 1"
+            "pathName": "Go to Source - 2"
           }
         },
         {
@@ -93,7 +93,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to reef 2"
+            "pathName": "Place Coral Level 4 - 3"
           }
         },
         {
@@ -124,7 +124,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Come back 2"
+            "pathName": "Go to Source - 3"
           }
         },
         {
@@ -136,7 +136,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to reef 3"
+            "pathName": "Place Coral Level 4 - 4"
           }
         },
         {

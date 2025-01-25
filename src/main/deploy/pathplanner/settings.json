@@ -3,7 +3,9 @@
   "robotLength": 0.6,
   "holonomicMode": true,
   "pathFolders": [
-    "2025 paths"
+    "2025 paths",
+    "South Coral Auto",
+    "North Coral Auto"
   ],
   "autoFolders": [
     "2025 Autos"
