@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,6 +34,7 @@ public class Elevator extends SubsystemBase{
     private final DigitalInput bottomSwitch;
 
     private final PIDController pid;
+    private final ElevatorFeedforward feedforward; 
 
     public ElevatorState elevatorState;
 
@@ -56,8 +58,10 @@ public class Elevator extends SubsystemBase{
         bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
-    
+        feedforward = new ElevatorFeedforward(Constants.ElevatorConstants.FeedForward.kS, Constants.ElevatorConstants.FeedForward.kG, Constants.ElevatorConstants.FeedForward.kV);
+
         elevatorState = ElevatorState.DOWN;
+
 
     }
 
@@ -74,7 +78,7 @@ public class Elevator extends SubsystemBase{
 
     public void pidControl()
     {
-        setOutput(pid.calculate(encoderPosition, goal));
+        setOutput(pid.calculate(encoderPosition, goal) + feedforward.calculate(encoderPosition, goal));
     }
 
 
