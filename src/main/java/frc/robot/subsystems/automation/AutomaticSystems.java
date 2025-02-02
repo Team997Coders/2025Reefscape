@@ -2,22 +2,14 @@ package frc.robot.subsystems.automation;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
-import java.lang.annotation.ElementType;
-
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
-
-
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.CoralManualControl;
 import frc.robot.commands.CoralOutTake;
-import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorAutomaticControl;
 import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToLocation;
