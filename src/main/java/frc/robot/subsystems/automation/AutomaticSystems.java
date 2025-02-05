@@ -379,7 +379,10 @@ public class AutomaticSystems extends SubsystemBase
         {
             //The robot will be driving through joystick (no automation (sad))
             manualDriveCommand.schedule();
-            currentDriveCommand.cancel();
+            if (currentDriveCommand != null)
+            {   
+                currentDriveCommand.cancel();
+            } 
         } else
         {
             //The robot will be driving automatically through pathplanner
