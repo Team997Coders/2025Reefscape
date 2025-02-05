@@ -23,8 +23,8 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class ElevatorConstants{
-    public static final int leftSparkMaxID = 0; //CAN
-    public static final int rightSparkMaxID = 0;
+    public static final int leftSparkMaxID = 9; //CAN
+    public static final int rightSparkMaxID = 10;
 
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
@@ -33,38 +33,72 @@ public final class Constants {
 
     public static final int atTargetOffset = 0; //The encoder ticks to determine whether the elevator is at the target position
 
+    // elevator travel is about 30in
     public static final class SetpointRotations {
-    public static final double SOURCE = 0;
-    public static final double DOWN = 0;
-    public static final double L1 = 0;
-    public static final double L2 = 0;
-    public static final double L3 = 0;
-    public static final double L4 = 0;
+      public static final double MAX = 10;
+      public static final double DOWN = 0;
+      public static final double SOURCE = 0;
+      public static final double L1 = 0;
+      public static final double L2 = 0;
+      public static final double L3 = 0;
+      public static final double L4 = 0;
     }
 
     public static final class PID {
-      public static final double kP = 0;
+      public static final double kP = 0.1;
       public static final double kI = 0;
       public static final double kD = 0;
     }
 
-    public static final double defaultManualOutput = 0;
+    public static final class SIM {
+      public static final double kElevatorKp = 0.1;
+      public static final double kElevatorKi = 0;
+      public static final double kElevatorKd = 0;
+
+      public static final double kElevatorkS = 0.0; // volts (V)
+      public static final double kElevatorkG = 0.762; // volts (V)
+      public static final double kElevatorkV = 0.762; // volt per velocity (V/(m/s))
+      public static final double kElevatorkA = 0.0; // volt per acceleration (V/(m/s²))
+
+      public static final double kElevatorGearing = 25.0;
+      public static final double kElevatorDrumDia = Units.inchesToMeters(1.76);
+      public static final double kCarriageMass = Units.lbsToKilograms(20.0); // kg
+
+      public static final double kSetpointMeters = 0.75;
+      // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
+      public static final double kMinElevatorHeightMeters = 0.0;
+      public static final double kMaxElevatorHeightMeters = 1.25;
+
+      // distance per pulse = (distance per revolution) / (pulses per revolution)
+      //  = (Pi * D) / ppr
+      // REV NEo motor encoders have 42 counts per revolution
+      // Note:  Assuming that the max motion of the elevator chain
+      //      is 34inches (which is 36 height minus the overlap).
+      //      The gear stack is:
+      //        motor->motor encoder->25:1 gearbox->14tooth sprocket->chain
+      //      Sprocket is from Thrifty-bot kit: 25 Chain 22t 1/2" Hex Sprocket = 1.76"
+      // This implies that the for a total travel of 34 inches => 6.15 rotations.
+      public static final double kElevatorEncoderDistPerPulse =
+        Math.PI * kElevatorDrumDia / 42;  // 0.131 inches/encoder tic
+    }
+
+    public static final double defaultManualOutput = 2;
   }
 
   public static final class Coral {
-    public static final int leftMotorID = 0; //CAN
-    public static final int rightMotorID = 0;
-    public static final int beamBrake1ID = 0; //DIO
-    public static final int beamBrake2ID = 0;
+    public static final int leftMotorID = 11; //CAN
+    public static final int rightMotorID = 12;
+    public static final int beamBrake1ID = 1; //DIO
+    public static final int beamBrake2ID = 2;
     public static final double motorSpeedOutTake = 0;
     public static final double motorSpeedIntake = 0;  
   }
   
   public static final class Algae{
-    public static final int spinnyMotorID = 0; //CAN
+    public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 0; //DIO
-    public static final double motorSpin = 0;
+    public static final int proximitySensorID = 3; //DIO
+    public static final double motorSpin = 0.8;
   }
   
   public static final class DriveConstants {
