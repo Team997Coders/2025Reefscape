@@ -276,8 +276,6 @@ public class RobotContainer {
     m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
     m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
 
-
-
     c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
         ()->c_driveStick.povDown().getAsBoolean()));
   }
