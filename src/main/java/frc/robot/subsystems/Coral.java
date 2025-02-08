@@ -52,4 +52,9 @@ public class Coral extends SubsystemBase{
         SmartDashboard.putBoolean("beam brake 1", BeamBrake1());
         SmartDashboard.putBoolean("beam brake 2", BeamBrake2());
     }
+
+    @Override
+    public void periodic() {
+        loggers();
+    }
 }

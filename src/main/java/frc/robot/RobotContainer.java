@@ -270,7 +270,7 @@ public class RobotContainer {
     Command goToTag = new goToTag(drivebase, frontCamera, 0.0);
     Command stop = new stop(goToTag);
     JoystickButton button_a = new JoystickButton(driveStick, 1);
-    button_a.onTrue(goToTag).onFalse(stop);
+    // button_a.onTrue(goToTag).onFalse(stop);
     m_driverController.a().whileTrue(m_algaeCommandIntake);
     m_driverController.b().whileTrue(m_algaeCommandOutTake);
 
