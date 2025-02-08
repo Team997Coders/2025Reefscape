@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 3.734,
+        "y": 3.048
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2478463511143891,
-        "y": -0.0197814371532362
+        "x": 2.3820002450215867,
+        "y": 2.938410249259098
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 0.0
+        "x": 1.083,
+        "y": 0.974
       },
       "prevControl": {
-        "x": -0.25,
-        "y": 1.2246467991473532e-16
+        "x": 0.9598633062397013,
+        "y": 0.7382244353838776
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -130.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "South Coral Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.083,
+        "y": 7.078
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2478463511143891,
-        "y": -0.0197814371532362
+        "x": 1.8758222720663238,
+        "y": 6.364271054940258
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 0.0
+        "x": 3.734,
+        "y": 5.004
       },
       "prevControl": {
-        "x": -0.25,
-        "y": 1.2246467991473532e-16
+        "x": 1.8963260172098828,
+        "y": 5.286486087243327
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "North Coral Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 130.0
   },
   "useDefaultConstraints": true
 }

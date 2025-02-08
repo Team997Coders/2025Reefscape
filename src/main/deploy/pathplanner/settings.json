@@ -2,8 +2,14 @@
   "robotWidth": 0.6,
   "robotLength": 0.6,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "2025 paths",
+    "South Coral Auto",
+    "North Coral Auto"
+  ],
+  "autoFolders": [
+    "2025 Autos"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
@@ -28,6 +34,5 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": [],
-  "robotWheelbase": 0.546
+  "robotFeatures": []
 }

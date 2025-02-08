@@ -13,6 +13,8 @@ public class CoralManualControl extends Command {
      
     public CoralManualControl(Coral coral, XboxController driveController) {
         this.coral = coral;
+        
+        this.driveController = driveController;
 
         addRequirements(coral);
     }

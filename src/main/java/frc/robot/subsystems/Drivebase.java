@@ -11,7 +11,9 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
+import choreo.trajectory.SwerveSample;
 import swervelib.SwerveModule;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -175,6 +177,7 @@ public class Drivebase extends SubsystemBase {
     this.backRight.drive(moduleStates[3]);
 
     SmartDashboard.putNumber("BL Target Angle", moduleStates[2].angle.getDegrees());
+    SmartDashboard.putNumber("BL angle", backLeft.getEncoderRadians());
   }
 
   public double getMaxVelocity() {
