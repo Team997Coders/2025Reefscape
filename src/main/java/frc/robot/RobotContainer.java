@@ -269,10 +269,12 @@ public class RobotContainer {
     // c_driveStick.povUp().onTrue(Commands.runOnce(gyro::reset));
     Command goToTag = new goToTag(drivebase, frontCamera, 0.0);
     Command stop = new stop(goToTag);
-    JoystickButton button_a = new JoystickButton(driveStick, 1);
+    //JoystickButton button_a = new JoystickButton(driveStick, 1);
     // button_a.onTrue(goToTag).onFalse(stop);
-    m_driverController.a().whileTrue(m_algaeCommandIntake);
-    m_driverController.b().whileTrue(m_algaeCommandOutTake);
+    m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
+    m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
+    m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
+    m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
 
     c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
         ()->c_driveStick.povDown().getAsBoolean()));
