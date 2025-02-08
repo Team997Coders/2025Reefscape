@@ -96,8 +96,8 @@ public final class Constants {
     public static final int rightMotorID = 12;
     public static final int beamBrake1ID = 1; //DIO
     public static final int beamBrake2ID = 2;
-    public static final double motorSpeedOutTake = 0;
-    public static final double motorSpeedIntake = 0;  
+    public static final double motorSpeedOutTake = 0.5;
+    public static final double motorSpeedIntake = 0.5;  
   }
   
   public static final class Algae{

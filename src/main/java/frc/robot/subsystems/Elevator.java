@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import java.security.spec.EncodedKeySpec;
-
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
