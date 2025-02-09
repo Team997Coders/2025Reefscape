@@ -26,7 +26,7 @@ public final class Constants {
     public static final int leftSparkMaxID = 9; //CAN
     public static final int rightSparkMaxID = 10;
 
-    public static final int climberServoID = 0;
+    public static final int climberServoID = 9;
     public static final double climberAngle1 = 0;
     public static final double climberAngle2 = 0;
     
@@ -115,7 +115,7 @@ public final class Constants {
   public static final class Algae{
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 3; //DIO
+    public static final int proximitySensorID = 9; //DIO
     public static final double motorSpin = 0.8;
   }
   
