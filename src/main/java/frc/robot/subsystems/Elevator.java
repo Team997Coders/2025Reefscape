@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import java.security.spec.EncodedKeySpec;
+import java.util.function.BooleanSupplier;
+
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -10,9 +14,11 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.exceptions.unfilledConstant;
 
@@ -34,6 +40,7 @@ public class Elevator extends SubsystemBase{
     private final ElevatorFeedforward feedforward; 
 
     public ElevatorState elevatorState;
+    public final Servo climber;
 
     public Elevator() {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
@@ -58,6 +65,10 @@ public class Elevator extends SubsystemBase{
         feedforward = new ElevatorFeedforward(Constants.ElevatorConstants.FeedForward.kS, Constants.ElevatorConstants.FeedForward.kG, Constants.ElevatorConstants.FeedForward.kV);
 
         elevatorState = ElevatorState.DOWN;
+
+        climber = new Servo(Constants.ElevatorConstants.climberServoID);
+
+
     }
 
     
@@ -69,6 +80,8 @@ public class Elevator extends SubsystemBase{
         loggers();
         encoderPosition = bottomSwitch.get() ? 0 : getEncoderPosition();
         setEncoderPosition(encoderPosition);   
+
+        climberSwitchHeight(climberSwitch());
     }
 
     public void pidControl()
@@ -161,6 +174,23 @@ public class Elevator extends SubsystemBase{
         return false;
     }
 
+    public BooleanSupplier climberSwitch() {
+        if (getEncoderPosition() <= Constants.ElevatorConstants.climberEncoderPosition) {
+            return () -> true;
+        } else if (getEncoderPosition() >= Constants.ElevatorConstants.climberEncoderPosition) {
+            return () -> false;
+        }
+            return () -> false;
+    }
+
+
+    public void climberSwitchHeight(BooleanSupplier switchThing) {
+        if (switchThing.getAsBoolean()) {
+            climber.setAngle(Constants.ElevatorConstants.climberAngle1);
+        } else if (switchThing.getAsBoolean() == false) {
+            climber.setAngle(Constants.ElevatorConstants.climberAngle2);
+        }
+    }
 
 /*LOGGERS*/
 

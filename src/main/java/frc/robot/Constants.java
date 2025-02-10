@@ -26,6 +26,12 @@ public final class Constants {
     public static final int leftSparkMaxID = 9; //CAN
     public static final int rightSparkMaxID = 10;
 
+    public static final int climberServoID = 0;
+    public static final double climberAngle1 = 0;
+    public static final double climberAngle2 = 0;
+    
+    public static final double climberEncoderPosition = 0;
+
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
 
