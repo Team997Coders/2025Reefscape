@@ -5,12 +5,16 @@
 package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.revrobotics.spark.config.SmartMotionConfig;
 import com.studica.frc.AHRS;
 
+import choreo.trajectory.SwerveSample;
 import swervelib.SwerveModule;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,10 +25,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -70,11 +79,18 @@ public class Drivebase extends SubsystemBase {
 
   private CameraBlock cameraBlock;
 
+  SendableChooser fieldOrientedChooser = new SendableChooser<Boolean>();
+
   /** Creates a new Drivebase. */
   public Drivebase(AHRS gyro, CameraBlock cameraBlock) {
+    fieldOrientedChooser.addOption("field oriented", true);
+    fieldOrientedChooser.addOption("robot oriented", false);
     var inst = NetworkTableInstance.getDefault();
     var table = inst.getTable("SmartDashboard");
-    this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry(true);
+
+    fieldOrientedChooser.setDefaultOption("field oriented", true);
+    Boolean value; 
+    this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry(value = fieldOrientedChooser.getSelected().equals(true)? true: false);
 
     this.gyro = gyro;
     this.cameraBlock = cameraBlock;
@@ -141,8 +157,9 @@ public class Drivebase extends SubsystemBase {
   public void defaultDrive(double speedX, double speedY, double rot) {
     defaultDrive(speedX, speedY, rot, true);
   }
-
+  public boolean isFieldOriented;
   public void defaultDrive(double speedX, double speedY, double rot, boolean slew) {
+   
     if (slew) {
       speedX = slewRateX.calculate(speedX);
       speedY = slewRateY.calculate(speedY);
@@ -150,8 +167,10 @@ public class Drivebase extends SubsystemBase {
 
     if (this.fieldOrientedEntry.get(true)) {
       fieldOrientedDrive(speedX, speedY, rot);
+      isFieldOriented = true;
     } else {
       robotOrientedDrive(speedX, speedY, rot);
+      isFieldOriented = false;
     }
   }
 
@@ -171,6 +190,7 @@ public class Drivebase extends SubsystemBase {
 
     SmartDashboard.putNumber("BL Target Angle", moduleStates[2].angle.getDegrees());
     SmartDashboard.putNumber("BL angle", backLeft.getEncoderRadians());
+
   }
 
   public double getMaxVelocity() {
@@ -209,6 +229,9 @@ public class Drivebase extends SubsystemBase {
     return positions;
   }
 
+ 
+
+
   @Override
   public void periodic() {
     var positions = getPositions();
@@ -221,5 +244,8 @@ public class Drivebase extends SubsystemBase {
     this.cameraBlock.update(poseEstimator);
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
+
+  
+    SmartDashboard.putData("fieldOriented", fieldOrientedChooser);
   }
 }
