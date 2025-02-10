@@ -58,8 +58,6 @@ public class Elevator extends SubsystemBase{
         feedforward = new ElevatorFeedforward(Constants.ElevatorConstants.FeedForward.kS, Constants.ElevatorConstants.FeedForward.kG, Constants.ElevatorConstants.FeedForward.kV);
 
         elevatorState = ElevatorState.DOWN;
-
-
     }
 
     
@@ -121,7 +119,11 @@ public class Elevator extends SubsystemBase{
     }
 
     public void manualControl(double input) {
-        goal += input;
+        if (input > 0 && getEncoderPosition() + input > Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
+            goal += input;
+        } else if (input < 0 && getEncoderPosition() - input < Constants.ElevatorConstants.kMinElevatorHeightMeters) {
+            goal -= input;
+        }
     }
 
     public void setEncoderPosition(double position) {
@@ -174,9 +176,6 @@ public class Elevator extends SubsystemBase{
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
 
     public Command goToStateCommand(ElevatorState state) {
-    return this.runOnce(() -> setStateByIndex(state.index));
-  }
-
-
-
+        return this.runOnce(() -> setStateByIndex(state.index));
+    }
 }
