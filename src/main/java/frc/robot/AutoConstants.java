@@ -21,7 +21,7 @@ import edu.wpi.first.math.util.Units;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class AutoConstants {
   public static final class ElevatorConstants{
     public static final int leftSparkMaxID = 9; //CAN
     public static final int rightSparkMaxID = 10;
