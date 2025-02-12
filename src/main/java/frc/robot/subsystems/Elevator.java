@@ -71,15 +71,14 @@ public class Elevator extends SubsystemBase{
 
     }
 
-    
     //pidloop
     private double encoderPosition;
     private double goal; 
     @Override
     public void periodic() {
         loggers();
-        encoderPosition = bottomSwitch.get() ? 0 : getEncoderPosition();
-        setEncoderPosition(encoderPosition);   
+        encoderPosition = getEncoderPosition(); /*bottomSwitch.get() ? 0 : getEncoderPosition();*/
+        //setEncoderPosition(encoderPosition);   
 
         climberSwitchHeight(climberSwitch());
     }
