@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase{
         leftConfig = new SparkMaxConfig();
         rightConfig = new SparkMaxConfig();
 
-        rightConfig.follow(leftSparkMax);
+        // rightConfig.follow(leftSparkMax);
 
         leftConfig.inverted(Constants.ElevatorConstants.leftSparkMaxInverted);
         rightConfig.inverted(Constants.ElevatorConstants.rightSparkMaxInverted);
@@ -76,11 +76,13 @@ public class Elevator extends SubsystemBase{
     private double goal; 
     @Override
     public void periodic() {
-        loggers();
-        encoderPosition = getEncoderPosition(); /*bottomSwitch.get() ? 0 : getEncoderPosition();*/
-        //setEncoderPosition(encoderPosition);   
+        // loggers();
+        // encoderPosition = getEncoderPosition(); /*bottomSwitch.get() ? 0 : getEncoderPosition();*/
+        // //setEncoderPosition(encoderPosition);   
 
-        climberSwitchHeight(climberSwitch());
+        // setOutput(pid.calculate(encoderPosition, goal) + feedforward.calculate(encoderPosition, goal));
+
+        // climberSwitchHeight(climberSwitch());
     }
 
     public void pidControl()
@@ -127,6 +129,7 @@ public class Elevator extends SubsystemBase{
 
     //set motor outputs
     public void setOutput(double output) {
+        rightSparkMax.set(output);
         leftSparkMax.set(output);
     }
 
@@ -206,5 +209,9 @@ public class Elevator extends SubsystemBase{
 
     public Command goToStateCommand(ElevatorState state) {
         return this.runOnce(() -> setStateByIndex(state.index));
+    }
+
+    public Command moveMotorsNoPID(double output) {
+        return this.runOnce(() -> setOutput(output));
     }
 }

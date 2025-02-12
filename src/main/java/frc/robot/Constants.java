@@ -98,14 +98,14 @@ public final class Constants {
     public static final double kMinElevatorHeightMeters = 0.0;
     public static final double kMaxElevatorHeightMeters = 1.25;
 
-    public static final double defaultManualOutput = 2;
+    public static final double defaultManualOutput = 1;
   }
 
   public static final class Coral {
     public static final int leftMotorID = 11; //CAN
     public static final int rightMotorID = 12;
-    public static final int beamBrake1ID = 1; //DIO
-    public static final int beamBrake2ID = 2;
+    public static final int coralSecondSensor = 9; //DIO
+    public static final int coralFirstSensor = 7;
     public static final double motorSpeedOutTake = 0.5;
     public static final double motorSpeedIntake = 0.5;
     public static final boolean leftMotorInverted = true;
@@ -115,7 +115,7 @@ public final class Constants {
   public static final class Algae{
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 9; //DIO
+    public static final int beamBreakID = 8; //DIO
     public static final double motorSpin = 0.8;
   }
   

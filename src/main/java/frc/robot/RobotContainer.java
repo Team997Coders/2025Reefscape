@@ -128,8 +128,8 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    elevator.setDefaultCommand(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    ()->c_driveStick.povDown().getAsBoolean()));
+    // elevator.setDefaultCommand(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    // ()->c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -143,17 +143,17 @@ public class RobotContainer {
     NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
 
 
-    m_led = new AddressableLED(9);
+  //   m_led = new AddressableLED(9);
 
-  // Reuse buffer
-  // Default to a length of 60, start empty output
-  // Length is expensive to set, so only set it once, then just update data
-    m_ledBuffer = new AddressableLEDBuffer(60);
-    m_led.setLength(m_ledBuffer.getLength());
+  // // Reuse buffer
+  // // Default to a length of 60, start empty output
+  // // Length is expensive to set, so only set it once, then just update data
+  //   m_ledBuffer = new AddressableLEDBuffer(60);
+  //   m_led.setLength(m_ledBuffer.getLength());
 
-  // Set the data
-    m_led.setData(m_ledBuffer);
-    m_led.start();
+  // // Set the data
+  //   m_led.setData(m_ledBuffer);
+  //   m_led.start();
   
 
     configureBindings();
@@ -264,6 +264,10 @@ public class RobotContainer {
     m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
     m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
+
+    c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.025));
+    c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.025));
+
 
     // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
     //     ()->c_driveStick.povDown().getAsBoolean()));
