@@ -59,8 +59,7 @@ public final class Constants {
     public static final class FeedForward{
       public static final double kG = 0.762; // volts (V)
       public static final double kV = 0.762; // volt per velocity (V/(m/s))
-      public static final double kA = 0.0; // volt per acceleration (V/(m/s²))
-      public static final double kDt = 0.02;
+      public static final double kS = 0.0; // volt per acceleration (V/(m/s²))
     }
 
     public static final class SIM {
