@@ -214,4 +214,12 @@ public class Elevator extends SubsystemBase{
     public Command moveMotorsNoPID(double output) {
         return this.runOnce(() -> setOutput(output));
     }
+
+    public Command manualUp() {
+        return this.runOnce(() -> manualControl(0.1));
+    }
+
+    public Command manualDown() {
+        return this.runOnce(() -> manualControl(-0.1));
+    }
 }

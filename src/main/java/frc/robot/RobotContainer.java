@@ -268,6 +268,9 @@ public class RobotContainer {
     c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.025));
     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.025));
 
+    // c_driveStick.povUp().whileTrue(elevator.manualUp());
+    // c_driveStick.povDown().whileTrue(elevator.manualDown());
+
 
     // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
     //     ()->c_driveStick.povDown().getAsBoolean()));
