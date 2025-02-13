@@ -51,7 +51,7 @@ public final class Constants {
     }
 
     public static final class PID {
-      public static final double kP = 0.1;
+      public static final double kP = 0.075;
       public static final double kI = 0;
       public static final double kD = 0;
     }
@@ -96,7 +96,7 @@ public final class Constants {
 
     // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
     public static final double kMinElevatorHeightMeters = 0.0;
-    public static final double kMaxElevatorHeightMeters = 1.25;
+    public static final double kMaxElevatorHeightMeters = 121;
 
     public static final double defaultManualOutput = 1;
   }
@@ -125,7 +125,7 @@ public final class Constants {
     public static final double slewRate = 20; // lower number for higher center of mass
 
     public static final class SwervePID {
-      public static final double p = 0.01;
+      public static final double p = 0.015;
       public static final double i = 0;
       public static final double d = 0;
     }

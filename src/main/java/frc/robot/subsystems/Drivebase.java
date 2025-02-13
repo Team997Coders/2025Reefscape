@@ -12,7 +12,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.revrobotics.spark.config.SmartMotionConfig;
 import com.studica.frc.AHRS;
 
-import choreo.trajectory.SwerveSample;
 import swervelib.SwerveModule;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -88,7 +87,7 @@ public class Drivebase extends SubsystemBase {
     var inst = NetworkTableInstance.getDefault();
     var table = inst.getTable("SmartDashboard");
 
-    fieldOrientedChooser.setDefaultOption("field oriented", true);
+    fieldOrientedChooser.setDefaultOption("field oriented", false);
     Boolean value; 
     this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry(value = fieldOrientedChooser.getSelected().equals(true)? true: false);
 

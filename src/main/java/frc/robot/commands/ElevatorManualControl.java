@@ -22,7 +22,7 @@ public class ElevatorManualControl extends Command {
 
     @Override 
     public void initialize() {
-        elevator.setEncoderPosition(0);
+      //  elevator.setEncoderPosition(0);
     }
 
     @Override

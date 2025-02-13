@@ -260,16 +260,21 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
     //// JoystickButton button_a = new JoystickButton(driveStick, 1);
     // // button_a.onTrue(goToTag).onFalse(stop);
-    m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
-    m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
+   // m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
+   // m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
     m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
 
-    c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.025));
-    c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.025));
+   // c_driveStick.a().onTrue(elevator.flipServo(80));
 
-    // c_driveStick.povUp().whileTrue(elevator.manualUp());
-    // c_driveStick.povDown().whileTrue(elevator.manualDown());
+//  c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.2)).onFalse(elevator.moveMotorsNoPID(0));
+//     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.2)).onFalse(elevator.moveMotorsNoPID(0));
+
+    c_driveStick.povUp().whileTrue(elevator.manualUp());
+    c_driveStick.povDown().whileTrue(elevator.manualDown());
+
+    c_driveStick.a().onTrue(elevator.goToPosition(112));
+    c_driveStick.b().onTrue(elevator.goToPosition(3));
 
 
     // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),

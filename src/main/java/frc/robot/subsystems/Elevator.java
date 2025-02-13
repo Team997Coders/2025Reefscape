@@ -11,7 +11,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
@@ -37,8 +36,6 @@ public class Elevator extends SubsystemBase{
     private final DigitalInput bottomSwitch;
 
     private final PIDController pid;
-    private final ElevatorFeedforward feedforward; 
-
     public ElevatorState elevatorState;
     public final Servo climber;
 
@@ -62,11 +59,15 @@ public class Elevator extends SubsystemBase{
         bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
-        feedforward = new ElevatorFeedforward(Constants.ElevatorConstants.FeedForward.kS, Constants.ElevatorConstants.FeedForward.kG, Constants.ElevatorConstants.FeedForward.kV);
-
+    
         elevatorState = ElevatorState.DOWN;
 
         climber = new Servo(Constants.ElevatorConstants.climberServoID);
+
+       // climber.setAngle(0);
+
+       goal = 0;
+       setEncoderPosition(0); 
 
 
     }
@@ -76,18 +77,18 @@ public class Elevator extends SubsystemBase{
     private double goal; 
     @Override
     public void periodic() {
-        // loggers();
+        loggers();
         // encoderPosition = getEncoderPosition(); /*bottomSwitch.get() ? 0 : getEncoderPosition();*/
-        // //setEncoderPosition(encoderPosition);   
+        // setEncoderPosition(encoderPosition);   
 
-        // setOutput(pid.calculate(encoderPosition, goal) + feedforward.calculate(encoderPosition, goal));
+        setOutput(pid.calculate(getEncoderPosition(), goal) );
 
         // climberSwitchHeight(climberSwitch());
     }
 
     public void pidControl()
     {
-        setOutput(pid.calculate(encoderPosition, goal) + feedforward.calculate(encoderPosition, goal));
+        setOutput(pid.calculate(encoderPosition, goal));
     }
 
 
@@ -133,11 +134,15 @@ public class Elevator extends SubsystemBase{
         leftSparkMax.set(output);
     }
 
+    public void setGoal(double newgoal) {
+        goal = newgoal;
+    }
+
     public void manualControl(double input) {
-        if (input > 0 && getEncoderPosition() + input > Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
+        if (input > 0 && goal + input < Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
             goal += input;
-        } else if (input < 0 && getEncoderPosition() - input < Constants.ElevatorConstants.kMinElevatorHeightMeters) {
-            goal -= input;
+        } else if (input < 0 && goal + input > Constants.ElevatorConstants.kMinElevatorHeightMeters) {
+            goal += input;
         }
     }
 
@@ -211,15 +216,23 @@ public class Elevator extends SubsystemBase{
         return this.runOnce(() -> setStateByIndex(state.index));
     }
 
+    public Command goToPosition(double position) {
+        return this.runOnce(() -> setGoal(position));
+    }
+
     public Command moveMotorsNoPID(double output) {
         return this.runOnce(() -> setOutput(output));
     }
 
     public Command manualUp() {
-        return this.runOnce(() -> manualControl(0.1));
+        return this.runOnce(() -> manualControl(0.0001));
     }
 
     public Command manualDown() {
-        return this.runOnce(() -> manualControl(-0.1));
+        return this.runOnce(() -> manualControl(-0.0001));
+    }
+
+    public Command flipServo(double angle) {
+        return this.runOnce(() -> climber.setAngle(angle));
     }
 }
