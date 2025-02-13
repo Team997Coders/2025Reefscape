@@ -37,7 +37,6 @@ public class Elevator extends SubsystemBase{
 
     private final PIDController pid;
     public ElevatorState elevatorState;
-    public final Servo climber;
 
     public Elevator() {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
@@ -61,8 +60,6 @@ public class Elevator extends SubsystemBase{
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
     
         elevatorState = ElevatorState.DOWN;
-
-        climber = new Servo(Constants.ElevatorConstants.climberServoID);
 
        // climber.setAngle(0);
 
@@ -181,24 +178,6 @@ public class Elevator extends SubsystemBase{
         return false;
     }
 
-    public BooleanSupplier climberSwitch() {
-        if (getEncoderPosition() <= Constants.ElevatorConstants.climberEncoderPosition) {
-            return () -> true;
-        } else if (getEncoderPosition() >= Constants.ElevatorConstants.climberEncoderPosition) {
-            return () -> false;
-        }
-            return () -> false;
-    }
-
-
-    public void climberSwitchHeight(BooleanSupplier switchThing) {
-        if (switchThing.getAsBoolean()) {
-            climber.setAngle(Constants.ElevatorConstants.climberAngle1);
-        } else if (switchThing.getAsBoolean() == false) {
-            climber.setAngle(Constants.ElevatorConstants.climberAngle2);
-        }
-    }
-
 /*LOGGERS*/
 
     private void loggers() {
@@ -232,7 +211,4 @@ public class Elevator extends SubsystemBase{
         return this.runOnce(() -> manualControl(-0.0001));
     }
 
-    public Command flipServo(double angle) {
-        return this.runOnce(() -> climber.setAngle(angle));
-    }
 }
