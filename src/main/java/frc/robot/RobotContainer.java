@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorAutomaticControl;
+import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
@@ -14,15 +16,11 @@ import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
 import java.util.Arrays;
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.events.PointTowardsZoneTrigger;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
+
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
+import com.reduxrobotics.canand.CanandEventLoop;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -33,29 +31,19 @@ import frc.robot.commands.CoralOutTake;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlgaeCommandIntake;
 import frc.robot.commands.AlgaeCommandOutTake;
-import frc.robot.commands.Drive;
-import frc.robot.commands.ElevatorAutomaticControl;
-import frc.robot.commands.ElevatorManualControl;
-import frc.robot.commands.goToTag;
-import frc.robot.commands.stop;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
-import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -74,7 +62,7 @@ public class RobotContainer {
   AddressableLEDBuffer m_ledBuffer;
 
 
-  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  private final Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
 
   private static XboxController driveStick = new XboxController(0);
   private static XboxController box = new XboxController(1);
@@ -97,7 +85,6 @@ public class RobotContainer {
 
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
-  // private final Elevator elevator = new Elevator();
 
   private final Coral m_coral = new Coral();
   private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
@@ -121,6 +108,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    CanandEventLoop.getInstance();
+
    // Configure the trigger bindings
     drivebase.setDefaultCommand(
        new Drive(
@@ -128,8 +117,8 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    // elevator.setDefaultCommand(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    // ()->c_driveStick.povDown().getAsBoolean()));
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    ()->c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -221,7 +210,7 @@ public class RobotContainer {
   }
 
   public void resetGyro() {
-    gyro.reset();
+    gyro.setYaw(0);
   }
 
   public double getGyroYaw() {
@@ -260,8 +249,8 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
     //// JoystickButton button_a = new JoystickButton(driveStick, 1);
     // // button_a.onTrue(goToTag).onFalse(stop);
-   // m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
-   // m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
+   m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
+   m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
     m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
 
@@ -270,11 +259,12 @@ public class RobotContainer {
 //  c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.2)).onFalse(elevator.moveMotorsNoPID(0));
 //     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.2)).onFalse(elevator.moveMotorsNoPID(0));
 
-    c_driveStick.povUp().whileTrue(elevator.manualUp());
-    c_driveStick.povDown().whileTrue(elevator.manualDown());
+    c_driveStick.povRight().whileTrue(elevator.manualUp());
+    c_driveStick.povLeft().whileTrue(elevator.manualDown());
 
-    c_driveStick.a().onTrue(elevator.goToPosition(112));
-    c_driveStick.b().onTrue(elevator.goToPosition(3));
+
+    // c_driveStick.a().onTrue(elevator.goToPosition(112));
+    // c_driveStick.b().onTrue(elevator.goToPosition(3));
 
 
     // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),

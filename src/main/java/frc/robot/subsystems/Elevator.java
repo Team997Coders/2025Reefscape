@@ -37,7 +37,6 @@ public class Elevator extends SubsystemBase{
 
     private final PIDController pid;
     public ElevatorState elevatorState;
-    public final Servo climber;
 
     public Elevator() {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
@@ -46,10 +45,12 @@ public class Elevator extends SubsystemBase{
         leftConfig = new SparkMaxConfig();
         rightConfig = new SparkMaxConfig();
 
-        // rightConfig.follow(leftSparkMax);
-
         leftConfig.inverted(Constants.ElevatorConstants.leftSparkMaxInverted);
         rightConfig.inverted(Constants.ElevatorConstants.rightSparkMaxInverted);
+
+        leftConfig.smartCurrentLimit(40);
+        rightConfig.smartCurrentLimit(40);
+        
 
         leftSparkMax.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         rightSparkMax.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
@@ -62,12 +63,9 @@ public class Elevator extends SubsystemBase{
     
         elevatorState = ElevatorState.DOWN;
 
-        climber = new Servo(Constants.ElevatorConstants.climberServoID);
-
        // climber.setAngle(0);
 
-       goal = 0;
-       setEncoderPosition(0); 
+       goal = 0; 
 
 
     }
@@ -78,12 +76,10 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         loggers();
-        // encoderPosition = getEncoderPosition(); /*bottomSwitch.get() ? 0 : getEncoderPosition();*/
-        // setEncoderPosition(encoderPosition);   
+        encoderPosition = getBottomSwitch() ? 0 : getEncoderPosition();
+        setEncoderPosition(encoderPosition);   
 
         setOutput(pid.calculate(getEncoderPosition(), goal) );
-
-        // climberSwitchHeight(climberSwitch());
     }
 
     public void pidControl()
@@ -154,6 +150,10 @@ public class Elevator extends SubsystemBase{
         return relativeEncoder.getPosition();
     }
 
+    public boolean getBottomSwitch() {
+        return !bottomSwitch.get();
+    }
+
     public ElevatorState getElevatorState() {
         return elevatorState;
     }
@@ -181,24 +181,6 @@ public class Elevator extends SubsystemBase{
         return false;
     }
 
-    public BooleanSupplier climberSwitch() {
-        if (getEncoderPosition() <= Constants.ElevatorConstants.climberEncoderPosition) {
-            return () -> true;
-        } else if (getEncoderPosition() >= Constants.ElevatorConstants.climberEncoderPosition) {
-            return () -> false;
-        }
-            return () -> false;
-    }
-
-
-    public void climberSwitchHeight(BooleanSupplier switchThing) {
-        if (switchThing.getAsBoolean()) {
-            climber.setAngle(Constants.ElevatorConstants.climberAngle1);
-        } else if (switchThing.getAsBoolean() == false) {
-            climber.setAngle(Constants.ElevatorConstants.climberAngle2);
-        }
-    }
-
 /*LOGGERS*/
 
     private void loggers() {
@@ -208,6 +190,7 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
+        SmartDashboard.putBoolean("elevator bottom switch", getBottomSwitch());
     }
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
@@ -232,7 +215,4 @@ public class Elevator extends SubsystemBase{
         return this.runOnce(() -> manualControl(-0.0001));
     }
 
-    public Command flipServo(double angle) {
-        return this.runOnce(() -> climber.setAngle(angle));
-    }
 }

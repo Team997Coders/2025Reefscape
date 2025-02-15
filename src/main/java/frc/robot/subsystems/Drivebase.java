@@ -9,6 +9,8 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.reduxrobotics.canand.CanandDevice;
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import com.revrobotics.spark.config.SmartMotionConfig;
 import com.studica.frc.AHRS;
 
@@ -49,7 +51,7 @@ public class Drivebase extends SubsystemBase {
 
   private final double MAX_VOLTAGE = 12;
 
-  private AHRS gyro;
+  private Canandgyro gyro;
 
   private SwerveModule frontLeft = new SwerveModule(SwerveModules.frontLeft, MAX_VELOCITY, MAX_VOLTAGE);
   private SwerveModule frontRight = new SwerveModule(SwerveModules.frontRight, MAX_VELOCITY, MAX_VOLTAGE);
@@ -81,13 +83,13 @@ public class Drivebase extends SubsystemBase {
   SendableChooser fieldOrientedChooser = new SendableChooser<Boolean>();
 
   /** Creates a new Drivebase. */
-  public Drivebase(AHRS gyro, CameraBlock cameraBlock) {
+  public Drivebase(Canandgyro gyro, CameraBlock cameraBlock) {
     fieldOrientedChooser.addOption("field oriented", true);
     fieldOrientedChooser.addOption("robot oriented", false);
     var inst = NetworkTableInstance.getDefault();
     var table = inst.getTable("SmartDashboard");
 
-    fieldOrientedChooser.setDefaultOption("field oriented", false);
+    fieldOrientedChooser.setDefaultOption("field oriented", true);
     Boolean value; 
     this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry(value = fieldOrientedChooser.getSelected().equals(true)? true: false);
 
@@ -131,7 +133,6 @@ public class Drivebase extends SubsystemBase {
     );
 
     SmartDashboard.putData("Field", field);
-
     SmartDashboard.putData("Swerve Drive", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {

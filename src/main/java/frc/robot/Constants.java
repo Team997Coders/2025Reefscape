@@ -25,10 +25,6 @@ public final class Constants {
   public static final class ElevatorConstants{
     public static final int leftSparkMaxID = 9; //CAN
     public static final int rightSparkMaxID = 10;
-
-    public static final int climberServoID = 9;
-    public static final double climberAngle1 = 0;
-    public static final double climberAngle2 = 0;
     
     public static final double climberEncoderPosition = 0;
 
@@ -41,13 +37,13 @@ public final class Constants {
 
     // elevator travel is about 30in
     public static final class SetpointRotations {
-      public static final double MAX = 10;
-      public static final double DOWN = 0;
-      public static final double SOURCE = 0;
-      public static final double L1 = 0;
-      public static final double L2 = 0;
-      public static final double L3 = 0;
-      public static final double L4 = 0;
+      public static final double MAX = 121;
+      public static final double DOWN = 3;
+      public static final double SOURCE = 30;
+      public static final double L1 = 15; //probably not true
+      public static final double L2 = 45;
+      public static final double L3 = 72;
+      public static final double L4 = 121;
     }
 
     public static final class PID {
@@ -101,6 +97,19 @@ public final class Constants {
     public static final double defaultManualOutput = 1;
   }
 
+  public static final class Climber {
+    public static final int climberFlipperID= 0;
+    public static final int climberFlipperUpAngle = 0;
+    public static final int climberFlipperDownAngle = 0;
+
+    public static final int coralFlipper1ID = 9;
+    public static final int coralFlipper2ID = 0;
+    public static double coralFlipperHoldAngle = 0;
+    public static double coralFlipperDropAngle = 80;
+
+    
+  }
+
   public static final class Coral {
     public static final int leftMotorID = 11; //CAN
     public static final int rightMotorID = 12;
@@ -112,7 +121,7 @@ public final class Constants {
     public static final boolean rightMotorInverted = false;
   }
   
-  public static final class Algae{
+  public static final class Algae {
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
     public static final int beamBreakID = 8; //DIO
@@ -125,7 +134,7 @@ public final class Constants {
     public static final double slewRate = 20; // lower number for higher center of mass
 
     public static final class SwervePID {
-      public static final double p = 0.015;
+      public static final double p = 0.1;
       public static final double i = 0;
       public static final double d = 0;
     }
@@ -231,5 +240,9 @@ public final class Constants {
   public static final class CANdleConstants {
     public static final int id = 50;
     public static final int ledCount = 50;
+  }
+
+  public static final class Gyro {
+    public static final int gyroID = 30;
   }
 }
