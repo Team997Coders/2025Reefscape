@@ -89,7 +89,7 @@ public class Drivebase extends SubsystemBase {
     var inst = NetworkTableInstance.getDefault();
     var table = inst.getTable("SmartDashboard");
 
-    fieldOrientedChooser.setDefaultOption("field oriented", false);
+    fieldOrientedChooser.setDefaultOption("field oriented", true);
     Boolean value; 
     this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry(value = fieldOrientedChooser.getSelected().equals(true)? true: false);
 
@@ -133,6 +133,26 @@ public class Drivebase extends SubsystemBase {
     );
 
     SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("Swerve Drive", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("SwerveDrive");
+    
+        builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getEncoderRadians(), null);
+        builder.addDoubleProperty("Front Left Velocity", () -> frontLeft.getState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Front Right Angle", () -> frontRight.getEncoderRadians(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> frontRight.getState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Back Left Angle", () -> backLeft.getEncoderRadians(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> backLeft.getState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Back Right Angle", () -> backRight.getEncoderRadians(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> backRight.getState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Robot Angle", () -> gyro.getRotation2d().getRadians(), null);
+      }
+    });
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds()
