@@ -35,6 +35,8 @@ public final class Constants {
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
 
+    
+
     public static final int bottomSwitchID = 0; //DIO
 
     public static final int atTargetOffset = 0; //The encoder ticks to determine whether the elevator is at the target position

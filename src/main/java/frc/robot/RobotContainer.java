@@ -109,11 +109,11 @@ public class RobotContainer {
   final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
-      drivebase,
-      () -> getScaledXY(),
-      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
-      m_coral, elevator, driveStick, c_driveStick);
+  // private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
+  //     drivebase,
+  //     () -> getScaledXY(),
+  //     () -> scaleRotationAxis(driveStick.getRawAxis(4))),
+  //     m_coral, elevator, driveStick, c_driveStick);
 
       
 
@@ -267,17 +267,17 @@ public class RobotContainer {
   private void configureBindings() {
     // Gyro Reset
     // c_driveStick.povUp().onTrue(Commands.runOnce(gyro::reset));
-    Command goToTag = new goToTag(drivebase, frontCamera, 0.0);
-    Command stop = new stop(goToTag);
-    //// JoystickButton button_a = new JoystickButton(driveStick, 1);
-    // // button_a.onTrue(goToTag).onFalse(stop);
-    m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
-    m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
-    m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
-    m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
+    // Command goToTag = new goToTag(drivebase, frontCamera, 0.0);
+    // Command stop = new stop(goToTag);
+    // //// JoystickButton button_a = new JoystickButton(driveStick, 1);
+    // // // button_a.onTrue(goToTag).onFalse(stop);
+    // m_driverController.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
+    // m_driverController.b().whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
+    // m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
+    // m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
 
-    c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-        ()->c_driveStick.povDown().getAsBoolean()));
+    // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    //     ()->c_driveStick.povDown().getAsBoolean()));
   }
 
   /**
