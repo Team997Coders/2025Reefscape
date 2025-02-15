@@ -248,14 +248,21 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
    
     //ALGAE COMMANDS
-    m_driverController.a().whileTrue(new AlgaeCommandIntake(m_algae));
-    m_driverController.b().whileTrue(new AlgaeCommandOutTake(m_algae));
+    m_driverController.a().whileTrue(new AlgaeCommandIntake(m_algae)).onFalse(m_algae.AlgaeStop());
+    m_driverController.b().whileTrue(new AlgaeCommandOutTake(m_algae)).onFalse(m_algae.AlgaeStop());
+
+    m_driverController.a().whileTrue(m_algae.AlgaeIntake(.5)).onFalse(m_algae.AlgaeStop());
+    m_driverController.b().whileTrue(m_algae.AlgaeOuttake(.5)).onFalse(m_algae.AlgaeStop());
+
+
 
     //CORAL COMMANDS
-    m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake());
-    m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake());
+    m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
+    m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
 
 
+
+    //ELEVATOR COMMANDS
 //  c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.2)).onFalse(elevator.moveMotorsNoPID(0));
 //     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.2)).onFalse(elevator.moveMotorsNoPID(0));
 

@@ -48,6 +48,10 @@ public class Coral extends SubsystemBase{
         return this.runOnce(() -> spinBothMotors(Constants.Coral.motorSpeedOutTake));
     
     }
+
+    public Command CoralStop() {
+        return this.runOnce(() -> spinBothMotors(0));
+    }
         
     public void spinBothMotors(double speed) {
         SpinLeftMotor(speed);

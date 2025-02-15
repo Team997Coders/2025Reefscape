@@ -78,8 +78,13 @@ public class Elevator extends SubsystemBase{
         loggers();
         encoderPosition = getBottomSwitch() ? 0 : getEncoderPosition();
         setEncoderPosition(encoderPosition);   
-
-        setOutput(pid.calculate(getEncoderPosition(), goal) );
+        if (encoderPosition < 0 && !getBottomSwitch())
+        {
+            setOutput(-0.125);
+        } else
+        {
+        setOutput(pid.calculate(getEncoderPosition(), goal));
+        }
     }
 
     public void pidControl()
@@ -137,7 +142,7 @@ public class Elevator extends SubsystemBase{
     public void manualControl(double input) {
         if (input > 0 && goal + input < Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
             goal += input;
-        } else if (input < 0 && goal + input > Constants.ElevatorConstants.kMinElevatorHeightMeters) {
+        } else if (input < 0 && goal + input >= Constants.ElevatorConstants.kMinElevatorHeightMeters) {
             goal += input;
         }
     }

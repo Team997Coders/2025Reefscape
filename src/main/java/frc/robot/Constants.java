@@ -37,6 +37,10 @@ public final class Constants {
 
     public static final int atTargetOffset = 0; //The encoder ticks to determine whether the elevator is at the target position
 
+     // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
+     public static final double kMinElevatorHeightMeters = 0.0;
+     public static final double kMaxElevatorHeightMeters = 78.6;
+
     // elevator travel is about 30in
     public static final class SetpointRotations {
       public static final double MAX = 121;
@@ -45,7 +49,7 @@ public final class Constants {
       public static final double L1 = 15; //probably not true
       public static final double L2 = 45;
       public static final double L3 = 72;
-      public static final double L4 = 121;
+      public static final double L4 = 78.6;
     }
 
     public static final class PID {
@@ -91,10 +95,6 @@ public final class Constants {
       public static final double kElevatorEncoderDistPerPulse =
         Math.PI * kElevatorDrumDia / 42;  // 0.131 inches/encoder tic
     }
-
-    // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-    public static final double kMinElevatorHeightMeters = 0.0;
-    public static final double kMaxElevatorHeightMeters = 121;
 
     public static final double defaultManualOutput = 1;
   }

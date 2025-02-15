@@ -59,6 +59,10 @@ public class Algae extends SubsystemBase{
         return this.runOnce(() -> SpinMotor(-speed));
     }
 
+    public Command AlgaeStop() {
+        return this.runOnce(() -> SpinMotor(0));
+    }
+
     public void loggers() {
         SmartDashboard.putBoolean("algae beambreak", getBeamBreakStatus());
     }
