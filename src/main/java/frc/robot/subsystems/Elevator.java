@@ -45,10 +45,12 @@ public class Elevator extends SubsystemBase{
         leftConfig = new SparkMaxConfig();
         rightConfig = new SparkMaxConfig();
 
-        // rightConfig.follow(leftSparkMax);
-
         leftConfig.inverted(Constants.ElevatorConstants.leftSparkMaxInverted);
         rightConfig.inverted(Constants.ElevatorConstants.rightSparkMaxInverted);
+
+        leftConfig.smartCurrentLimit(40);
+        rightConfig.smartCurrentLimit(40);
+        
 
         leftSparkMax.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         rightSparkMax.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
@@ -63,8 +65,7 @@ public class Elevator extends SubsystemBase{
 
        // climber.setAngle(0);
 
-       goal = 0;
-       setEncoderPosition(0); 
+       goal = 0; 
 
 
     }
@@ -75,12 +76,10 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         loggers();
-        // encoderPosition = getEncoderPosition(); /*bottomSwitch.get() ? 0 : getEncoderPosition();*/
-        // setEncoderPosition(encoderPosition);   
+        encoderPosition = getBottomSwitch() ? 0 : getEncoderPosition();
+        setEncoderPosition(encoderPosition);   
 
         setOutput(pid.calculate(getEncoderPosition(), goal) );
-
-        // climberSwitchHeight(climberSwitch());
     }
 
     public void pidControl()
@@ -151,6 +150,10 @@ public class Elevator extends SubsystemBase{
         return relativeEncoder.getPosition();
     }
 
+    public boolean getBottomSwitch() {
+        return !bottomSwitch.get();
+    }
+
     public ElevatorState getElevatorState() {
         return elevatorState;
     }
@@ -187,6 +190,7 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
+        SmartDashboard.putBoolean("elevator bottom switch", getBottomSwitch());
     }
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
