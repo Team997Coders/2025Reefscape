@@ -172,7 +172,8 @@ public final class Constants {
           false,
           1,
           //.759
-          0);
+          0
+        );
 
       // Back Left
       public static final SwerveModuleConfig backLeft = new SwerveModuleConfig(
