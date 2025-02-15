@@ -11,7 +11,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
@@ -37,10 +36,7 @@ public class Elevator extends SubsystemBase{
     private final DigitalInput bottomSwitch;
 
     private final PIDController pid;
-    private final ElevatorFeedforward feedforward; 
-
     public ElevatorState elevatorState;
-    public final Servo climber;
 
     public Elevator() {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
@@ -49,10 +45,12 @@ public class Elevator extends SubsystemBase{
         leftConfig = new SparkMaxConfig();
         rightConfig = new SparkMaxConfig();
 
-        rightConfig.follow(leftSparkMax);
-
         leftConfig.inverted(Constants.ElevatorConstants.leftSparkMaxInverted);
         rightConfig.inverted(Constants.ElevatorConstants.rightSparkMaxInverted);
+
+        leftConfig.smartCurrentLimit(40);
+        rightConfig.smartCurrentLimit(40);
+        
 
         leftSparkMax.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         rightSparkMax.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
@@ -62,31 +60,31 @@ public class Elevator extends SubsystemBase{
         bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
-        feedforward = new ElevatorFeedforward(Constants.ElevatorConstants.FeedForward.kS, Constants.ElevatorConstants.FeedForward.kG, Constants.ElevatorConstants.FeedForward.kV);
-
+    
         elevatorState = ElevatorState.DOWN;
 
-        climber = new Servo(Constants.ElevatorConstants.climberServoID);
+       // climber.setAngle(0);
+
+       goal = 0; 
 
 
     }
 
-    
     //pidloop
     private double encoderPosition;
     private double goal; 
     @Override
     public void periodic() {
         loggers();
-        encoderPosition = bottomSwitch.get() ? 0 : getEncoderPosition();
+        encoderPosition = getBottomSwitch() ? 0 : getEncoderPosition();
         setEncoderPosition(encoderPosition);   
 
-        climberSwitchHeight(climberSwitch());
+        setOutput(pid.calculate(getEncoderPosition(), goal) );
     }
 
     public void pidControl()
     {
-        setOutput(pid.calculate(encoderPosition, goal) + feedforward.calculate(encoderPosition, goal));
+        setOutput(pid.calculate(encoderPosition, goal));
     }
 
 
@@ -128,14 +126,19 @@ public class Elevator extends SubsystemBase{
 
     //set motor outputs
     public void setOutput(double output) {
+        rightSparkMax.set(output);
         leftSparkMax.set(output);
     }
 
+    public void setGoal(double newgoal) {
+        goal = newgoal;
+    }
+
     public void manualControl(double input) {
-        if (input > 0 && getEncoderPosition() + input > Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
+        if (input > 0 && goal + input < Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
             goal += input;
-        } else if (input < 0 && getEncoderPosition() - input < Constants.ElevatorConstants.kMinElevatorHeightMeters) {
-            goal -= input;
+        } else if (input < 0 && goal + input > Constants.ElevatorConstants.kMinElevatorHeightMeters) {
+            goal += input;
         }
     }
 
@@ -145,6 +148,10 @@ public class Elevator extends SubsystemBase{
 
     public double getEncoderPosition() {
         return relativeEncoder.getPosition();
+    }
+
+    public boolean getBottomSwitch() {
+        return !bottomSwitch.get();
     }
 
     public ElevatorState getElevatorState() {
@@ -174,24 +181,6 @@ public class Elevator extends SubsystemBase{
         return false;
     }
 
-    public BooleanSupplier climberSwitch() {
-        if (getEncoderPosition() <= Constants.ElevatorConstants.climberEncoderPosition) {
-            return () -> true;
-        } else if (getEncoderPosition() >= Constants.ElevatorConstants.climberEncoderPosition) {
-            return () -> false;
-        }
-            return () -> false;
-    }
-
-
-    public void climberSwitchHeight(BooleanSupplier switchThing) {
-        if (switchThing.getAsBoolean()) {
-            climber.setAngle(Constants.ElevatorConstants.climberAngle1);
-        } else if (switchThing.getAsBoolean() == false) {
-            climber.setAngle(Constants.ElevatorConstants.climberAngle2);
-        }
-    }
-
 /*LOGGERS*/
 
     private void loggers() {
@@ -201,6 +190,7 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator kp", Constants.ElevatorConstants.PID.kP);
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
+        SmartDashboard.putBoolean("elevator bottom switch", getBottomSwitch());
     }
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
@@ -208,4 +198,21 @@ public class Elevator extends SubsystemBase{
     public Command goToStateCommand(ElevatorState state) {
         return this.runOnce(() -> setStateByIndex(state.index));
     }
+
+    public Command goToPosition(double position) {
+        return this.runOnce(() -> setGoal(position));
+    }
+
+    public Command moveMotorsNoPID(double output) {
+        return this.runOnce(() -> setOutput(output));
+    }
+
+    public Command manualUp() {
+        return this.runOnce(() -> manualControl(0.0001));
+    }
+
+    public Command manualDown() {
+        return this.runOnce(() -> manualControl(-0.0001));
+    }
+
 }

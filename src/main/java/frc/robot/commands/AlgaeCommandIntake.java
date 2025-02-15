@@ -20,9 +20,9 @@ public class AlgaeCommandIntake extends Command{
 
   @Override
   public void execute() {
-    if (m_algae.getProximitySensor() == true) {
+    if (m_algae.getBeamBreakStatus() == true) {
         m_algae.SpinMotor(Constants.Algae.motorSpin);
-    } else if (m_algae.getProximitySensor() == false){
+    } else if (m_algae.getBeamBreakStatus() == false){
         m_algae.SpinMotor(0);
     }
   }

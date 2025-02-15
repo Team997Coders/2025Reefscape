@@ -42,6 +42,7 @@ public class ElevatorAutomaticControl extends Command{
             } else if (state >= 5) {
                 state = 5;
             }
+        elevator.goToStateCommand(ElevatorState.findByIndex(state));
         } 
         
 
@@ -52,11 +53,10 @@ public class ElevatorAutomaticControl extends Command{
             } else if (state <= 0) {
                 state = 0;
             }
+        elevator.goToStateCommand(ElevatorState.findByIndex(state));
         }
 
         upPrevious = upCurrent;
         downPrevious = downCurrent;
-
-        elevator.goToStateCommand(ElevatorState.findByIndex(state));
     }    
 }

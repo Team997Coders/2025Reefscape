@@ -21,8 +21,8 @@ public class Coral extends SubsystemBase{
     private final SparkMax rightMotor;
     private final SparkBaseConfig leftConfig;
     private final SparkBaseConfig rightConfig;
-    private final DigitalInput beamBrake1;
-    private final DigitalInput beamBrake2;
+    private final DigitalInput firstSensor;
+    private final DigitalInput secondSensor;
     public Coral(){
         leftMotor = new SparkMax(Constants.Coral.leftMotorID, MotorType.kBrushless);
         rightMotor = new SparkMax(Constants.Coral.rightMotorID, MotorType.kBrushless);
@@ -36,8 +36,8 @@ public class Coral extends SubsystemBase{
         leftMotor.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         rightMotor.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        beamBrake1 = new DigitalInput(Constants.Coral.beamBrake1ID);
-        beamBrake2 = new DigitalInput(Constants.Coral.beamBrake2ID);
+        firstSensor = new DigitalInput(Constants.Coral.coralFirstSensor);
+        secondSensor = new DigitalInput(Constants.Coral.coralSecondSensor);
     }
 
     public Command manualMoveCoralMotorsIntake() {
@@ -63,10 +63,10 @@ public class Coral extends SubsystemBase{
 
     }
     public boolean BeamBrake1(){
-        return beamBrake1.get();
+        return firstSensor.get();
     }
     public boolean BeamBrake2(){
-        return beamBrake2.get();
+        return secondSensor.get();
     }
     private void loggers() {
         SmartDashboard.putBoolean("beam brake 1", BeamBrake1());

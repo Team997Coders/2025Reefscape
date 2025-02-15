@@ -16,7 +16,7 @@ public class Algae extends SubsystemBase{
     
     private final SparkMax spinnyMotor;
     private final SparkMaxConfig spinnyMotorConfig;
-    private final DigitalInput proximitySensor;
+    private final DigitalInput beamBreak;
 
     public Algae() {
         spinnyMotor = new SparkMax(Constants.Algae.spinnyMotorID, MotorType.kBrushless);
@@ -25,7 +25,7 @@ public class Algae extends SubsystemBase{
         spinnyMotorConfig.smartCurrentLimit(Constants.Algae.spinnyMotorConfig);
         spinnyMotor.configure(spinnyMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        proximitySensor = new DigitalInput(Constants.Algae.proximitySensorID);
+        beamBreak = new DigitalInput(Constants.Algae.beamBreakID);
     
     }
     @Override
@@ -37,8 +37,8 @@ public class Algae extends SubsystemBase{
         spinnyMotor.set(speed);
     }
     
-    public boolean getProximitySensor() {
-        return proximitySensor.get();
+    public boolean getBeamBreakStatus() {
+        return beamBreak.get();
     }
 
     public Command AlgaeIntake(double speed) {
@@ -60,7 +60,7 @@ public class Algae extends SubsystemBase{
     }
 
     public void loggers() {
-        SmartDashboard.putBoolean("algae proximity sensor", getProximitySensor());
+        SmartDashboard.putBoolean("algae beambreak", getBeamBreakStatus());
     }
 }
 

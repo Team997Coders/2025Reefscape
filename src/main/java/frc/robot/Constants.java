@@ -25,10 +25,6 @@ public final class Constants {
   public static final class ElevatorConstants{
     public static final int leftSparkMaxID = 9; //CAN
     public static final int rightSparkMaxID = 10;
-
-    public static final int climberServoID = 9;
-    public static final double climberAngle1 = 0;
-    public static final double climberAngle2 = 0;
     
     public static final double climberEncoderPosition = 0;
 
@@ -43,25 +39,25 @@ public final class Constants {
 
     // elevator travel is about 30in
     public static final class SetpointRotations {
-      public static final double MAX = 10;
-      public static final double DOWN = 0;
-      public static final double SOURCE = 0;
-      public static final double L1 = 0;
-      public static final double L2 = 0;
-      public static final double L3 = 0;
-      public static final double L4 = 0;
+      public static final double MAX = 121;
+      public static final double DOWN = 3;
+      public static final double SOURCE = 30;
+      public static final double L1 = 15; //probably not true
+      public static final double L2 = 45;
+      public static final double L3 = 72;
+      public static final double L4 = 121;
     }
 
     public static final class PID {
-      public static final double kP = 0.1;
+      public static final double kP = 0.075;
       public static final double kI = 0;
       public static final double kD = 0;
     }
 
     public static final class FeedForward{
-      public static final double kS = 0;
-      public static final double kG = 0;
-      public static final double kV = 0;
+      public static final double kG = 0.762; // volts (V)
+      public static final double kV = 0.762; // volt per velocity (V/(m/s))
+      public static final double kS = 0.0; // volt per acceleration (V/(m/s²))
     }
 
     public static final class SIM {
@@ -98,26 +94,39 @@ public final class Constants {
 
     // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
     public static final double kMinElevatorHeightMeters = 0.0;
-    public static final double kMaxElevatorHeightMeters = 1.25;
+    public static final double kMaxElevatorHeightMeters = 121;
 
-    public static final double defaultManualOutput = 2;
+    public static final double defaultManualOutput = 1;
+  }
+
+  public static final class Climber {
+    public static final int climberFlipperID= 0;
+    public static final int climberFlipperUpAngle = 0;
+    public static final int climberFlipperDownAngle = 0;
+
+    public static final int coralFlipper1ID = 9;
+    public static final int coralFlipper2ID = 0;
+    public static double coralFlipperHoldAngle = 0;
+    public static double coralFlipperDropAngle = 80;
+
+    
   }
 
   public static final class Coral {
     public static final int leftMotorID = 11; //CAN
     public static final int rightMotorID = 12;
-    public static final int beamBrake1ID = 1; //DIO
-    public static final int beamBrake2ID = 2;
+    public static final int coralSecondSensor = 9; //DIO
+    public static final int coralFirstSensor = 7;
     public static final double motorSpeedOutTake = 0.5;
     public static final double motorSpeedIntake = 0.5;
     public static final boolean leftMotorInverted = true;
     public static final boolean rightMotorInverted = false;
   }
   
-  public static final class Algae{
+  public static final class Algae {
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 9; //DIO
+    public static final int beamBreakID = 8; //DIO
     public static final double motorSpin = 0.8;
   }
   
@@ -127,7 +136,7 @@ public final class Constants {
     public static final double slewRate = 20; // lower number for higher center of mass
 
     public static final class SwervePID {
-      public static final double p = 0.01;
+      public static final double p = 0.1;
       public static final double i = 0;
       public static final double d = 0;
     }
@@ -165,7 +174,8 @@ public final class Constants {
           false,
           1,
           //.759
-          0);
+          0
+        );
 
       // Back Left
       public static final SwerveModuleConfig backLeft = new SwerveModuleConfig(
@@ -233,5 +243,10 @@ public final class Constants {
   public static final class CANdleConstants {
     public static final int id = 50;
     public static final int ledCount = 50;
+  }
+
+  public static final class Gyro {
+    public static final int gyroID = 30;
+    public static final double gyroYawConversionFactor = 360;
   }
 }

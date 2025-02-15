@@ -20,6 +20,11 @@ public class ElevatorManualControl extends Command {
         addRequirements(elevator);
     }
 
+    @Override 
+    public void initialize() {
+      //  elevator.setEncoderPosition(0);
+    }
+
     @Override
     public void execute() {
         if (up.getAsBoolean()) {

@@ -9,10 +9,11 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.reduxrobotics.canand.CanandDevice;
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import com.revrobotics.spark.config.SmartMotionConfig;
 import com.studica.frc.AHRS;
 
-import choreo.trajectory.SwerveSample;
 import swervelib.SwerveModule;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -36,10 +37,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.ModuleLocations;
 import frc.robot.Constants.DriveConstants.SwerveModules;
 import frc.robot.subsystems.vision.CameraBlock;
+
 
 public class Drivebase extends SubsystemBase {
   private final double DRIVE_REDUCTION = 1.0 / 6.75;
@@ -50,7 +53,7 @@ public class Drivebase extends SubsystemBase {
 
   private final double MAX_VOLTAGE = 12;
 
-  private AHRS gyro;
+  private Canandgyro gyro;
 
   private SwerveModule frontLeft = new SwerveModule(SwerveModules.frontLeft, MAX_VELOCITY, MAX_VOLTAGE);
   private SwerveModule frontRight = new SwerveModule(SwerveModules.frontRight, MAX_VELOCITY, MAX_VOLTAGE);
@@ -82,7 +85,7 @@ public class Drivebase extends SubsystemBase {
   SendableChooser fieldOrientedChooser = new SendableChooser<Boolean>();
 
   /** Creates a new Drivebase. */
-  public Drivebase(AHRS gyro, CameraBlock cameraBlock) {
+  public Drivebase(Canandgyro gyro, CameraBlock cameraBlock) {
     fieldOrientedChooser.addOption("field oriented", true);
     fieldOrientedChooser.addOption("robot oriented", false);
     var inst = NetworkTableInstance.getDefault();
@@ -132,7 +135,6 @@ public class Drivebase extends SubsystemBase {
     );
 
     SmartDashboard.putData("Field", field);
-
     SmartDashboard.putData("Swerve Drive", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
@@ -161,7 +163,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public double getFieldAngle() {
-    return -gyro.getYaw();
+    return gyro.getYaw()*(Constants.Gyro.gyroYawConversionFactor);
   }
 
   public void fieldOrientedDrive(double speedX, double speedY, double rot) {
