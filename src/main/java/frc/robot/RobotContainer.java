@@ -14,16 +14,11 @@ import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
 import java.util.Arrays;
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.events.PointTowardsZoneTrigger;
-import com.pathplanner.lib.path.PathPlannerPath;
+
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
+import com.reduxrobotics.canand.CanandEventLoop;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -34,29 +29,19 @@ import frc.robot.commands.CoralOutTake;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlgaeCommandIntake;
 import frc.robot.commands.AlgaeCommandOutTake;
-import frc.robot.commands.Drive;
-import frc.robot.commands.ElevatorAutomaticControl;
-import frc.robot.commands.ElevatorManualControl;
-import frc.robot.commands.goToTag;
-import frc.robot.commands.stop;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
-import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -122,6 +107,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    CanandEventLoop.getInstance();
+
    // Configure the trigger bindings
     drivebase.setDefaultCommand(
        new Drive(
