@@ -21,6 +21,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.events.PointTowardsZoneTrigger;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
@@ -74,7 +75,7 @@ public class RobotContainer {
   AddressableLEDBuffer m_ledBuffer;
 
 
-  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  private final Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
 
   private static XboxController driveStick = new XboxController(0);
   private static XboxController box = new XboxController(1);
@@ -221,7 +222,7 @@ public class RobotContainer {
   }
 
   public void resetGyro() {
-    gyro.reset();
+    gyro.setYaw(0);
   }
 
   public double getGyroYaw() {

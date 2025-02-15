@@ -110,8 +110,6 @@ public final class Constants {
     
   }
 
-
-
   public static final class Coral {
     public static final int leftMotorID = 11; //CAN
     public static final int rightMotorID = 12;
@@ -123,7 +121,7 @@ public final class Constants {
     public static final boolean rightMotorInverted = false;
   }
   
-  public static final class Algae{
+  public static final class Algae {
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
     public static final int beamBreakID = 8; //DIO
@@ -242,5 +240,9 @@ public final class Constants {
   public static final class CANdleConstants {
     public static final int id = 50;
     public static final int ledCount = 50;
+  }
+
+  public static final class Gyro {
+    public static final int gyroID = 30;
   }
 }
