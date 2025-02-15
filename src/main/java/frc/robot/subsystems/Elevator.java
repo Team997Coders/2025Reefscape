@@ -60,6 +60,7 @@ public class Elevator extends SubsystemBase{
         bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
+        pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
     
         elevatorState = ElevatorState.DOWN;
 
@@ -76,9 +77,8 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         loggers();
-        encoderPosition = getBottomSwitch() ? 0 : getEncoderPosition();
-        setEncoderPosition(encoderPosition);   
-        if (encoderPosition < 0 && !getBottomSwitch())
+  
+        if (getEncoderPosition() < 0 && !getBottomSwitch())
         {
             setOutput(-0.125);
         } else
@@ -140,10 +140,15 @@ public class Elevator extends SubsystemBase{
     }
 
     public void manualControl(double input) {
-        if (input > 0 && goal + input < Constants.ElevatorConstants.kMaxElevatorHeightMeters) {
+        if (input > 0 && goal + input <= Constants.ElevatorConstants.kMaxElevatorHeightRotations) {
             goal += input;
-        } else if (input < 0 && goal + input >= Constants.ElevatorConstants.kMinElevatorHeightMeters) {
+        } else if (input < 0 && goal + input >= Constants.ElevatorConstants.kMinElevatorHeightRotations) {
+            if (goal > 0 && goal < 1) {
+                goal = 0;
+            } else {
             goal += input;
+            }
+            
         }
     }
 
@@ -152,6 +157,9 @@ public class Elevator extends SubsystemBase{
     }
 
     public double getEncoderPosition() {
+        if(getBottomSwitch()) {
+             setEncoderPosition(0);
+        }
         return relativeEncoder.getPosition();
     }
 
@@ -174,7 +182,7 @@ public class Elevator extends SubsystemBase{
 
     public boolean elevatorAtTarget() throws unfilledConstant
     {
-        int offset = Constants.ElevatorConstants.atTargetOffset;
+        double offset = Constants.ElevatorConstants.atTargetOffset;
         if (offset == 0)
         {
             throw new unfilledConstant("The atTargetOffset elevator constants is set to zero meaning nothing will work ever");
@@ -196,6 +204,7 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
         SmartDashboard.putBoolean("elevator bottom switch", getBottomSwitch());
+        SmartDashboard.putBoolean("pid at goal", pid.atSetpoint());
     }
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/

@@ -120,8 +120,8 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    ()->c_driveStick.povDown().getAsBoolean()));
+    // elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    // ()->c_driveStick.povDown().getAsBoolean()));
 
     //AUTOCHOOSER
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
@@ -266,9 +266,7 @@ public class RobotContainer {
 //  c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.2)).onFalse(elevator.moveMotorsNoPID(0));
 //     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.2)).onFalse(elevator.moveMotorsNoPID(0));
 
-    c_driveStick.povRight().whileTrue(elevator.manualUp());
-    c_driveStick.povLeft().whileTrue(elevator.manualDown());
-
+    
 
     // c_driveStick.a().onTrue(elevator.goToPosition(112));
     // c_driveStick.b().onTrue(elevator.goToPosition(3));

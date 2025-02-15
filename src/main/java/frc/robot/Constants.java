@@ -35,25 +35,25 @@ public final class Constants {
 
     public static final int bottomSwitchID = 0; //DIO
 
-    public static final int atTargetOffset = 0; //The encoder ticks to determine whether the elevator is at the target position
+    public static final double atTargetOffset = 0.3; //The encoder ticks to determine whether the elevator is at the target position
 
      // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-     public static final double kMinElevatorHeightMeters = 0.0;
-     public static final double kMaxElevatorHeightMeters = 78.6;
+     public static final double kMinElevatorHeightRotations = 0.0;
+     public static final double kMaxElevatorHeightRotations = 110;
 
     // elevator travel is about 30in
     public static final class SetpointRotations {
-      public static final double MAX = 121;
-      public static final double DOWN = 3;
+      public static final double MAX = kMaxElevatorHeightRotations;
+      public static final double DOWN = 0;
       public static final double SOURCE = 30;
-      public static final double L1 = 15; //probably not true
+      public static final double L1 = 15;
       public static final double L2 = 45;
       public static final double L3 = 72;
-      public static final double L4 = 78.6;
+      public static final double L4 = kMaxElevatorHeightRotations; 
     }
 
     public static final class PID {
-      public static final double kP = 0.075;
+      public static final double kP = 0.15;
       public static final double kI = 0;
       public static final double kD = 0;
     }
