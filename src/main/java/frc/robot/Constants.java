@@ -244,5 +244,6 @@ public final class Constants {
 
   public static final class Gyro {
     public static final int gyroID = 30;
+    public static final double gyroYawConversionFactor = 360;
   }
 }

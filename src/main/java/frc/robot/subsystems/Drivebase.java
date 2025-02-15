@@ -37,10 +37,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.ModuleLocations;
 import frc.robot.Constants.DriveConstants.SwerveModules;
 import frc.robot.subsystems.vision.CameraBlock;
+
 
 public class Drivebase extends SubsystemBase {
   private final double DRIVE_REDUCTION = 1.0 / 6.75;
@@ -161,7 +163,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public double getFieldAngle() {
-    return -gyro.getYaw();
+    return gyro.getYaw()*(Constants.Gyro.gyroYawConversionFactor);
   }
 
   public void fieldOrientedDrive(double speedX, double speedY, double rot) {

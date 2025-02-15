@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("Yaw", m_robotContainer.getGyroYaw());
+    SmartDashboard.putNumber("Yaw", m_robotContainer.drivebase.getFieldAngle());
     //SmartDashboard.putBoolean("On Blue Alliance", m_robotContainer.onBlueAlliance());
     //SmartDashboard.putBoolean("Note Acquired", m_robotContainer.getBeamBreak());
 

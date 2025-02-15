@@ -84,7 +84,7 @@ public class RobotContainer {
 
 
 
-  private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
+  public final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
 
   private final Coral m_coral = new Coral();
   private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
@@ -213,9 +213,6 @@ public class RobotContainer {
     gyro.setYaw(0);
   }
 
-  public double getGyroYaw() {
-    return -gyro.getYaw();
-  }
 
   public boolean onBlueAlliance() {
     var alliance = DriverStation.getAlliance();
