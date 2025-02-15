@@ -32,7 +32,7 @@ public class Camera
 
     public Camera(String cameraName, Transform3d robotToCamera)
     {
-        aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
         this.camera = new PhotonCamera(cameraName);
 
