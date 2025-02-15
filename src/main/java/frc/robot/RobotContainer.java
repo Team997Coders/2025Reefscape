@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorAutomaticControl;
+import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
@@ -83,7 +85,6 @@ public class RobotContainer {
 
 
   private final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
-  // private final Elevator elevator = new Elevator();
 
   private final Coral m_coral = new Coral();
   private final CoralIntake m_CoralIntake = new CoralIntake(m_coral);
@@ -116,8 +117,8 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    // elevator.setDefaultCommand(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    // ()->c_driveStick.povDown().getAsBoolean()));
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    ()->c_driveStick.povDown().getAsBoolean()));
 
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -261,8 +262,11 @@ public class RobotContainer {
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
 
-    c_driveStick.a().onTrue(elevator.goToPosition(112));
-    c_driveStick.b().onTrue(elevator.goToPosition(3));
+    // c_driveStick.a().onTrue(elevator.goToPosition(112));
+    // c_driveStick.b().onTrue(elevator.goToPosition(3));
+
+    c_driveStick.a().onTrue(elevator.goToStateCommand(ElevatorState.DOWN));
+    c_driveStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L1));
 
 
     // c_driveStick.leftBumper().toggleOnTrue(new ElevatorManualControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),

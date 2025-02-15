@@ -37,13 +37,13 @@ public final class Constants {
 
     // elevator travel is about 30in
     public static final class SetpointRotations {
-      public static final double MAX = 10;
-      public static final double DOWN = 0;
-      public static final double SOURCE = 0;
-      public static final double L1 = 0;
-      public static final double L2 = 0;
-      public static final double L3 = 0;
-      public static final double L4 = 0;
+      public static final double MAX = 121;
+      public static final double DOWN = 3;
+      public static final double SOURCE = 30;
+      public static final double L1 = 15; //probably not true
+      public static final double L2 = 45;
+      public static final double L3 = 72;
+      public static final double L4 = 121;
     }
 
     public static final class PID {
