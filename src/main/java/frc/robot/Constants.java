@@ -26,8 +26,16 @@ public final class Constants {
     public static final int leftSparkMaxID = 9; //CAN
     public static final int rightSparkMaxID = 10;
 
+    public static final int climberServoID = 9;
+    public static final double climberAngle1 = 0;
+    public static final double climberAngle2 = 0;
+    
+    public static final double climberEncoderPosition = 0;
+
     public static final boolean leftSparkMaxInverted = false;
     public static final boolean rightSparkMaxInverted = true;
+
+    
 
     public static final int bottomSwitchID = 0; //DIO
 
@@ -48,6 +56,12 @@ public final class Constants {
       public static final double kP = 0.1;
       public static final double kI = 0;
       public static final double kD = 0;
+    }
+
+    public static final class FeedForward{
+      public static final double kS = 0;
+      public static final double kG = 0;
+      public static final double kV = 0;
     }
 
     public static final class SIM {
@@ -82,6 +96,10 @@ public final class Constants {
         Math.PI * kElevatorDrumDia / 42;  // 0.131 inches/encoder tic
     }
 
+    // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
+    public static final double kMinElevatorHeightMeters = 0.0;
+    public static final double kMaxElevatorHeightMeters = 1.25;
+
     public static final double defaultManualOutput = 2;
   }
 
@@ -90,14 +108,16 @@ public final class Constants {
     public static final int rightMotorID = 12;
     public static final int beamBrake1ID = 1; //DIO
     public static final int beamBrake2ID = 2;
-    public static final double motorSpeedOutTake = 0;
-    public static final double motorSpeedIntake = 0;  
+    public static final double motorSpeedOutTake = 0.5;
+    public static final double motorSpeedIntake = 0.5;
+    public static final boolean leftMotorInverted = true;
+    public static final boolean rightMotorInverted = false;
   }
   
   public static final class Algae{
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
-    public static final int proximitySensorID = 3; //DIO
+    public static final int proximitySensorID = 9; //DIO
     public static final double motorSpin = 0.8;
   }
   
