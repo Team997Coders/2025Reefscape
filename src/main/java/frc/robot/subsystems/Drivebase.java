@@ -86,14 +86,14 @@ public class Drivebase extends SubsystemBase {
 
   /** Creates a new Drivebase. */
   public Drivebase(Canandgyro gyro, CameraBlock cameraBlock) {
-    fieldOrientedChooser.addOption("field oriented", true);
-    fieldOrientedChooser.addOption("robot oriented", false);
+    // fieldOrientedChooser.addOption("field oriented", true);
+    // fieldOrientedChooser.addOption("robot oriented", false);
     var inst = NetworkTableInstance.getDefault();
     var table = inst.getTable("SmartDashboard");
 
-    fieldOrientedChooser.setDefaultOption("field oriented", true);
-    Boolean value; 
-    this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry(value = fieldOrientedChooser.getSelected().equals(true)? true: false);
+    // fieldOrientedChooser.setDefaultOption("field oriented", true);
+    // Boolean value; 
+    this.fieldOrientedEntry = table.getBooleanTopic("Field Oriented").getEntry( false /* value = fieldOrientedChooser.getSelected().equals(true)? true: false*/);
 
     this.gyro = gyro;
     this.cameraBlock = cameraBlock;

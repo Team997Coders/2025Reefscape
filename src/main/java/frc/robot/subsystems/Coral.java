@@ -41,7 +41,7 @@ public class Coral extends SubsystemBase{
     }
 
     public Command manualMoveCoralMotorsIntake() {
-        return this.runOnce(() -> spinBothMotors(Constants.Coral.motorSpeedIntake));
+        return this.runOnce(() -> spinBothMotors(-Constants.Coral.motorSpeedIntake));
 
     }
     public Command manualMoveCoralMotorsOutake() {

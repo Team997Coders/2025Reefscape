@@ -222,11 +222,11 @@ public class Elevator extends SubsystemBase{
     }
 
     public Command manualUp() {
-        return this.runOnce(() -> manualControl(0.0001));
+        return this.run(() -> manualControl(0.0001));
     }
 
     public Command manualDown() {
-        return this.runOnce(() -> manualControl(-0.0001));
+        return this.run(() -> manualControl(-0.0001));
     }
 
 }

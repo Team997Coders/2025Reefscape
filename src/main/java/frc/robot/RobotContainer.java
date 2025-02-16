@@ -11,7 +11,7 @@ import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToTag;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Drivebase;
-import frc.robot.subsystems.automation.AutomaticSystems;
+//import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
@@ -97,12 +97,12 @@ public class RobotContainer {
 
 
 
-  //AUTOMATIC SUBSYSTEMS
-  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
-      drivebase,
-      () -> getScaledXY(),
-      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
-      m_coral, elevator, driveStick, c_driveStick);
+  //AUTOMATIC SYSTEMS
+//  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
+//      drivebase,
+//      () -> getScaledXY(),
+//      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
+//      m_coral, elevator, driveStick, c_driveStick);
 
       
 
@@ -120,8 +120,8 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    // elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    // ()->c_driveStick.povDown().getAsBoolean()));
+    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
+    ()->c_driveStick.povDown().getAsBoolean()));
 
     //AUTOCHOOSER
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
@@ -248,8 +248,8 @@ public class RobotContainer {
     Command stop = new stop(goToTag);
    
     //ALGAE COMMANDS
-    m_driverController.a().whileTrue(new AlgaeCommandIntake(m_algae)).onFalse(m_algae.AlgaeStop());
-    m_driverController.b().whileTrue(new AlgaeCommandOutTake(m_algae)).onFalse(m_algae.AlgaeStop());
+    // m_driverController.a().whileTrue(new AlgaeCommandIntake(m_algae)).onFalse(m_algae.AlgaeStop());
+    // m_driverController.b().whileTrue(new AlgaeCommandOutTake(m_algae)).onFalse(m_algae.AlgaeStop());
 
     m_driverController.a().whileTrue(m_algae.AlgaeIntake(.5)).onFalse(m_algae.AlgaeStop());
     m_driverController.b().whileTrue(m_algae.AlgaeOuttake(.5)).onFalse(m_algae.AlgaeStop());
@@ -263,10 +263,12 @@ public class RobotContainer {
 
 
     //ELEVATOR COMMANDS
+    c_driveStick.povRight().whileTrue(elevator.manualUp());
+    c_driveStick.povLeft().whileTrue(elevator.manualDown());
+   elevator.setDefaultCommand(new ElevatorManualControl(elevator, () -> c_driveStick.povUp().getAsBoolean(), () -> c_driveStick.povDown().getAsBoolean()));
+
 //  c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.2)).onFalse(elevator.moveMotorsNoPID(0));
 //     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.2)).onFalse(elevator.moveMotorsNoPID(0));
-
-    
 
     // c_driveStick.a().onTrue(elevator.goToPosition(112));
     // c_driveStick.b().onTrue(elevator.goToPosition(3));
