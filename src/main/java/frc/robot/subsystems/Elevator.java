@@ -38,7 +38,9 @@ public class Elevator extends SubsystemBase{
     private final PIDController pid;
     public ElevatorState elevatorState;
 
-    public Elevator() {
+    public BooleanSupplier m_beamBrake;
+
+    public Elevator(BooleanSupplier beamBrake) {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
         rightSparkMax = new SparkMax(Constants.ElevatorConstants.rightSparkMaxID, MotorType.kBrushless);
 
@@ -64,9 +66,9 @@ public class Elevator extends SubsystemBase{
     
         elevatorState = ElevatorState.DOWN;
 
-       // climber.setAngle(0);
+       goal = ElevatorState.DOWN.rotations; 
 
-       goal = 0; 
+       m_beamBrake = beamBrake;
 
 
     }
@@ -77,14 +79,15 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         loggers();
-  
-        if (getEncoderPosition() < 0 && !getBottomSwitch())
-        {
-            setOutput(-0.125);
-        } else
-        {
         setOutput(pid.calculate(getEncoderPosition(), goal));
-        }
+  
+        // if (getEncoderPosition() < 0 && !getBottomSwitch())
+        // {
+        //     setOutput(-0.125);
+        // } else
+        // {
+        // setOutput(pid.calculate(getEncoderPosition(), goal));
+        // }
     }
 
     public void pidControl()
@@ -136,17 +139,20 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setGoal(double newgoal) {
-        goal = newgoal;
+        if (m_beamBrake.getAsBoolean())
+        {
+            goal = newgoal;
+        } 
     }
 
     public void manualControl(double input) {
         if (input > 0 && goal + input <= Constants.ElevatorConstants.kMaxElevatorHeightRotations) {
-            goal += input;
+            setGoal(goal + input);
         } else if (input < 0 && goal + input >= Constants.ElevatorConstants.kMinElevatorHeightRotations) {
             if (goal > 0 && goal < 1) {
-                goal = 0;
+                setGoal(0);
             } else {
-            goal += input;
+            setGoal(goal + input);
             }
             
         }
@@ -177,7 +183,7 @@ public class Elevator extends SubsystemBase{
 
     public void setStateByIndex(int desiredIndex) {
         elevatorState = ElevatorState.findByIndex(desiredIndex);
-        goal = elevatorState.rotations;
+        setGoal(elevatorState.rotations);
     }
 
     public boolean elevatorAtTarget() throws unfilledConstant

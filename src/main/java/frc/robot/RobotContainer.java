@@ -31,6 +31,9 @@ import frc.robot.commands.CoralOutTake;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlgaeCommandIntake;
 import frc.robot.commands.AlgaeCommandOutTake;
+import frc.robot.commands.AlgaeToggleIntake;
+import frc.robot.commands.AlgaeToggleOutTake;
+import frc.robot.commands.CoralDefaultCommand;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
@@ -78,12 +81,12 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser;
 
 //CAMERA STUFF
-  private static final Camera frontCamera = new Camera("pineapple",
-      new Transform3d(new Translation3d(0.254, 0, 0.1524), new Rotation3d(0, -0.785, 0)));
-  private static final Camera backCamera = new Camera("dragonfruit",
-      new Transform3d(new Translation3d(-0.254, 0, 0.1524), new Rotation3d(Math.PI, -0.785, 0)));
+  private static final Camera RIGHT_CAMERA = new Camera("RedCurrent",
+      new Transform3d(new Translation3d(0.318, -0.305, 0.229), new Rotation3d(0, -0.785, 0)));
+  private static final Camera LEFT_CAMERA = new Camera("BlueBerry",
+      new Transform3d(new Translation3d(0.318, 0.305, 0.229), new Rotation3d(Math.PI, -0.785, 0)));
 
-  private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(frontCamera, backCamera));
+  private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA));
 
 
   //SUBSYSTEMS
@@ -91,9 +94,9 @@ public class RobotContainer {
 
   private final Coral m_coral = new Coral();
   
-  private final Algae m_algae = new Algae();
+  public final Algae m_algae = new Algae();
 
-  private final Elevator elevator = new Elevator();
+  private final Elevator elevator = new Elevator(() -> m_coral.BeamBrake1());
 
 
 
@@ -120,9 +123,13 @@ public class RobotContainer {
            () -> getScaledXY(),
            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
 
-    elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, ()->c_driveStick.povUp().getAsBoolean(),
-    ()->c_driveStick.povDown().getAsBoolean()));
-
+    m_algae.setDefaultCommand(new AlgaeToggleIntake(m_algae, 
+      () -> m_driverController.a().getAsBoolean(), 
+      () -> m_driverController.b().getAsBoolean()));
+    m_coral.setDefaultCommand(new CoralDefaultCommand(m_coral, 
+      () -> m_driverController.x().getAsBoolean(), 
+      () -> m_driverController.y().getAsBoolean(), 
+      () -> m_driverController.rightBumper().getAsBoolean()));
     //AUTOCHOOSER
     autoChooser = AutoBuilder.buildAutoChooser("moveForward");
     SmartDashboard.putData("Auto Choser", autoChooser);
@@ -242,30 +249,34 @@ public class RobotContainer {
    * joysticks}.
    */
 
-
   private void configureBindings() {
-    Command goToTag = new goToTag(drivebase, frontCamera, 0.0);
-    Command stop = new stop(goToTag);
+
+    ;
    
     //ALGAE COMMANDS
-    // m_driverController.a().whileTrue(new AlgaeCommandIntake(m_algae)).onFalse(m_algae.AlgaeStop());
-    // m_driverController.b().whileTrue(new AlgaeCommandOutTake(m_algae)).onFalse(m_algae.AlgaeStop());
+    //m_driverController.a().whileTrue(m_algae.AlgaeIntake(0.5)).onFalse(m_algae.AlgaeStop());
+    //m_driverController.b().whileTrue(m_algae.AlgaeOuttake(0.5)).onFalse(m_algae.AlgaeStop());
 
-    m_driverController.a().whileTrue(m_algae.AlgaeIntake(.5)).onFalse(m_algae.AlgaeStop());
-    m_driverController.b().whileTrue(m_algae.AlgaeOuttake(.5)).onFalse(m_algae.AlgaeStop());
+    //m_driverController.a().onTrue(algaeCommand);
+    ///.b().onTrue(new AlgaeCommandOutTake(m_algae)).onFalse(getAutonomousCommand());
 
 
 
     //CORAL COMMANDS
-    m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
-    m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
+    //m_driverController.x().whileTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
+    //m_driverController.y().whileTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
 
 
 
     //ELEVATOR COMMANDS
-    c_driveStick.povRight().whileTrue(elevator.manualUp());
-    c_driveStick.povLeft().whileTrue(elevator.manualDown());
-   elevator.setDefaultCommand(new ElevatorManualControl(elevator, () -> c_driveStick.povUp().getAsBoolean(), () -> c_driveStick.povDown().getAsBoolean()));
+    // c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.L4));
+    // c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.DOWN));
+   // elevator.setDefaultCommand(new ElevatorManualControl(elevator, () -> c_driveStick.povUp().getAsBoolean(), () -> c_driveStick.povDown().getAsBoolean()));
+   
+
+    //DRIVE STUFF 
+    c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.5)).onFalse(drivebase.setDriveMultiplier(1));
+
 
 //  c_driveStick.povUp().whileTrue(elevator.moveMotorsNoPID(0.2)).onFalse(elevator.moveMotorsNoPID(0));
 //     c_driveStick.povDown().whileTrue(elevator.moveMotorsNoPID(-0.2)).onFalse(elevator.moveMotorsNoPID(0));

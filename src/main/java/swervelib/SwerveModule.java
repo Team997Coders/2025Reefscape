@@ -19,8 +19,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.SwervePID;
+import frc.robot.subsystems.Drivebase;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -107,9 +112,12 @@ public class SwerveModule {
     double drive_voltage = (speedMetersPerSecond / maxVelocity) * maxVoltage;
     double angle_voltage = pidController.calculate(this.getEncoder(), angle);
 
-    speedMotor.setVoltage(drive_voltage);
+    speedMotor.setVoltage(drive_voltage*Constants.DriveConstants.driveMultiplier);
     angleMotor.setVoltage(angle_voltage);
   }
+
+
+  
 
   /**
    * drive:

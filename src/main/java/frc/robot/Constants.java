@@ -38,13 +38,13 @@ public final class Constants {
     public static final double atTargetOffset = 0.3; //The encoder ticks to determine whether the elevator is at the target position
 
      // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-     public static final double kMinElevatorHeightRotations = 0.0;
-     public static final double kMaxElevatorHeightRotations = 110;
+     public static final double kMinElevatorHeightRotations = 1;
+     public static final double kMaxElevatorHeightRotations = 129;
 
     // elevator travel is about 30in
     public static final class SetpointRotations {
       public static final double MAX = kMaxElevatorHeightRotations;
-      public static final double DOWN = 0;
+      public static final double DOWN = kMinElevatorHeightRotations;
       public static final double SOURCE = 30;
       public static final double L1 = 15;
       public static final double L2 = 45;
@@ -53,7 +53,7 @@ public final class Constants {
     }
 
     public static final class PID {
-      public static final double kP = 0.15;
+      public static final double kP = 0.1;
       public static final double kI = 0;
       public static final double kD = 0;
     }
@@ -80,7 +80,7 @@ public final class Constants {
 
       public static final double kSetpointMeters = 0.75;
       // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-      public static final double kMinElevatorHeightMeters = 0.0;
+      public static final double kMinElevatorHeightMeters = 1;
       public static final double kMaxElevatorHeightMeters = 1.25;
 
       // distance per pulse = (distance per revolution) / (pulses per revolution)
@@ -101,11 +101,13 @@ public final class Constants {
 
   public static final class Climber {
     public static final int climberFlipperID= 0;
+
     public static final int climberFlipperUpAngle = 0;
     public static final int climberFlipperDownAngle = 0;
 
     public static final int coralFlipper1ID = 9;
     public static final int coralFlipper2ID = 0;
+
     public static double coralFlipperHoldAngle = 0;
     public static double coralFlipperDropAngle = 80;
 
@@ -115,12 +117,16 @@ public final class Constants {
   public static final class Coral {
     public static final int leftMotorID = 11; //CAN
     public static final int rightMotorID = 12;
-    public static final int coralSecondSensor = 9; //DIO
-    public static final int coralFirstSensor = 7;
-    public static final double motorSpeedOutTake = 0.5;
-    public static final double motorSpeedIntake = 0.5;
+
     public static final boolean leftMotorInverted = true;
     public static final boolean rightMotorInverted = false;
+
+    public static final int coralSecondSensor = 9; //DIO
+    public static final int coralFirstSensor = 7;
+
+    public static final double motorSpeedOutTake = -1;
+    public static final double motorSpeedIntake = 0.5;
+    
   }
   
   public static final class Algae {
@@ -134,6 +140,8 @@ public final class Constants {
     public static final double deadband = 0.08;
     public static final int currentLimit = 40;
     public static final double slewRate = 20; // lower number for higher center of mass
+
+    public static double driveMultiplier = 1;
 
     public static final class SwervePID {
       public static final double p = 0.1;
