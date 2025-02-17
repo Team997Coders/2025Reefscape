@@ -66,56 +66,92 @@ public class RobotContainer {
   AddressableLEDBuffer m_ledBuffer;
 
 //GYRO
-  private final Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
-
-  //CONTROLLERS
-  private static XboxController driveStick = new XboxController(0);
-  private static XboxController box = new XboxController(1);
-
-  private static CommandXboxController c_driveStick = new CommandXboxController(0);
-  final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-
-  //AUTOCHOOSER
-  private SendableChooser<Command> autoChooser;
-
-//CAMERA STUFF
-  private static final Camera RIGHT_CAMERA = new Camera("RedCurrent",
-      new Transform3d(new Translation3d(0.318, -0.305, 0.229), new Rotation3d(0, -0.785, 0)));
-  private static final Camera LEFT_CAMERA = new Camera("BlueBerry",
-      new Transform3d(new Translation3d(0.318, 0.305, 0.229), new Rotation3d(Math.PI, -0.785, 0)));
-
-  private static final CameraBlock cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA));
-
-
-  //SUBSYSTEMS
-  public final Drivebase drivebase = new Drivebase(gyro, cameraBlock);
-
-  private final Coral m_coral = new Coral();
+  private Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
   
-  public final Algae m_algae = new Algae();
-
-  private final Elevator elevator = new Elevator(() -> m_coral.BeamBrake1());
-
-
-
-  //AUTOMATIC SYSTEMS
-//  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
-//      drivebase,
-//      () -> getScaledXY(),
-//      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
-//      m_coral, elevator, driveStick, c_driveStick);
-
+    //CONTROLLERS
+    private static XboxController driveStick = new XboxController(0);
+    private static XboxController box = new XboxController(1);
+  
+    private static CommandXboxController c_driveStick = new CommandXboxController(0);
+    final CommandXboxController m_driverController =
+        new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  
+  
+    //AUTOCHOOSER
+    private SendableChooser<Command> autoChooser;
+  
+  //CAMERA STUFF
+    private static Camera RIGHT_CAMERA;
+    private static Camera LEFT_CAMERA;
+  
+    private static CameraBlock cameraBlock;
+    
+    
+      //SUBSYSTEMS
+      public final Drivebase drivebase;
+    
+      private final Coral m_coral;
       
+      public final Algae m_algae;
+    
+      private final Elevator elevator;
+    
+      //TRIGGERS
+      public Trigger coralFirstBeamBreak;
+    
+    
+    
+      //AUTOMATIC SYSTEMS
+    //  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
+    //      drivebase,
+    //      () -> getScaledXY(),
+    //      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
+    //      m_coral, elevator, driveStick, c_driveStick);
+    
+          
+    
+      //CONSTRUCTOR
+      /**
+       * The container for the robot. Contains subsystems, OI devices, and commands.
+       */
+      public RobotContainer() {
+        CanandEventLoop.getInstance();
+    
+        //GYRO
+        gyro = new Canandgyro(Constants.Gyro.gyroID);
+  
+    //CONTROLLERS
+    driveStick = new XboxController(0);
+    box = new XboxController(1);
+  
+    c_driveStick = new CommandXboxController(0);
+    final CommandXboxController m_driverController =
+        new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  
+  
+  //CAMERA STUFF
+    RIGHT_CAMERA = new Camera("RedCurrent",
+        new Transform3d(new Translation3d(0.318, -0.305, 0.229), new Rotation3d(0, -0.785, 0)));
+    LEFT_CAMERA = new Camera("BlueBerry",
+        new Transform3d(new Translation3d(0.318, 0.305, 0.229), new Rotation3d(Math.PI, -0.785, 0)));
+  
+    cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA));
 
-  //CONSTRUCTOR
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    CanandEventLoop.getInstance();
 
+
+    //INITALIZE SUBSYSTEMS
+    drivebase = new Drivebase(gyro, cameraBlock);
+
+    m_coral = new Coral();
+
+    m_algae = new Algae();
+
+    elevator = new Elevator(coralFirstBeamBreak);
+
+    //TRIGGERS 
+    coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1());
+
+    
    // CONFIGURE THE TRIGGER BINDINGS
     drivebase.setDefaultCommand(
        new Drive(

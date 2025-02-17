@@ -38,9 +38,9 @@ public class Elevator extends SubsystemBase{
     private final PIDController pid;
     public ElevatorState elevatorState;
 
-    public BooleanSupplier m_beamBrake;
+    public Trigger m_beamBrake;
 
-    public Elevator(BooleanSupplier beamBrake) {
+    public Elevator(Trigger beamBrake) {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
         rightSparkMax = new SparkMax(Constants.ElevatorConstants.rightSparkMaxID, MotorType.kBrushless);
 
@@ -80,14 +80,6 @@ public class Elevator extends SubsystemBase{
     public void periodic() {
         loggers();
         setOutput(pid.calculate(getEncoderPosition(), goal));
-  
-        // if (getEncoderPosition() < 0 && !getBottomSwitch())
-        // {
-        //     setOutput(-0.125);
-        // } else
-        // {
-        // setOutput(pid.calculate(getEncoderPosition(), goal));
-        // }
     }
 
     public void pidControl()
