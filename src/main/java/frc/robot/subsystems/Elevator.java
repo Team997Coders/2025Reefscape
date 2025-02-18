@@ -66,7 +66,7 @@ public class Elevator extends SubsystemBase{
     
         elevatorState = ElevatorState.DOWN;
 
-       goal = ElevatorState.DOWN.rotations; 
+       goal = elevatorState.rotations; 
 
        m_beamBrake = beamBrake;
 
@@ -131,10 +131,10 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setGoal(double newgoal) {
-        if (m_beamBrake.getAsBoolean())
+        if (!m_beamBrake.getAsBoolean())
         {
             goal = newgoal;
-        } 
+        }
     }
 
     public void manualControl(double input) {
@@ -178,6 +178,28 @@ public class Elevator extends SubsystemBase{
         setGoal(elevatorState.rotations);
     }
 
+    public void moveStateUp() {
+        int state = elevatorState.index;
+
+        if (state < 5) {
+            state += 1; 
+        }
+
+        elevatorState = ElevatorState.findByIndex(state);
+        setGoal(elevatorState.rotations);
+    }
+
+    public void moveStateDown() {
+        int state = elevatorState.index;
+
+            if (state > 0) {
+                state -= 1;
+            }
+
+        elevatorState = ElevatorState.findByIndex(state);
+        setGoal(elevatorState.rotations);
+    }
+
     public boolean elevatorAtTarget() throws unfilledConstant
     {
         double offset = Constants.ElevatorConstants.atTargetOffset;
@@ -211,6 +233,14 @@ public class Elevator extends SubsystemBase{
         return this.runOnce(() -> setStateByIndex(state.index));
     }
 
+    public Command stateUp() {
+        return this.runOnce(() -> moveStateUp());
+    }
+
+    public Command stateDown() {
+        return this.runOnce(() -> moveStateDown());
+    }
+
     public Command goToPosition(double position) {
         return this.runOnce(() -> setGoal(position));
     }
@@ -220,11 +250,11 @@ public class Elevator extends SubsystemBase{
     }
 
     public Command manualUp() {
-        return this.run(() -> manualControl(0.0001));
+        return this.runOnce(() -> manualControl(0.1));
     }
 
     public Command manualDown() {
-        return this.run(() -> manualControl(-0.0001));
+        return this.runOnce(() -> manualControl(-.1));
     }
 
 }

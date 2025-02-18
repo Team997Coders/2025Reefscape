@@ -3,16 +3,17 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorManualControl extends Command {
     private Elevator elevator;
 
-    private BooleanSupplier up; 
-    private BooleanSupplier down;
+    private Trigger up; 
+    private Trigger down;
      
-    public ElevatorManualControl(Elevator elevator, BooleanSupplier up, BooleanSupplier down) {
+    public ElevatorManualControl(Elevator elevator, Trigger up, Trigger down) {
         this.elevator = elevator;
         this.up = up;
         this.down = down;

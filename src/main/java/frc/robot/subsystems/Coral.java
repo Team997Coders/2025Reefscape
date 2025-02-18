@@ -52,6 +52,7 @@ public class Coral extends SubsystemBase{
     public Command CoralStop() {
         return this.runOnce(() -> spinBothMotors(0));
     }
+
         
     public void spinBothMotors(double speed) {
         SpinLeftMotor(speed);
@@ -67,15 +68,16 @@ public class Coral extends SubsystemBase{
 
     }
     public boolean BeamBrake1(){
-        return firstSensor.get();
+        return !firstSensor.get();
     }
     public boolean BeamBrake2(){
-        return secondSensor.get();
+        return !secondSensor.get();
     }
     private void loggers() {
         SmartDashboard.putBoolean("beam brake 1", BeamBrake1());
         SmartDashboard.putBoolean("beam brake 2", BeamBrake2());
     }
+
 
     @Override
     public void periodic() {

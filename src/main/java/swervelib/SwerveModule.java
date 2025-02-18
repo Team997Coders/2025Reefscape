@@ -69,7 +69,7 @@ public class SwerveModule {
     SparkBaseConfig speedMotorConfig = new SparkMaxConfig();
         speedMotorConfig
           .inverted(driveMotorReversed)
-          .idleMode(IdleMode.kBrake);
+          .idleMode(IdleMode.kCoast);
         speedMotorConfig.encoder
           .positionConversionFactor(rotationsToDistance)
           .velocityConversionFactor(rotationsToDistance/60);
