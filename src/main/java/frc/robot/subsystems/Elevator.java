@@ -63,13 +63,10 @@ public class Elevator extends SubsystemBase{
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
         pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
-    
-        elevatorState = ElevatorState.DOWN;
 
-       goal = elevatorState.rotations; 
+        m_beamBrake = beamBrake;
 
-       m_beamBrake = beamBrake;
-
+        setState(findNearestState());
 
     }
 
@@ -130,6 +127,7 @@ public class Elevator extends SubsystemBase{
         leftSparkMax.set(output);
     }
 
+    //set pid goal
     public void setGoal(double newgoal) {
         if (!m_beamBrake.getAsBoolean())
         {
@@ -137,6 +135,7 @@ public class Elevator extends SubsystemBase{
         }
     }
 
+    //manual control that's iffy
     public void manualControl(double input) {
         if (input > 0 && goal + input <= Constants.ElevatorConstants.kMaxElevatorHeightRotations) {
             setGoal(goal + input);
@@ -150,6 +149,7 @@ public class Elevator extends SubsystemBase{
         }
     }
 
+    //encoder stuff
     public void setEncoderPosition(double position) {
         relativeEncoder.setPosition(position);
     }
@@ -161,16 +161,24 @@ public class Elevator extends SubsystemBase{
         return relativeEncoder.getPosition();
     }
 
+    //limit switch 
     public boolean getBottomSwitch() {
         return !bottomSwitch.get();
     }
 
+
+    //State machine stuff
     public ElevatorState getElevatorState() {
         return elevatorState;
     }
 
     public int getElevatorStateIndex() {
         return elevatorState.index;
+    }
+
+    public void setState(ElevatorState state) {
+        elevatorState = state;
+        setGoal(elevatorState.rotations);
     }
 
     public void setStateByIndex(int desiredIndex) {
@@ -198,6 +206,25 @@ public class Elevator extends SubsystemBase{
 
         elevatorState = ElevatorState.findByIndex(state);
         setGoal(elevatorState.rotations);
+    }
+
+    public ElevatorState findNearestState() {
+        double position = getEncoderPosition();
+        double diff1;
+        double currentClosestDiff = 0;
+        ElevatorState closestState = ElevatorState.DOWN;
+        
+        for (int i = 0; i<=ElevatorState.values().length; i++) {
+            diff1 = Math.abs(position - ElevatorState.findByIndex(i).rotations);
+
+            if (diff1 < currentClosestDiff) {
+                currentClosestDiff = diff1;
+                
+                closestState = ElevatorState.findByIndex(i);
+            }
+    
+        }
+        return closestState;
     }
 
     public boolean elevatorAtTarget() throws unfilledConstant
@@ -230,7 +257,7 @@ public class Elevator extends SubsystemBase{
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
 
     public Command goToStateCommand(ElevatorState state) {
-        return this.runOnce(() -> setStateByIndex(state.index));
+        return this.runOnce(() -> setState(state));
     }
 
     public Command stateUp() {
