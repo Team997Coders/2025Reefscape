@@ -63,10 +63,11 @@ public class Elevator extends SubsystemBase{
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
         pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
+        pid.setIZone(5);
 
         m_beamBrake = beamBrake;
 
-        setState(findNearestState());
+        setState(ElevatorState.DOWN);
 
     }
 
@@ -161,6 +162,7 @@ public class Elevator extends SubsystemBase{
         return relativeEncoder.getPosition();
     }
 
+    
     //limit switch 
     public boolean getBottomSwitch() {
         return !bottomSwitch.get();
@@ -174,6 +176,25 @@ public class Elevator extends SubsystemBase{
 
     public int getElevatorStateIndex() {
         return elevatorState.index;
+    }
+
+    public ElevatorState findNearestState() {
+        double position = getEncoderPosition();
+        double diff1;
+        double currentClosestDiff = 0;
+        ElevatorState closestState = ElevatorState.DOWN;
+        
+        for (int i = 0; i<=ElevatorState.values().length; i++) {
+            diff1 = Math.abs(position - ElevatorState.findByIndex(i).rotations);
+
+            if (diff1 < currentClosestDiff) {
+                currentClosestDiff = diff1;
+                
+                closestState = ElevatorState.findByIndex(i);
+            }
+    
+        }
+        return closestState;
     }
 
     public void setState(ElevatorState state) {
@@ -208,25 +229,7 @@ public class Elevator extends SubsystemBase{
         setGoal(elevatorState.rotations);
     }
 
-    public ElevatorState findNearestState() {
-        double position = getEncoderPosition();
-        double diff1;
-        double currentClosestDiff = 0;
-        ElevatorState closestState = ElevatorState.DOWN;
-        
-        for (int i = 0; i<=ElevatorState.values().length; i++) {
-            diff1 = Math.abs(position - ElevatorState.findByIndex(i).rotations);
-
-            if (diff1 < currentClosestDiff) {
-                currentClosestDiff = diff1;
-                
-                closestState = ElevatorState.findByIndex(i);
-            }
-    
-        }
-        return closestState;
-    }
-
+//for automatic subsystems
     public boolean elevatorAtTarget() throws unfilledConstant
     {
         double offset = Constants.ElevatorConstants.atTargetOffset;
@@ -256,6 +259,10 @@ public class Elevator extends SubsystemBase{
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
 
+public Command moveMotorsNoPID(double output) {
+    return this.runOnce(() -> setOutput(output));
+}
+
     public Command goToStateCommand(ElevatorState state) {
         return this.runOnce(() -> setState(state));
     }
@@ -272,16 +279,16 @@ public class Elevator extends SubsystemBase{
         return this.runOnce(() -> setGoal(position));
     }
 
-    public Command moveMotorsNoPID(double output) {
-        return this.runOnce(() -> setOutput(output));
-    }
-
     public Command manualUp() {
-        return this.runOnce(() -> manualControl(0.1));
+        return this.run(() -> manualControl(1));
     }
 
     public Command manualDown() {
-        return this.runOnce(() -> manualControl(-.1));
+        return this.run(() -> manualControl(-1));
+    }
+
+    public Command StopManual() {
+        return this.runOnce(() -> manualControl(0));
     }
 
 }

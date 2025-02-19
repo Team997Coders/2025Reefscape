@@ -6,8 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
-import frc.robot.commands.ElevatorAutomaticControl;
-import frc.robot.commands.ElevatorManualControl;
 import frc.robot.subsystems.Drivebase;
 //import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
@@ -26,7 +24,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlgaeToggleIntake;
-import frc.robot.commands.CoralAutomatic;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
@@ -62,12 +59,11 @@ public class RobotContainer {
   private Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
   
   //CONTROLLERS
-  private static XboxController driveStick = new XboxController(0);
+  //private static XboxController driveStick = new XboxController(0);
   private static XboxController box = new XboxController(1);
   
-    private static CommandXboxController c_driveStick = new CommandXboxController(0);
-    final CommandXboxController m_driverController =
-        new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private static CommandXboxController c_driveStick;
+    // final CommandXboxController m_driverController;
   
   
   //AUTOCHOOSER
@@ -115,8 +111,8 @@ public class RobotContainer {
       gyro = new Canandgyro(Constants.Gyro.gyroID);
   
       //CONTROLLERS
-      driveStick = new XboxController(0);
-      box = new XboxController(1);
+    // driveStick = new XboxController(0);
+      //box = new XboxController(1);
   
       c_driveStick = new CommandXboxController(0);
       final CommandXboxController m_driverController =
@@ -143,27 +139,18 @@ public class RobotContainer {
       coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2());
 
       elevator = new Elevator(coralFirstBeamBreak);
-
-
-      //TRIGGERS 
-      
-
     
     // CONFIGURE THE TRIGGER BINDINGS
       drivebase.setDefaultCommand(
         new Drive(
             drivebase,
             () -> getScaledXY(),
-            () -> scaleRotationAxis(driveStick.getRawAxis(4))));
+            () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
+
 
       m_algae.setDefaultCommand(new AlgaeToggleIntake(m_algae, 
         () -> m_driverController.a().getAsBoolean(), 
         () -> m_driverController.b().getAsBoolean()));
-
-      m_coral.setDefaultCommand(new CoralAutomatic(m_coral, m_driverController.y(), coralFirstBeamBreak, coralSecondBeamBreak));
-
-      //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp(), c_driveStick.povDown()));
-      elevator.setDefaultCommand(new ElevatorManualControl(elevator, m_driverController.povRight(), m_driverController.povLeft()));
       
 
       //AUTOCHOOSER
@@ -207,12 +194,10 @@ public class RobotContainer {
     }
   }
 
-  
-
   private double[] getXY() {
     double[] xy = new double[2];
-    xy[0] = -deadband(driveStick.getLeftX(), DriveConstants.deadband);
-    xy[1] = -deadband(driveStick.getLeftY(), DriveConstants.deadband);
+    xy[0] = -deadband(c_driveStick.getLeftX(), DriveConstants.deadband);
+    xy[1] = -deadband(c_driveStick.getLeftY(), DriveConstants.deadband);
     return xy;
   }
 
@@ -240,7 +225,7 @@ public class RobotContainer {
   public void updateDashboard() {
     SmartDashboard.putNumber("Scaled_X", getScaledXY()[0]);
     SmartDashboard.putNumber("Scaled_Y", getScaledXY()[1]);
-    SmartDashboard.putNumber("Rotation", scaleRotationAxis(driveStick.getRawAxis(4)));
+    SmartDashboard.putNumber("Rotation", scaleRotationAxis(c_driveStick.getRawAxis(4)));
   }
 
   @SuppressWarnings("unused")
@@ -287,30 +272,22 @@ public class RobotContainer {
 
   private void configureBindings() {   
     //ALGAE COMMANDS
-    //m_driverController.a().whileTrue(m_algae.AlgaeIntake(0.5)).onFalse(m_algae.AlgaeStop());
-    //m_driverController.b().whileTrue(m_algae.AlgaeOuttake(0.5)).onFalse(m_algae.AlgaeStop());
-
-    //m_driverController.a().onTrue(algaeCommand);
-    ///.b().onTrue(new AlgaeCommandOutTake(m_algae)).onFalse(getAutonomousCommand());
-
-
 
     //CORAL COMMANDS
-    // m_driverController.x().onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
-    // m_driverController.y().onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
-
-    //ELEVATOR COMMANDS
-    // c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.L4));
-    // c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.DOWN));
-   // elevator.setDefaultCommand(new ElevatorManualControl(elevator, () -> c_driveStick.povUp().getAsBoolean(), () -> c_driveStick.povDown().getAsBoolean()));
-
-   c_driveStick.povUp().onTrue(elevator.stateUp());
-   c_driveStick.povDown().onTrue(elevator.stateDown());
-
-  //  c_driveStick.povRight().onTrue(elevator.manualUp());
-  //  c_driveStick.povLeft().onTrue(elevator.manualDown());
+    coralFirstBeamBreak.onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
+    coralFirstBeamBreak.and(coralSecondBeamBreak).onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
+    coralSecondBeamBreak.and(c_driveStick.y()).onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
    
+    //ELEVATOR COMMANDS
+    c_driveStick.povUp().onTrue(elevator.stateUp());
+    c_driveStick.povDown().onTrue(elevator.stateDown());
 
+    c_driveStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L4));
+    c_driveStick.leftBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+
+    c_driveStick.povRight().onTrue(elevator.manualUp()).onFalse(elevator.StopManual());
+    c_driveStick.povLeft().onTrue(elevator.manualDown()).onFalse(elevator.StopManual());
+   
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.5)).onFalse(drivebase.setDriveMultiplier(1));
   }
