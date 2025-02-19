@@ -1,22 +1,22 @@
-// package frc.robot.subsystems.buttonBox.buttonCommands;
+package frc.robot.subsystems.buttonBox.buttonCommands;
 
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.exceptions.outOfBounds;
-// import frc.robot.subsystems.automation.AutomaticSystems;
-// import frc.robot.subsystems.buttonBox.ButtonyBit;
-// import frc.robot.subsystems.buttonBox.ButtonyList;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.exceptions.outOfBounds;
+import frc.robot.subsystems.automation.AutomaticSystems;
+import frc.robot.subsystems.buttonBox.ButtonyBit;
+import frc.robot.subsystems.buttonBox.ButtonyList;
 
-// public class goPressed extends Command {
+public class goPressed extends Command {
 
-//   private AutomaticSystems systems;
+  private AutomaticSystems systems;
   
-//   public goPressed(AutomaticSystems system) {
-//     systems = system; 
-//   }
+  public goPressed(AutomaticSystems system) {
+    systems = system; 
+  }
 
-//   @Override
-//   public void initialize() {
-//     systems.goClick = true;
-//     this.cancel();
-//   }
-// }
+  @Override
+  public void initialize() {
+    systems.goClick = true;
+    this.cancel();
+  }
+}
