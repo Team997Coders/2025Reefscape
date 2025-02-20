@@ -8,6 +8,7 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,6 +24,7 @@ public class goToLocation extends Command {
   private Drivebase drivebase;
   private Pose2d pose2d;
   private Command driveCommand;
+  private PathPlannerTrajectory trajectory;
 
   public goToLocation(Drivebase drivebase, Pose2d pose) {
     this.drivebase = drivebase;
@@ -45,15 +47,13 @@ public class goToLocation extends Command {
         new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path.,
         null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
         new GoalEndState(0.0, Rotation2d.fromDegrees(-90))); // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    driveCommand = AutoBuilder.followPath(path);
-    driveCommand.schedule();
+    trajectory = path.generateTrajectory(drivebase.getCurrentSpeeds(), drivebase.getPose().getRotation(), drivebase.config);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
-    
   }
 
   // Called once the command ends or is interrupted.

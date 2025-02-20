@@ -21,8 +21,9 @@ public class Coral extends SubsystemBase{
     private final SparkMax rightMotor;
     private final SparkBaseConfig leftConfig;
     private final SparkBaseConfig rightConfig;
-    private final DigitalInput firstSensor;
-    private final DigitalInput secondSensor;
+    public final DigitalInput firstSensor;
+    public final DigitalInput secondSensor;
+    
     public Coral(){
         leftMotor = new SparkMax(Constants.Coral.leftMotorID, MotorType.kBrushless);
         rightMotor = new SparkMax(Constants.Coral.rightMotorID, MotorType.kBrushless);

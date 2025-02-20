@@ -42,4 +42,9 @@ public class ButtonyList
         }
         return buttonyList.indexOf(buttony);
     }
+
+    public ButtonyBit getBitAtIdx(int index)
+    {
+        return buttonyList.get(index);
+    }
 }

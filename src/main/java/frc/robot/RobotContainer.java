@@ -31,6 +31,7 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.automation.AutomaticSystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -93,22 +94,12 @@ public class RobotContainer {
   public Trigger coralFirstBeamBreak;
   public Trigger coralSecondBeamBreak;
     
+  // AUTOMATIC SYSTEMS
+  private final AutomaticSystems systems;
     
-    
-      //AUTOMATIC SYSTEMS
-    //  private final AutomaticSystems systems = new AutomaticSystems(box, drivebase, new Drive(
-    //      drivebase,
-    //      () -> getScaledXY(),
-    //      () -> scaleRotationAxis(driveStick.getRawAxis(4))),
-    //      m_coral, elevator, driveStick, c_driveStick);
-    
-          
-    
-      //CONSTRUCTOR
-      /**
-       * The container for the robot. Contains subsystems, OI devices, and commands.
-       */
-    public RobotContainer() {
+  //CONSTRUCTOR
+  //The container for the robot. Contains subsystems, OI devices, and commands.
+  public RobotContainer() {
       CanandEventLoop.getInstance();
     
       //GYRO
@@ -142,9 +133,10 @@ public class RobotContainer {
       coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1());
       coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2());
 
-      elevator = new Elevator(coralFirstBeamBreak);
+      elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-
+      systems = new AutomaticSystems(box, 
+          drivebase, elevator, c_driveStick);
       //TRIGGERS 
       
 
@@ -164,7 +156,6 @@ public class RobotContainer {
 
       //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp(), c_driveStick.povDown()));
       elevator.setDefaultCommand(new ElevatorManualControl(elevator, m_driverController.povRight(), m_driverController.povLeft()));
-      
 
       //AUTOCHOOSER
       autoChooser = AutoBuilder.buildAutoChooser("moveForward");

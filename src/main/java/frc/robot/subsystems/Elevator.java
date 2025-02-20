@@ -38,9 +38,10 @@ public class Elevator extends SubsystemBase{
     private final PIDController pid;
     public ElevatorState elevatorState;
 
-    public Trigger m_beamBrake;
+    public Trigger m_firstBeamBrake;
+    public Trigger m_secondBeamBrake;
 
-    public Elevator(Trigger beamBrake) {
+    public Elevator(Trigger firstBeamBrake, Trigger SecondBeamBreak) {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
         rightSparkMax = new SparkMax(Constants.ElevatorConstants.rightSparkMaxID, MotorType.kBrushless);
 
@@ -68,7 +69,8 @@ public class Elevator extends SubsystemBase{
 
        goal = elevatorState.rotations; 
 
-       m_beamBrake = beamBrake;
+       m_firstBeamBrake = firstBeamBrake;
+       m_secondBeamBrake = SecondBeamBreak;
 
 
     }
@@ -86,7 +88,6 @@ public class Elevator extends SubsystemBase{
     {
         setOutput(pid.calculate(encoderPosition, goal));
     }
-
 
    //elevator states
     public enum ElevatorState {
@@ -131,7 +132,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setGoal(double newgoal) {
-        if (!m_beamBrake.getAsBoolean())
+        if (!m_firstBeamBrake.getAsBoolean())
         {
             goal = newgoal;
         }
