@@ -132,8 +132,11 @@ public final class Constants {
   public static final class Algae {
     public static final int spinnyMotorID = 13; //CAN
     public static final int spinnyMotorConfig = 15;
+
     public static final int beamBreakID = 8; //DIO
+
     public static final double motorSpin = 0.8;
+    public static final double motorHold = .1;
   }
   
   public static final class DriveConstants {

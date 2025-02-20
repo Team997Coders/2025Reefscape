@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -88,6 +89,8 @@ public class RobotContainer {
   //TRIGGERS
   public Trigger coralFirstBeamBreak;
   public Trigger coralSecondBeamBreak;
+
+  public Trigger algaeBeamBreak;
     
     
     
@@ -137,6 +140,8 @@ public class RobotContainer {
 
       coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1());
       coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2());
+
+      algaeBeamBreak = new Trigger(() -> m_algae.getBeamBreakStatus());
 
       elevator = new Elevator(coralFirstBeamBreak);
     
@@ -272,6 +277,9 @@ public class RobotContainer {
 
   private void configureBindings() {   
     //ALGAE COMMANDS
+    algaeBeamBreak.and(() -> m_algae.AlgaeIntake().isScheduled()).onTrue(new SequentialCommandGroup(m_algae.AlgaeStop(), m_algae.AlgaeHold())).onFalse(m_algae.AlgaeStop());
+    c_driveStick.a().toggleOnTrue(m_algae.AlgaeIntake());
+    c_driveStick.b().toggleOnTrue(m_algae.AlgaeOuttake());
 
     //CORAL COMMANDS
     coralFirstBeamBreak.onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());

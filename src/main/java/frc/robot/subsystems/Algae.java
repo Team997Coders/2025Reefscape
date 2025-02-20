@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -41,22 +42,24 @@ public class Algae extends SubsystemBase{
         return beamBreak.get();
     }
 
-    public Command AlgaeIntake(double speed) {
+    public Command AlgaeIntake() {
         spinnyMotorConfig.smartCurrentLimit(Constants.Algae.spinnyMotorConfig);
         spinnyMotor.configure(spinnyMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        return this.runOnce(() -> SpinMotor(speed));
+        return this.startEnd(() -> SpinMotor(Constants.Algae.motorSpin), () -> SpinMotor(0));
     }
+
+
 
     public Command AlgaeHold() {
         spinnyMotorConfig.smartCurrentLimit(Constants.Algae.spinnyMotorConfig/10);
         spinnyMotor.configure(spinnyMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        return this.runOnce(() -> SpinMotor(0.1));
+        return this.runOnce(() -> SpinMotor(Constants.Algae.motorHold));
     }
 
-    public Command AlgaeOuttake(double speed) {
+    public Command AlgaeOuttake() {
         spinnyMotorConfig.smartCurrentLimit(Constants.Algae.spinnyMotorConfig);
         spinnyMotor.configure(spinnyMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        return this.runOnce(() -> SpinMotor(-speed));
+        return this.startEnd(() -> SpinMotor(-Constants.Algae.motorSpin), () -> SpinMotor(0));
     }
 
     public Command AlgaeStop() {
@@ -67,4 +70,3 @@ public class Algae extends SubsystemBase{
         SmartDashboard.putBoolean("algae beambreak", getBeamBreakStatus());
     }
 }
-

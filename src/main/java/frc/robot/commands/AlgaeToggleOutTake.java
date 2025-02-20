@@ -12,7 +12,7 @@ public class AlgaeToggleOutTake extends Command {
 
     @Override
     public void execute(){
-        m_algae.AlgaeOuttake(.5);
+        m_algae.AlgaeOuttake();
     }
 
     @Override 
