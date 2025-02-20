@@ -4,6 +4,10 @@ import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
+import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.Algae;
+import frc.robot.commands.AlgaeToggleIntake;
+
 
 import java.util.Optional;
 
@@ -17,6 +21,7 @@ import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.LEDCommand;
 
 
 public class LED extends SubsystemBase{
@@ -26,8 +31,11 @@ public class LED extends SubsystemBase{
     private final AddressableLED m_led;
     private final LEDPattern blue;
     private final LEDPattern purple;
+    private final LEDPattern gray;
+    private final LEDPattern green;
     private final LEDPattern redPattern;
     private final LEDPattern bluePattern;
+
 
 
 //     // Create an LED pattern that displays a red-to-blue gradient, then scroll at one quarter of the LED strip's length per second.
@@ -42,7 +50,7 @@ public class LED extends SubsystemBase{
 
 // // Write the data to the LED strip
 // m_led.setData(m_ledBuffer);
-    public LED(){
+    public LED(Coral coral){
         
         m_buffer = new AddressableLEDBuffer(120);
         m_led = new AddressableLED(0);
@@ -50,15 +58,38 @@ public class LED extends SubsystemBase{
         red = LEDPattern.gradient(GradientType.kContinuous, Color.kFirstRed, Color.kOrangeRed);
         blue = LEDPattern.gradient(GradientType.kContinuous, Color.kFirstBlue, Color.kLightBlue);
         purple = LEDPattern.solid(Color.kPlum);
+        gray = LEDPattern.solid(Color.kGainsboro);
+        green = LEDPattern.solid(Color.kLawnGreen);
+
 
         redPattern = red.scrollAtRelativeSpeed(Percent.per(Second).of(25));
         bluePattern = blue.scrollAtRelativeSpeed(Percent.per(Second).of(25));
+
+
     }
+// Use int for LEDS when we have Coral, Alege or nothing
+     public void ItemPickedUp(int x) {
+        if (x == 1)
+            LEDPattern.solid(Color.kGainsboro);
+        }
+        if (x == 2){
+             LEDPattern.solid(Color.kLawnGreen);
+        }
+        else{
+            SetColor();
+        }
+ }
+            
 
-     
-
-
-        public void SetColor() {
+                 
+            
+            
+ private void print(String string) {
+// TODO Auto-generated method stub
+throw new UnsupportedOperationException("Unimplemented method 'print'");
+                }
+            
+                    public void SetColor() {
             Optional<Alliance> ally = DriverStation.getAlliance();
             if (ally.isPresent()) {
                 if (ally.get() == Alliance.Red) {
@@ -77,3 +108,7 @@ public class LED extends SubsystemBase{
         }
 
 }
+
+
+
+

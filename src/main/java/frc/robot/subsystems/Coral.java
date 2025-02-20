@@ -69,6 +69,7 @@ public class Coral extends SubsystemBase{
     }
     public boolean BeamBrake1(){
         return !firstSensor.get();
+        return int.class x = 1;
     }
     public boolean BeamBrake2(){
         return !secondSensor.get();
