@@ -120,9 +120,9 @@ public class RobotContainer {
     
     
      //CAMERA STUFF
-      RIGHT_CAMERA = new Camera("RedCurrent",
+      RIGHT_CAMERA = new Camera("pineapple",
           new Transform3d(new Translation3d(0.318, -0.305, 0.229), new Rotation3d(0, -0.785, 0)));
-      LEFT_CAMERA = new Camera("BlueBerry",
+      LEFT_CAMERA = new Camera("dragonfruit",
           new Transform3d(new Translation3d(0.318, 0.305, 0.229), new Rotation3d(Math.PI, -0.785, 0)));
     
       cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA));
