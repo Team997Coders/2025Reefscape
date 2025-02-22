@@ -142,7 +142,6 @@ public class AutomaticSystems extends SubsystemBase
         if (this.coralBeamBrake)
         {
             if (fullAuto)
-            
             {
                 //Ha u though I cared enough to make this work loser
             }
