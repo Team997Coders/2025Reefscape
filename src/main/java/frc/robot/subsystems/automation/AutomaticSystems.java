@@ -139,6 +139,7 @@ public class AutomaticSystems extends SubsystemBase
 
     public void Go() 
     {
+        SmartDashboard.putBoolean("beam break", this.coralBeamBrake);
         if (this.coralBeamBrake)
         {
             if (fullAuto)
@@ -150,7 +151,8 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoElevator) {
                     try 
                     {
-                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 4);
+                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedIdx());
+                        SmartDashboard.putNumber("Hey you tried to move the elevator", this.buttonBox.elevatorLevel.selectedIdx());
                     } catch (noSelectedButton e) {
                         e.printStackTrace();
                     }
@@ -172,12 +174,18 @@ public class AutomaticSystems extends SubsystemBase
         {
             try
             {
-            driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
-            driveCommand.schedule();
-            this.elevator.setGoal(0);
+                if (autoDrive) 
+                {
+                    driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
+                    driveCommand.schedule();
+                }
             } catch(Exception e)
             {
                 e.printStackTrace();
+            }
+            if (autoElevator)
+            {
+                this.elevator.setGoal(0);
             }
         }
     }
@@ -190,6 +198,7 @@ public class AutomaticSystems extends SubsystemBase
     @Override
     public void periodic() {
         //loggers();
+        
     }
 
     public void loggers()
@@ -200,10 +209,10 @@ public class AutomaticSystems extends SubsystemBase
         SmartDashboard.putBoolean("Full Cycles", fullAuto);
 
         try{
-        SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedBit().id);
-        SmartDashboard.putNumber("Elevator", this.buttonBox.elevatorLevel.selectedBit().id);
-        SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
-        SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
+        SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedIdx());
+        SmartDashboard.putNumber("Elevator", this.buttonBox.elevatorLevel.selectedIdx());
+        SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedIdx());
+        SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedIdx());
         } catch(Exception e)
         {
             e.printStackTrace();

@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Feb 22 Autos",
+  "folder": null,
   "choreoAuto": false
 }
