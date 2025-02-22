@@ -158,7 +158,7 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoDrive)
                 {
                     try {
-                        driveCommand = new goToLocation(drivebase, pathplanning.getReefLocation(alliance, this.buttonBox.reefSide.selectedBit().id, this.buttonBox.scoreSide.selectedBit().id));
+                        driveCommand = new goToLocation(drivebase, pathplanning.getReefLocation(alliance, this.buttonBox.reefSide.selectedBit().id - 1, this.buttonBox.scoreSide.selectedBit().id));
                         driveCommand.schedule();
                     } catch (allianceNotInitialized e) {
                         e.printStackTrace();
