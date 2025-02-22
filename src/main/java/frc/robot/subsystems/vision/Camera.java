@@ -23,71 +23,65 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
-public class Camera
-{
+public class Camera {
     private PhotonCamera camera;
     private AprilTagFieldLayout aprilTagFieldLayout;
     private PhotonPoseEstimator photonPoseEstimator;
 
     private List<PhotonPipelineResult> results;
 
-    public Camera(String cameraName, Transform3d robotToCamera)
-    {
+    public Camera(String cameraName, Transform3d robotToCamera) {
         aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
         this.camera = new PhotonCamera(cameraName);
 
-        this.photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCamera);
+        this.photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCamera);
 
         this.results = null;
     }
 
-    public void update(SwerveDrivePoseEstimator poseEstimator, List<PhotonPipelineResult> results)
-    {
+    public void update(SwerveDrivePoseEstimator poseEstimator, List<PhotonPipelineResult> results) {
         this.results = results;
-        for (PhotonPipelineResult result: results)
-        {
+        for (PhotonPipelineResult result : results) {
             Optional<EstimatedRobotPose> estimatedRobotPose = this.photonPoseEstimator.update(result);
-            if (estimatedRobotPose.isPresent())
-            {
-                poseEstimator.addVisionMeasurement(estimatedRobotPose.orElseThrow().estimatedPose.toPose2d(), result.getTimestampSeconds());
-            }        
-        } 
+            if (estimatedRobotPose.isPresent()) {
+                poseEstimator.addVisionMeasurement(estimatedRobotPose.orElseThrow().estimatedPose.toPose2d(),
+                        result.getTimestampSeconds());
+            }
+        }
     }
 
-    public List<PhotonPipelineResult> getResults()
-    {
+    public List<PhotonPipelineResult> getResults() {
         return this.camera.getAllUnreadResults();
     }
 
-    public boolean hasTarget()
-    {
-        if (!this.results.isEmpty())
-        {
-            if (results.get(0).getBestTarget() != null)
-            {
+    public boolean hasTarget() {
+        if (!this.results.isEmpty()) {
+            if (results.get(0).getBestTarget() != null) {
                 return true;
             }
         }
         return false;
     }
 
-    public double getAutoAlignYaw() {
+    //
+    // Auto Alignment of drivebase to a specific AprilTag
+    public double getAutoAlignYaw(int targetId) {
         boolean targetVisible = false;
         double targetYaw = 0.0;
 
         var results = getResults();
-        if (!results.isEmpty()){
+        if (!results.isEmpty()) {
             var result = results.get(results.size() - 1);
             if (result.hasTargets()) {
                 // At least one AprilTag was seen by the camera
                 for (var target : result.getTargets()) {
-                    if (target.getFiducialId() == 7) {
-                        // change 7 to point to which ever target desired
+                    if (target.getFiducialId() == targetId) {
                         targetYaw = target.getYaw();
                         targetVisible = true;
                     } else {
-                        targetYaw = 0.0;
+                        targetYaw = -1.0;
                     }
                 }
             }
@@ -96,33 +90,27 @@ public class Camera
         return targetYaw;
     }
 
-    public Translation2d robot_to_tag(Drivebase drivebase)
-    {
-        if (!this.results.isEmpty())
-        {
+    public Translation2d robot_to_tag(Drivebase drivebase) {
+        if (!this.results.isEmpty()) {
             PhotonTrackedTarget target = results.get(0).getBestTarget();
-            if (target != null)
-            {
+            if (target != null) {
                 Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
-                if (tagPose.isPresent())
-                {
-                    return PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.getDistanceToPose(drivebase.getPose(), tagPose.orElseThrow().toPose2d()), Rotation2d.fromDegrees(-target.getYaw()));
+                if (tagPose.isPresent()) {
+                    return PhotonUtils.estimateCameraToTargetTranslation(
+                            PhotonUtils.getDistanceToPose(drivebase.getPose(), tagPose.orElseThrow().toPose2d()),
+                            Rotation2d.fromDegrees(-target.getYaw()));
                 }
             }
         }
         return new Translation2d();
     }
 
-    public Pose2d get_tag_pose2d()
-    {
-        if (!this.results.isEmpty())
-        {
+    public Pose2d get_tag_pose2d() {
+        if (!this.results.isEmpty()) {
             PhotonTrackedTarget target = results.get(0).getBestTarget();
-            if (target != null)
-            {
+            if (target != null) {
                 Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
-                if (tagPose.isPresent())
-                {
+                if (tagPose.isPresent()) {
                     return tagPose.orElseThrow().toPose2d();
                 }
             }
