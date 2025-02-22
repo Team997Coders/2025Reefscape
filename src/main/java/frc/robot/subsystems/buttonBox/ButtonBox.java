@@ -11,7 +11,7 @@ public class ButtonBox
     public FlippySwitch autoDrive;
     public FlippySwitch fullAutoElevator;
     public FlippySwitch fullAutoCycles;
-    public FlippySwitch semiAutoElevator;
+    public FlippySwitch semiAutoCycles;
 
     public ButtonyBit go;
 
@@ -35,51 +35,43 @@ public class ButtonBox
 
     public ButtonyList reefSide;
     public ButtonyList elevatorLevel;
+    public ButtonyList scoreSide;
+    public ButtonyList sourceSide;
 
     public ButtonBox(XboxController joystick)
     {
         //TODO: NEED TO SET BUTTON NUMBERS TO BE CORRECT, THEY ARE NOT
         //----------------------------------------------------------
-        autoDrive = new FlippySwitch(joystick, 0);
-        fullAutoCycles = new FlippySwitch(joystick, 1);
-        fullAutoElevator = new FlippySwitch(joystick, 2);
-        semiAutoElevator = new FlippySwitch(joystick, 18);
+        autoDrive = new FlippySwitch(joystick, 15);
+        fullAutoCycles = new FlippySwitch(joystick, 18);
+        fullAutoElevator = new FlippySwitch(joystick, 16);
+        semiAutoCycles = new FlippySwitch(joystick, 17);
 
-        level1 = new ButtonyBit(joystick, 3);
-        level2 = new ButtonyBit(joystick, 4);
-        level3 = new ButtonyBit(joystick, 5);
-        level4 = new ButtonyBit(joystick, 6);
+        level1 = new ButtonyBit(joystick, 7);
+        level2 = new ButtonyBit(joystick, 8);
+        level3 = new ButtonyBit(joystick, 9);
+        level4 = new ButtonyBit(joystick, 10);
 
-        side1 = new ButtonyBit(joystick, 7);
-        side2 = new ButtonyBit(joystick, 8);
-        side3 = new ButtonyBit(joystick, 9);
-        side4 = new ButtonyBit(joystick, 10);
-        side5 = new ButtonyBit(joystick, 11);
-        side6 = new ButtonyBit(joystick, 12);
+        side1 = new ButtonyBit(joystick, 1);
+        side2 = new ButtonyBit(joystick, 2);
+        side3 = new ButtonyBit(joystick, 3);
+        side4 = new ButtonyBit(joystick, 4);
+        side5 = new ButtonyBit(joystick, 5);
+        side6 = new ButtonyBit(joystick, 6);
 
         leftSource = new ButtonyBit(joystick, 13);
         rightSource = new ButtonyBit(joystick, 14);
 
-        rightScore = new ButtonyBit(joystick, 15);
-        leftScore = new ButtonyBit(joystick, 16);
+        rightScore = new ButtonyBit(joystick, 12);
+        leftScore = new ButtonyBit(joystick, 11);
 
-        go = new ButtonyBit(joystick, 17);
+        go = new ButtonyBit(joystick, 19);
 
         //-----------------------------------------------------------
 
         reefSide = new ButtonyList(Arrays.asList(side1, side2, side3, side4, side5, side6));
         elevatorLevel = new ButtonyList(Arrays.asList(level1, level2, level3, level4));
-
-        level1.onTrue(new SetPressed(level1, elevatorLevel));
-        level2.onTrue(new SetPressed(level2, elevatorLevel));
-        level3.onTrue(new SetPressed(level3, elevatorLevel));
-        level4.onTrue(new SetPressed(level4, elevatorLevel));
-
-        side1.onTrue(new SetPressed(side1, reefSide));
-        side2.onTrue(new SetPressed(side2, reefSide));
-        side3.onTrue(new SetPressed(side3, reefSide));
-        side4.onTrue(new SetPressed(side4, reefSide));
-        side5.onTrue(new SetPressed(side5, reefSide));
-        side6.onTrue(new SetPressed(side6, reefSide));
+        scoreSide = new ButtonyList(Arrays.asList(rightScore, leftScore));
+        sourceSide = new ButtonyList(Arrays.asList(rightSource, leftSource));
     }  
 }

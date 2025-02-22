@@ -38,9 +38,10 @@ public class Elevator extends SubsystemBase{
     private final PIDController pid;
     public ElevatorState elevatorState;
 
-    public Trigger m_beamBrake;
+    public Trigger m_firstBeamBrake;
+    public Trigger m_secondBeamBrake;
 
-    public Elevator(Trigger beamBrake) {
+    public Elevator(Trigger firstBeamBrake, Trigger SecondBeamBreak) {
         leftSparkMax = new SparkMax(Constants.ElevatorConstants.leftSparkMaxID, MotorType.kBrushless);
         rightSparkMax = new SparkMax(Constants.ElevatorConstants.rightSparkMaxID, MotorType.kBrushless);
 
@@ -63,13 +64,12 @@ public class Elevator extends SubsystemBase{
 
         pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
         pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
-    
-        elevatorState = ElevatorState.DOWN;
+        pid.setIZone(5);
 
-       goal = elevatorState.rotations; 
+        m_firstBeamBrake = firstBeamBrake;
+       m_secondBeamBrake = SecondBeamBreak;
 
-       m_beamBrake = beamBrake;
-
+        setState(ElevatorState.DOWN);
 
     }
 
@@ -86,7 +86,6 @@ public class Elevator extends SubsystemBase{
     {
         setOutput(pid.calculate(encoderPosition, goal));
     }
-
 
    //elevator states
     public enum ElevatorState {
@@ -130,13 +129,15 @@ public class Elevator extends SubsystemBase{
         leftSparkMax.set(output);
     }
 
+    //set pid goal
     public void setGoal(double newgoal) {
-        if (!m_beamBrake.getAsBoolean())
+        if (!m_firstBeamBrake.getAsBoolean())
         {
             goal = newgoal;
         }
     }
 
+    //manual control that's iffy
     public void manualControl(double input) {
         if (input > 0 && goal + input <= Constants.ElevatorConstants.kMaxElevatorHeightRotations) {
             setGoal(goal + input);
@@ -150,6 +151,7 @@ public class Elevator extends SubsystemBase{
         }
     }
 
+    //encoder stuff
     public void setEncoderPosition(double position) {
         relativeEncoder.setPosition(position);
     }
@@ -161,16 +163,44 @@ public class Elevator extends SubsystemBase{
         return relativeEncoder.getPosition();
     }
 
+    
+    //limit switch 
     public boolean getBottomSwitch() {
         return !bottomSwitch.get();
     }
 
+
+    //State machine stuff
     public ElevatorState getElevatorState() {
         return elevatorState;
     }
 
     public int getElevatorStateIndex() {
         return elevatorState.index;
+    }
+
+    public ElevatorState findNearestState() {
+        double position = getEncoderPosition();
+        double diff1;
+        double currentClosestDiff = 0;
+        ElevatorState closestState = ElevatorState.DOWN;
+        
+        for (int i = 0; i<=ElevatorState.values().length; i++) {
+            diff1 = Math.abs(position - ElevatorState.findByIndex(i).rotations);
+
+            if (diff1 < currentClosestDiff) {
+                currentClosestDiff = diff1;
+                
+                closestState = ElevatorState.findByIndex(i);
+            }
+    
+        }
+        return closestState;
+    }
+
+    public void setState(ElevatorState state) {
+        elevatorState = state;
+        setGoal(elevatorState.rotations);
     }
 
     public void setStateByIndex(int desiredIndex) {
@@ -200,6 +230,7 @@ public class Elevator extends SubsystemBase{
         setGoal(elevatorState.rotations);
     }
 
+//for automatic subsystems
     public boolean elevatorAtTarget() throws unfilledConstant
     {
         double offset = Constants.ElevatorConstants.atTargetOffset;
@@ -229,8 +260,12 @@ public class Elevator extends SubsystemBase{
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/
 
+public Command moveMotorsNoPID(double output) {
+    return this.runOnce(() -> setOutput(output));
+}
+
     public Command goToStateCommand(ElevatorState state) {
-        return this.runOnce(() -> setStateByIndex(state.index));
+        return this.runOnce(() -> setState(state));
     }
 
     public Command stateUp() {
@@ -245,16 +280,16 @@ public class Elevator extends SubsystemBase{
         return this.runOnce(() -> setGoal(position));
     }
 
-    public Command moveMotorsNoPID(double output) {
-        return this.runOnce(() -> setOutput(output));
-    }
-
     public Command manualUp() {
-        return this.runOnce(() -> manualControl(0.1));
+        return this.run(() -> manualControl(1));
     }
 
     public Command manualDown() {
-        return this.runOnce(() -> manualControl(-.1));
+        return this.run(() -> manualControl(-1));
+    }
+
+    public Command StopManual() {
+        return this.runOnce(() -> manualControl(0));
     }
 
 }

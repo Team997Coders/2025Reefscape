@@ -85,6 +85,8 @@ public class Drivebase extends SubsystemBase {
 
   SendableChooser fieldOrientedChooser = new SendableChooser<Boolean>();
 
+  public RobotConfig config;
+
   /** Creates a new Drivebase. */
   public Drivebase(Canandgyro gyro, CameraBlock cameraBlock) {
     // fieldOrientedChooser.addOption("field oriented", true);
@@ -105,7 +107,6 @@ public class Drivebase extends SubsystemBase {
 
     //ModuleConfig ModuleConfig = new ModuleConfig(WHEEL_DIAMETER/2, 3, WHEEL_DIAMETER, DCMotor.getNEO(2), 1.8, 0);
     //RobotConfig config = new RobotConfig(15, 11.25, ModuleConfig, 0.66);
-    RobotConfig config;
      try{
        config = RobotConfig.fromGUISettings();
      } catch (Exception e) {
@@ -121,8 +122,8 @@ public class Drivebase extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> drive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(0.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(0.0, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(0.1, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -165,6 +166,10 @@ public class Drivebase extends SubsystemBase {
 
   public double getFieldAngle() {
     return gyro.getYaw()*(Constants.Gyro.gyroYawConversionFactor);
+  }
+
+  public void driveWithChassisSpeeds(ChassisSpeeds speeds){
+    this.drive(speeds);
   }
 
   public void fieldOrientedDrive(double speedX, double speedY, double rot) {
