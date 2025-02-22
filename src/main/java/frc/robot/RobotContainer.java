@@ -129,8 +129,8 @@ public class RobotContainer {
 
       m_algae = new Algae();
 
-      coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1(0));
-      coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2(0));
+      coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1());
+      coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2());
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
