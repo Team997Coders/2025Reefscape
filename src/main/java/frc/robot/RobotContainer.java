@@ -24,7 +24,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlgaeToggleIntake;
 import frc.robot.subsystems.Coral;
@@ -76,6 +76,7 @@ public class RobotContainer {
   //CAMERA STUFF
   private static Camera RIGHT_CAMERA;
   private static Camera LEFT_CAMERA;
+  private static Camera BACK_CAMERA;
   
   private static CameraBlock cameraBlock;
     
@@ -114,12 +115,14 @@ public class RobotContainer {
     
     
      //CAMERA STUFF
-      RIGHT_CAMERA = new Camera("RedCurrent",
-          new Transform3d(new Translation3d(0.318, -0.305, 0.229), new Rotation3d(0, -0.785, 0)));
-      LEFT_CAMERA = new Camera("BlueBerry",
-          new Transform3d(new Translation3d(0.318, 0.305, 0.229), new Rotation3d(Math.PI, -0.785, 0)));
+      RIGHT_CAMERA = new Camera("rightBerry",
+          new Transform3d(new Translation3d(Units.inchesToMeters(13.5), -Units.inchesToMeters(11.5), Units.inchesToMeters(8.5)), new Rotation3d(0, Units.degreesToRadians(20), 0)));
+      LEFT_CAMERA = new Camera("leftBerry",
+          new Transform3d(new Translation3d(Units.inchesToMeters(13.5), Units.inchesToMeters(11.5), Units.inchesToMeters(8.5)), new Rotation3d(0, Units.degreesToRadians(20), 0)));
+      BACK_CAMERA = new Camera("backBerry",
+          new Transform3d(new Translation3d(-Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(28.5)), new Rotation3d(0, Units.degreesToRadians(17.5), Math.PI)));
     
-      cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA));
+      cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA, BACK_CAMERA));
 
 
       //INITALIZE SUBSYSTEMS
@@ -134,11 +137,10 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      systems = null;
-      //systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
-      //TRIGGERS 
-          
-    // CONFIGURE THE TRIGGER BINDINGS
+      systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
+      
+      //TRIGGERS   
+      // CONFIGURE THE TRIGGER BINDINGS
       drivebase.setDefaultCommand(
         new Drive(
             drivebase,
