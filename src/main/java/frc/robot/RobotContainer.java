@@ -6,8 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
-import frc.robot.commands.ElevatorAutomaticControl;
-import frc.robot.commands.ElevatorManualControl;
 import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Drivebase;
 //import frc.robot.subsystems.automation.AutomaticSystems;
@@ -152,10 +150,10 @@ public class RobotContainer {
         () -> m_driverController.a().getAsBoolean(), 
         () -> m_driverController.b().getAsBoolean()));
 
-      m_coral.setDefaultCommand(new CoralAutomatic(m_coral, m_driverController.y(), coralFirstBeamBreak, coralSecondBeamBreak));
+      // m_coral.setDefaultCommand(new CoralAutomatic(m_coral, m_driverController.y(), coralFirstBeamBreak, coralSecondBeamBreak));
 
-      //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp(), c_driveStick.povDown()));
-      elevator.setDefaultCommand(new ElevatorManualControl(elevator, m_driverController.povRight(), m_driverController.povLeft()));
+      // //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp(), c_driveStick.povDown()));
+      // elevator.setDefaultCommand(new ElevatorManualControl(elevator, m_driverController.povRight(), m_driverController.povLeft()));
 
       //AUTOCHOOSER
       autoChooser = AutoBuilder.buildAutoChooser("moveForward");
@@ -291,7 +289,7 @@ public class RobotContainer {
    
 
     //DRIVE STUFF 
-    c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.5)).onFalse(drivebase.setDriveMultiplier(1));
+    c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
   }
 
   /**
