@@ -69,13 +69,12 @@ public class LED extends SubsystemBase{
     }
 // Use int for LEDS when we have Coral, Alege or nothing
      public void ItemPickedUp(int x) {
-        if (x == 1)
+        if (x == 1) {
             LEDPattern.solid(Color.kGainsboro);
         }
-        if (x == 2){
+       else if (x == 2) {
              LEDPattern.solid(Color.kLawnGreen);
-        }
-        else{
+        } else {
             SetColor();
         }
  }
@@ -83,13 +82,8 @@ public class LED extends SubsystemBase{
 
                  
             
-            
- private void print(String string) {
-// TODO Auto-generated method stub
-throw new UnsupportedOperationException("Unimplemented method 'print'");
-                }
-            
-                    public void SetColor() {
+
+     public void SetColor() {
             Optional<Alliance> ally = DriverStation.getAlliance();
             if (ally.isPresent()) {
                 if (ally.get() == Alliance.Red) {
@@ -107,7 +101,8 @@ throw new UnsupportedOperationException("Unimplemented method 'print'");
             m_led.setData(m_buffer);
         }
 
-}
+    }
+
 
 
 

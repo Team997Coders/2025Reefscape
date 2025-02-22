@@ -22,6 +22,7 @@ public class AlgaeCommandOutTake extends Command{
   public void execute() {
     if (m_algae.getBeamBreakStatus() == true) {
         m_algae.SpinMotor(Constants.Algae.motorSpin*-1);
+        LEDCommand.x = 0;
     } else if (m_algae.getBeamBreakStatus() == false){
         m_algae.SpinMotor(0);
     }

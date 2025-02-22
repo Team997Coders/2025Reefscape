@@ -10,8 +10,8 @@ import frc.robot.subsystems.LED;
 
 
 public class LEDCommand extends Command{
-      private int x;
-        private LED m_led;
+      public static int x;
+      private LED m_led;
     
 
     public LEDCommand(LED led){
@@ -29,11 +29,6 @@ public class LEDCommand extends Command{
   public void execute() {
     m_led.SetColor();
     m_led.ItemPickedUp(x);
-  }
-
-  @Override 
-  public void end(boolean interrupted) {
-   
   }
 
   @Override

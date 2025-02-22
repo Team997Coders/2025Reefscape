@@ -23,7 +23,7 @@ import com.reduxrobotics.canand.CanandEventLoop;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-
+import frc.robot.commands.AlgaeCommandOutTake;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlgaeToggleIntake;
 import frc.robot.commands.CoralAutomatic;
@@ -139,8 +139,8 @@ public class RobotContainer {
 
       m_algae = new Algae();
 
-      coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1());
-      coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2());
+      coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1(0));
+      coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2(0));
 
       elevator = new Elevator(coralFirstBeamBreak);
 
