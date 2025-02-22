@@ -1,14 +1,11 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,14 +13,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Coral extends SubsystemBase{
+public class Coral extends SubsystemBase {
     private final SparkMax leftMotor;
     private final SparkMax rightMotor;
     private final SparkBaseConfig leftConfig;
     private final SparkBaseConfig rightConfig;
     private final DigitalInput firstSensor;
     private final DigitalInput secondSensor;
-    public Coral(){
+
+    public Coral() {
         leftMotor = new SparkMax(Constants.Coral.leftMotorID, MotorType.kBrushless);
         rightMotor = new SparkMax(Constants.Coral.rightMotorID, MotorType.kBrushless);
 
@@ -42,42 +40,42 @@ public class Coral extends SubsystemBase{
 
     public Command manualMoveCoralMotorsIntake() {
         return this.runOnce(() -> spinBothMotors(-Constants.Coral.motorSpeedIntake));
-
     }
+
     public Command manualMoveCoralMotorsOutake() {
         return this.runOnce(() -> spinBothMotors(Constants.Coral.motorSpeedOutTake));
-    
     }
 
     public Command CoralStop() {
         return this.runOnce(() -> spinBothMotors(0));
     }
 
-        
     public void spinBothMotors(double speed) {
         SpinLeftMotor(speed);
         SpinRightMotor(speed);
     }
 
-    public void SpinLeftMotor(double speed){
+    public void SpinLeftMotor(double speed) {
         leftMotor.set(speed);
     }
 
-    public void SpinRightMotor(double speed){
+    public void SpinRightMotor(double speed) {
         rightMotor.set(speed);
 
     }
-    public boolean BeamBrake1(){
+
+    public boolean BeamBrake1() {
         return !firstSensor.get();
     }
-    public boolean BeamBrake2(){
+
+    public boolean BeamBrake2() {
         return !secondSensor.get();
     }
+
     private void loggers() {
         SmartDashboard.putBoolean("beam brake 1", BeamBrake1());
         SmartDashboard.putBoolean("beam brake 2", BeamBrake2());
     }
-
 
     @Override
     public void periodic() {

@@ -2,7 +2,6 @@ package frc.robot.subsystems.buttonBox;
 
 import java.util.Arrays;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.buttonBox.buttonCommands.SetPressed;
 

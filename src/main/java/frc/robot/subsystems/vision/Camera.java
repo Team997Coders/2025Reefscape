@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
@@ -69,6 +70,30 @@ public class Camera
             }
         }
         return false;
+    }
+
+    public double getAutoAlignYaw() {
+        boolean targetVisible = false;
+        double targetYaw = 0.0;
+
+        var results = getResults();
+        if (!results.isEmpty()){
+            var result = results.get(results.size() - 1);
+            if (result.hasTargets()) {
+                // At least one AprilTag was seen by the camera
+                for (var target : result.getTargets()) {
+                    if (target.getFiducialId() == 7) {
+                        // change 7 to point to which ever target desired
+                        targetYaw = target.getYaw();
+                        targetVisible = true;
+                    } else {
+                        targetYaw = 0.0;
+                    }
+                }
+            }
+        }
+        SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
+        return targetYaw;
     }
 
     public Translation2d robot_to_tag(Drivebase drivebase)
