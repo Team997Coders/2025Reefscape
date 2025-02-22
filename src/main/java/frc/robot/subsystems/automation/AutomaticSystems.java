@@ -141,25 +141,31 @@ public class AutomaticSystems extends SubsystemBase
     {
         if (this.coralBeamBrake)
         {
-            if (this.fullAuto)
+            if (fullAuto)
             
             {
                 //Ha u though I cared enough to make this work loser
             }
-            else if (this.semiAuto)
+            else if (semiAuto)
             {
-                try 
-                {
-                    this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 4);
-                } catch (noSelectedButton e) {
-                    e.printStackTrace();
+                if (autoElevator) {
+                    try 
+                    {
+                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 4);
+                    } catch (noSelectedButton e) {
+                        e.printStackTrace();
+                    }
                 }
-                try {
-                    new goToLocation(drivebase, pathplanning.getReefLocation(alliance, this.buttonBox.reefSide.selectedBit().id, this.buttonBox.scoreSide.selectedBit().id));
-                } catch (allianceNotInitialized e) {
-                    e.printStackTrace();
-                } catch (noSelectedButton e) {
-                    e.printStackTrace();
+                if (autoDrive)
+                {
+                    try {
+                        driveCommand = new goToLocation(drivebase, pathplanning.getReefLocation(alliance, this.buttonBox.reefSide.selectedBit().id, this.buttonBox.scoreSide.selectedBit().id));
+                        driveCommand.schedule();
+                    } catch (allianceNotInitialized e) {
+                        e.printStackTrace();
+                    } catch (noSelectedButton e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -184,7 +190,7 @@ public class AutomaticSystems extends SubsystemBase
 
     @Override
     public void periodic() {
-        loggers();
+        //loggers();
     }
 
     public void loggers()

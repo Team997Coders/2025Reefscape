@@ -16,10 +16,15 @@ import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,14 +35,24 @@ import frc.robot.subsystems.vision.Camera;
 public class goToLocation extends Command {
   
   private Drivebase drivebase;
-  private Pose2d pose2d;
-  private PathPlannerTrajectory trajectory;
-  private int index;
-  private Timer time;
+  private Pose2d goalPose;
+
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
+  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
+  
+  private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, THETA_CONSTRAINTS);
 
   public goToLocation(Drivebase drivebase, Pose2d pose) {
     this.drivebase = drivebase;
-    this.pose2d = pose;
+    this.goalPose = pose;
+
+    xController.setTolerance(0.1);
+    yController.setTolerance(0.1);
+    thetaController.setTolerance(Units.degreesToRadians(3));
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivebase);
   }
@@ -45,54 +60,34 @@ public class goToLocation extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses
-    // (
-    //   this.drivebase.getPose(),
-    //   this.pose2d
-    // );
-
-    // PathPlannerPath pathplannerPath = new PathPlannerPath(
-    //     waypoints,
-    //     new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path.,
-    //     null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
-    //     new GoalEndState(0.0, pose2d.getRotation())); // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    Pose2d robotPose = drivebase.getPose();
     
-    // PathfindThenFollowPath path = new PathfindThenFollowPath(
-    //   pathplannerPath, 
-    //   new PathConstraints(5, 5, 1, 1), 
-    //   () -> drivebase.getPose(), 
-    //   () -> drivebase.getCurrentSpeeds(), 
-    //   (speeds, feedforwards) -> drivebase.driveWithChassisSpeeds(speeds), 
-    //   new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-    //                 new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
-    //                 new PIDConstants(0.1, 0.0, 0.0) // Rotation PID constants
-    //   ),
-    //   drivebase.config, 
-    //   () -> (false), 
-    //   drivebase);
-
-    //   trajectory = pathplannerPath.generateTrajectory(drivebase.getCurrentSpeeds(), drivebase.getPose().getRotation(), drivebase.config);
-
-    PathfindingCommand pathfindingCommand = new PathfindingCommand(pose2d, 
-      new PathConstraints(5, 5, 1, 1), 
-      () -> drivebase.getPose(), 
-      () -> drivebase.getCurrentSpeeds(), 
-      (speeds, feedforwards) -> drivebase.driveWithChassisSpeeds(speeds), 
-      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                     new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
-                     new PIDConstants(0.1, 0.0, 0.0)), // Rotation PID constants
-       drivebase.config, 
-       drivebase);
-
-       pathfindingCommand.schedule();
-       SmartDashboard.putBoolean("Hey: the path finding command got schedules", pathfindingCommand.isScheduled());
+    xController.reset(robotPose.getX());
+    yController.reset(robotPose.getY());
+    thetaController.reset(robotPose.getRotation().getRadians());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
-    
+    Pose2d robotPose = drivebase.getPose();
+
+    xController.setGoal(goalPose.getX());
+    yController.setGoal(goalPose.getY());
+    thetaController.setGoal(goalPose.getRotation().getRadians());
+
+    var xSpeed = xController.calculate(robotPose.getX());
+    var ySpeed = yController.calculate(robotPose.getY());
+    var thetaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
+
+    if (xController.atGoal()) {xSpeed = 0;}
+    if (yController.atGoal()) {ySpeed = 0;}
+    if (thetaController.atGoal()) {thetaSpeed = 0;}
+
+    drivebase.driveWithChassisSpeeds(
+      ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, thetaSpeed, robotPose.getRotation())
+    );
   }
 
   // Called once the command ends or is interrupted.
