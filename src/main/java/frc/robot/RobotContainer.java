@@ -8,6 +8,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorAutomaticControl;
 import frc.robot.commands.ElevatorManualControl;
+import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Drivebase;
 //import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
@@ -20,6 +21,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import com.reduxrobotics.canand.CanandEventLoop;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -135,8 +138,8 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      systems = new AutomaticSystems(box, 
-          drivebase, elevator, c_driveStick);
+      systems = null;
+      //systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       //TRIGGERS 
       
 
@@ -299,7 +302,9 @@ public class RobotContainer {
    c_driveStick.povDown().onTrue(elevator.stateDown());
 
   //  c_driveStick.povRight().onTrue(elevator.manualUp());
-  //  c_driveStick.povLeft().onTrue(elevator.manualDown());
+  //  c_driveStick.povLeft().onTrue(elevator.manualDowsn());
+
+  c_driveStick.leftTrigger().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d())));
    
 
     //DRIVE STUFF 
