@@ -17,18 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Coral extends SubsystemBase{
-<<<<<<< HEAD
-    private static final int x = 0;
-        private final SparkMax leftMotor;
-        private final SparkMax rightMotor;
-        private final SparkBaseConfig leftConfig;
-        private final SparkBaseConfig rightConfig;
-        private final DigitalInput firstSensor;
-        private final DigitalInput secondSensor;
-        public Coral(){
-            leftMotor = new SparkMax(Constants.Coral.leftMotorID, MotorType.kBrushless);
-            rightMotor = new SparkMax(Constants.Coral.rightMotorID, MotorType.kBrushless);
-=======
+
+
     private final SparkMax leftMotor;
     private final SparkMax rightMotor;
     private final SparkBaseConfig leftConfig;
@@ -53,26 +43,6 @@ public class Coral extends SubsystemBase{
         secondSensor = new DigitalInput(Constants.Coral.coralSecondSensor);
     }
 
-    public Command manualMoveCoralMotorsIntake() {
-        return this.runOnce(() -> spinBothMotors(-Constants.Coral.motorSpeedIntake));
-
-    }
-    public Command manualMoveCoralMotorsOutake() {
-        return this.runOnce(() -> spinBothMotors(Constants.Coral.motorSpeedOutTake));
->>>>>>> dev
-    
-            leftConfig = new SparkMaxConfig();
-            rightConfig = new SparkMaxConfig();
-    
-            leftConfig.inverted(Constants.Coral.leftMotorInverted);
-            rightConfig.inverted(Constants.Coral.rightMotorInverted);
-    
-            leftMotor.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-            rightMotor.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    
-            firstSensor = new DigitalInput(Constants.Coral.coralFirstSensor);
-            secondSensor = new DigitalInput(Constants.Coral.coralSecondSensor);
-        }
     
         public Command manualMoveCoralMotorsIntake() {
             return this.runOnce(() -> spinBothMotors(-Constants.Coral.motorSpeedIntake));
@@ -101,17 +71,15 @@ public class Coral extends SubsystemBase{
             rightMotor.set(speed);
     
         }
-        public boolean BeamBrake1(int x){
-            x = 1;
+        public boolean BeamBrake1(){
             return !firstSensor.get();
         }
-        public boolean BeamBrake2(int x){
-            x = 0;
+        public boolean BeamBrake2(){
             return !secondSensor.get();
         }
         private void loggers() {
-            SmartDashboard.putBoolean("beam brake 1", BeamBrake1(x));
-        SmartDashboard.putBoolean("beam brake 2", BeamBrake2(x));
+            SmartDashboard.putBoolean("beam brake 1", BeamBrake1());
+        SmartDashboard.putBoolean("beam brake 2", BeamBrake2());
     }
 
 
