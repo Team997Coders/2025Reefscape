@@ -87,9 +87,7 @@ public class goToLocation extends Command {
 
     if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){this.cancel();}
 
-    drivebase.driveWithChassisSpeeds(
-      ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, thetaSpeed, robotPose.getRotation())
-    );
+    drivebase.defaultDrive(xSpeed, ySpeed, thetaSpeed);
   }
 
   // Called once the command ends or is interrupted.

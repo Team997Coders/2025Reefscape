@@ -163,7 +163,7 @@ public class RobotContainer {
 
       NamedCommands.registerCommand("Pick Up Coral", m_coral.manualMoveCoralMotorsIntake());
       NamedCommands.registerCommand("Place Coral", m_coral.manualMoveCoralMotorsOutake());
-      NamedCommands.registerCommand("Elevator Down", elevator.goToStateCommand(ElevatorState.DOWN));
+      NamedCommands.registerCommand("Elevator Source", elevator.goToStateCommand(ElevatorState.SOURCE));
       NamedCommands.registerCommand("Elevator L1", elevator.goToStateCommand(ElevatorState.L1));
       NamedCommands.registerCommand("Elevator L2", elevator.goToStateCommand(ElevatorState.L2));
       NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
@@ -289,7 +289,7 @@ public class RobotContainer {
     c_driveStick.povRight().whileTrue(elevator.manualUp());
     c_driveStick.povLeft().whileTrue(elevator.manualDown());
    
-    c_driveStick.leftBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
+    c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
   }

@@ -45,7 +45,7 @@ public final class Constants {
     public static final class SetpointRotations {
       public static final double MAX = kMaxElevatorHeightRotations;
       public static final double DOWN = kMinElevatorHeightRotations;
-      public static final double SOURCE = 30;
+      public static final double SOURCE = 1;
       public static final double L1 = 19;
       public static final double L2 = 38;
       public static final double L3 = 72;

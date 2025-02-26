@@ -137,7 +137,7 @@ public class AutomaticSystems extends SubsystemBase
         return this.runOnce(() -> this.elevator.setStateByIndex(index));
     }
 
-    public void Go() 
+    public void runSubsystems()
     {
         if (this.coralBeamBrake)
         {
@@ -150,7 +150,7 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoElevator) {
                     try 
                     {
-                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 4);
+                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 3);
                     } catch (noSelectedButton e) {
                         e.printStackTrace();
                     }
@@ -158,8 +158,8 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoDrive)
                 {
                     try {
-                        driveCommand = new goToLocation(drivebase, pathplanning.getReefLocation(alliance, this.buttonBox.reefSide.selectedBit().id - 1, this.buttonBox.scoreSide.selectedBit().id));
-                        driveCommand.schedule();
+                        this.driveCommand = new goToLocation(drivebase, pathplanning.getReefLocation(alliance, this.buttonBox.reefSide.selectedBit().id - 1, this.buttonBox.scoreSide.selectedBit().id));
+                        this.driveCommand.schedule();
                     } catch (allianceNotInitialized e) {
                         e.printStackTrace();
                     } catch (noSelectedButton e) {
@@ -172,13 +172,30 @@ public class AutomaticSystems extends SubsystemBase
         {
             try
             {
-            driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
-            driveCommand.schedule();
+            this.driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
+            this.driveCommand.schedule();
             this.elevator.setGoal(0);
             } catch(Exception e)
             {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void Go() 
+    {
+        if (this.driveCommand != null)
+        {
+            if (this.driveCommand.isFinished())
+            {
+                runSubsystems();
+            } else 
+            {
+                this.driveCommand.cancel();
+                this.elevator.setGoal(this.elevator.getEncoderPosition());
+            }
+        } else {
+            runSubsystems();
         }
     }
 

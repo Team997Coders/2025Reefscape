@@ -168,10 +168,6 @@ public class Drivebase extends SubsystemBase {
     return gyro.getYaw()*(Constants.Gyro.gyroYawConversionFactor);
   }
 
-  public void driveWithChassisSpeeds(ChassisSpeeds speeds){
-    this.drive(speeds);
-  }
-
   public void fieldOrientedDrive(double speedX, double speedY, double rot) {
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, rot,
         Rotation2d.fromDegrees(getFieldAngle()));
@@ -216,10 +212,6 @@ public class Drivebase extends SubsystemBase {
     this.frontRight.drive(moduleStates[1]);
     this.backLeft.drive(moduleStates[2]);
     this.backRight.drive(moduleStates[3]);
-
-    SmartDashboard.putNumber("BL Target Angle", moduleStates[2].angle.getDegrees());
-    SmartDashboard.putNumber("BL angle", backLeft.getEncoderRadians());
-
   }
 
   public double getMaxVelocity() {
@@ -266,8 +258,6 @@ public class Drivebase extends SubsystemBase {
   public Command setDriveMultiplier(double newDriveMultiplier) {
     return this.runOnce(() -> changeDriveMultiplier(newDriveMultiplier));
   }
- 
-
 
   @Override
   public void periodic() {
@@ -280,7 +270,7 @@ public class Drivebase extends SubsystemBase {
 
     this.cameraBlock.update(poseEstimator);
 
-    field.setRobotPose(poseEstimator.getEstimatedPosition());
+    field.setRobotPose(getPose());
 
   
     SmartDashboard.putData("fieldOriented", fieldOrientedChooser);
