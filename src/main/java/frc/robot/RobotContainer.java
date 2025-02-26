@@ -289,7 +289,7 @@ public class RobotContainer {
     c_driveStick.povRight().whileTrue(elevator.manualUp());
     c_driveStick.povLeft().whileTrue(elevator.manualDown());
    
-
+    c_driveStick.leftBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
   }

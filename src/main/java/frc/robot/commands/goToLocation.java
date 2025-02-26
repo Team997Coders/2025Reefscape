@@ -85,6 +85,8 @@ public class goToLocation extends Command {
     if (yController.atGoal()) {ySpeed = 0;}
     if (thetaController.atGoal()) {thetaSpeed = 0;}
 
+    if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){this.cancel();}
+
     drivebase.driveWithChassisSpeeds(
       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, thetaSpeed, robotPose.getRotation())
     );
