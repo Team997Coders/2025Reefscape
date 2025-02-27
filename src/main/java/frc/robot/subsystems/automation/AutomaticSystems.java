@@ -170,14 +170,20 @@ public class AutomaticSystems extends SubsystemBase
         }
         else
         {
-            try
-            {
-            this.driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
-            this.driveCommand.schedule();
-            this.elevator.setGoal(0);
-            } catch(Exception e)
-            {
-                e.printStackTrace();
+            if (semiAuto){
+                try
+                {
+                    if (autoDrive) {
+                        this.driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
+                        this.driveCommand.schedule();
+                    }
+                } catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                if (autoElevator) {
+                    this.elevator.setGoal(0);
+                }
             }
         }
     }
@@ -206,7 +212,7 @@ public class AutomaticSystems extends SubsystemBase
 
     @Override
     public void periodic() {
-        //loggers();
+        loggers();
     }
 
     public void loggers()
@@ -218,8 +224,23 @@ public class AutomaticSystems extends SubsystemBase
 
         try{
         SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedBit().id);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        try{
         SmartDashboard.putNumber("Elevator", this.buttonBox.elevatorLevel.selectedBit().id);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        try{
         SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        try{
         SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
         } catch(Exception e)
         {
