@@ -29,7 +29,7 @@ public class Pathplanning
     public Pose2d getSourceLocation(Alliance alliance, int sourceId) throws allianceNotInitialized, noSelectedButton
     {
         //TODO: Find the positions of all the sources
-        if (sourceId == 1)
+        if (sourceId == 14)
         {
             if (alliance == Alliance.Blue)
             {
@@ -42,7 +42,7 @@ public class Pathplanning
                 throw new allianceNotInitialized("The alliance is neither blue nor red");
             }
         }
-        if (sourceId == 0){
+        if (sourceId == 13){
             if (alliance == Alliance.Blue)
             {
                 return new Pose2d(1.13,7.01, new Rotation2d(5.341));

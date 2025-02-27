@@ -174,6 +174,7 @@ public class AutomaticSystems extends SubsystemBase
                 try
                 {
                     if (autoDrive) {
+                        SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
                         this.driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
                         this.driveCommand.schedule();
                     }
@@ -240,6 +241,7 @@ public class AutomaticSystems extends SubsystemBase
         {
             e.printStackTrace();
         }
+
         try{
         SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
         } catch(Exception e)
