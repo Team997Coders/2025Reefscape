@@ -17,13 +17,12 @@ public class CameraBlock
 
     public void update(SwerveDrivePoseEstimator poseEstimator)
     {
-        List<PhotonPipelineResult> results = this.cameraList.get(0).getResults();
-        if (!results.isEmpty())
+        for (Camera camera: this.cameraList){
+        List<PhotonPipelineResult> result = camera.getResults();
         {
-            for (Camera camera: this.cameraList)
-            {
-                camera.update(poseEstimator, results);
-            }
+            camera.update(poseEstimator, result);
+        }
         }
     }
 }
+
