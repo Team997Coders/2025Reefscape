@@ -150,7 +150,7 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoElevator) {
                     try 
                     {
-                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 3);
+                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 6);
                     } catch (noSelectedButton e) {
                         e.printStackTrace();
                     }
@@ -191,19 +191,19 @@ public class AutomaticSystems extends SubsystemBase
 
     public void Go() 
     {
-        if (this.driveCommand != null)
-        {
-            if (this.driveCommand.isFinished())
-            {
-                runSubsystems();
-            } else 
-            {
-                this.driveCommand.cancel();
-                this.elevator.setGoal(this.elevator.getEncoderPosition());
-            }
-        } else {
-            runSubsystems();
-        }
+        // if (this.driveCommand != null)
+        // {
+        //     if (this.driveCommand.isFinished())
+        //     {
+        //         runSubsystems();
+        //     } else 
+        //     {
+        //         this.driveCommand.cancel();
+        //     }
+        // } else {
+        //     runSubsystems();
+        // }
+        runSubsystems();
     }
 
     public Command goPressCommand()
@@ -213,7 +213,8 @@ public class AutomaticSystems extends SubsystemBase
 
     @Override
     public void periodic() {
-        loggers();
+        //loggers();
+        //SmartDashboard.putBoolean("Beam break", this.coralBeamBrake);
     }
 
     public void loggers()
