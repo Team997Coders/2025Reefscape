@@ -259,6 +259,15 @@ public class Drivebase extends SubsystemBase {
     return this.runOnce(() -> changeDriveMultiplier(newDriveMultiplier));
   }
 
+  public SwerveModulePosition[] invertPositions(SwerveModulePosition[] positions)
+  {
+    SwerveModulePosition[] swervePositions = positions;
+      for (int i = 0; i < swervePositions.length; i++) {
+        swervePositions[i].distanceMeters *= -1;
+    }
+    return swervePositions;
+  }
+
   @Override
   public void periodic() {
     var positions = getPositions();
@@ -266,13 +275,12 @@ public class Drivebase extends SubsystemBase {
 
     odometry.update(rotation, positions);
 
-    poseEstimator.update(rotation, positions);
+    poseEstimator.update(rotation, invertPositions(positions));
 
     this.cameraBlock.update(poseEstimator);
 
     field.setRobotPose(getPose());
 
-  
     SmartDashboard.putData("fieldOriented", fieldOrientedChooser);
   }
 }

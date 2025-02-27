@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.LocationSupplier;
 import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Drivebase;
 //import frc.robot.subsystems.automation.AutomaticSystems;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.automation.AutomaticSystems;
+import frc.robot.subsystems.automation.LocationList;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -96,6 +98,8 @@ public class RobotContainer {
     
   // AUTOMATIC SYSTEMS
   private final AutomaticSystems systems;
+
+  private final LocationList locations;
     
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
@@ -138,7 +142,9 @@ public class RobotContainer {
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
       systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
-      
+
+      locations = new LocationList();
+
       //TRIGGERS   
       // CONFIGURE THE TRIGGER BINDINGS
       drivebase.setDefaultCommand(
@@ -289,7 +295,7 @@ public class RobotContainer {
     c_driveStick.povRight().whileTrue(elevator.manualUp());
     c_driveStick.povLeft().whileTrue(elevator.manualDown());
    
-    c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
+    c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(1.13,1.05, new Rotation2d(.9425))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
   }
