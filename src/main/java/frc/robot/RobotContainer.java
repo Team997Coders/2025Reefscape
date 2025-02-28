@@ -200,8 +200,8 @@ public class RobotContainer {
 
   private double[] getXY() {
     double[] xy = new double[2];
-    xy[0] = -deadband(c_driveStick.getLeftX(), DriveConstants.deadband);
-    xy[1] = -deadband(c_driveStick.getLeftY(), DriveConstants.deadband);
+    xy[0] = deadband(c_driveStick.getLeftX(), DriveConstants.deadband);
+    xy[1] = deadband(c_driveStick.getLeftY(), DriveConstants.deadband);
     return xy;
   }
 
