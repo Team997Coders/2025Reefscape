@@ -31,7 +31,7 @@ public class AutomaticSystems extends SubsystemBase
     private Boolean autoElevator = false;
     private Boolean fullAuto = false;
     private Boolean semiAuto = false;
-    private Boolean coralBeamBrake = false;
+    private Boolean coralBeamBrake = true;
     
     private Command driveCommand;
     
