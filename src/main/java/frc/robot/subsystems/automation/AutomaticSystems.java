@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.commands.goToLocation;
 import frc.robot.exceptions.allianceNotInitialized;
 import frc.robot.exceptions.noSelectedButton;
@@ -183,7 +184,7 @@ public class AutomaticSystems extends SubsystemBase
                     e.printStackTrace();
                 }
                 if (autoElevator) {
-                    this.elevator.setGoal(0);
+                    this.elevator.setGoal(Constants.ElevatorConstants.kMinElevatorHeightRotations);
                 }
             }
         }
