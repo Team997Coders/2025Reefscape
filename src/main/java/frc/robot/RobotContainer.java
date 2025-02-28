@@ -290,7 +290,7 @@ public class RobotContainer {
     c_driveStick.povDown().whileTrue(elevator.manualDown());
 
     c_driveStick.rightBumper().onTrue(elevator.stateUp());
-    c_driveStick.leftBumper().onTrue(elevator.stateUp());
+    c_driveStick.leftBumper().onTrue(elevator.stateDown());
 
     c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
     c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.L1));
