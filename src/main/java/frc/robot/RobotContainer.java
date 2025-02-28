@@ -283,13 +283,20 @@ public class RobotContainer {
     coralSecondBeamBreak.and(c_driveStick.y()).onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
    
     //ELEVATOR COMMANDS
-    c_driveStick.povUp().onTrue(elevator.stateUp());
-    c_driveStick.povDown().onTrue(elevator.stateDown());
+    // c_driveStick.povUp().onTrue(elevator.stateUp());
+    // c_driveStick.povDown().onTrue(elevator.stateDown());
 
-    c_driveStick.povRight().whileTrue(elevator.manualUp());
-    c_driveStick.povLeft().whileTrue(elevator.manualDown());
+    c_driveStick.povUp().whileTrue(elevator.manualUp());
+    c_driveStick.povDown().whileTrue(elevator.manualDown());
+
+    c_driveStick.rightBumper().onTrue(elevator.stateUp());
+    c_driveStick.leftBumper().onTrue(elevator.stateUp());
+
+    c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
+    c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+    
    
-    c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
+    //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
   }
