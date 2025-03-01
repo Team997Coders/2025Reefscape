@@ -40,6 +40,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -305,8 +308,20 @@ public class RobotContainer {
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
+   * 
+   * 
    */
+
+   public double[] noSpeed() {
+    double[] speeds = new double[2];
+    speeds[0] = 0.0;
+    speeds[1] = 0.0;
+    return speeds;
+
+   }
+
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+   return new  SequentialCommandGroup(autoChooser.getSelected(),  new ParallelRaceGroup(new Drive(drivebase ,() -> noSpeed(),() -> drivebase.getFieldAngle() ) , new SequentialCommandGroup(elevator.goToStateCommand(ElevatorState.L1), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(3), m_coral.CoralStop(), elevator.stateUp())));
+    //return autoChooser.getSelected(); 
   }
 }
