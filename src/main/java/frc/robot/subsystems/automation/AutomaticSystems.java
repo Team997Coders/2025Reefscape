@@ -139,7 +139,6 @@ public class AutomaticSystems extends SubsystemBase
 
     public void Go() 
     {
-        SmartDashboard.putBoolean("beam break", this.coralBeamBrake);
         if (this.coralBeamBrake)
         {
             if (fullAuto)
@@ -151,8 +150,7 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoElevator) {
                     try 
                     {
-                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedIdx());
-                        SmartDashboard.putNumber("Hey you tried to move the elevator", this.buttonBox.elevatorLevel.selectedIdx());
+                        this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedIdx() + 2);
                     } catch (noSelectedButton e) {
                         e.printStackTrace();
                     }

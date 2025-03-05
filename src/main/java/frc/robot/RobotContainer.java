@@ -93,6 +93,7 @@ public class RobotContainer {
   //TRIGGERS
   public Trigger coralFirstBeamBreak;
   public Trigger coralSecondBeamBreak;
+  public Trigger algaeBeamBreak;
     
   // AUTOMATIC SYSTEMS
   private final AutomaticSystems systems;
@@ -134,6 +135,7 @@ public class RobotContainer {
 
       coralFirstBeamBreak = new Trigger(() -> m_coral.BeamBrake1());
       coralSecondBeamBreak = new Trigger(() -> m_coral.BeamBrake2());
+      algaeBeamBreak = new Trigger(() -> m_algae.getBeamBreakStatus());
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
@@ -148,9 +150,7 @@ public class RobotContainer {
             () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
 
 
-      m_algae.setDefaultCommand(new AlgaeToggleIntake(m_algae, 
-        () -> m_driverController.a().getAsBoolean(), 
-        () -> m_driverController.b().getAsBoolean()));
+  
 
       // m_coral.setDefaultCommand(new CoralAutomatic(m_coral, m_driverController.y(), coralFirstBeamBreak, coralSecondBeamBreak));
 
@@ -276,6 +276,11 @@ public class RobotContainer {
 
   private void configureBindings() {   
     //ALGAE COMMANDS
+    c_driveStick.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
+    algaeBeamBreak.whileTrue(m_algae.AlgaeHold());
+    c_driveStick.b().and(algaeBeamBreak).whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
+    c_driveStick.a().and(c_driveStick.b()).and(algaeBeamBreak).whileFalse(m_algae.AlgaeStop());
+
 
     //CORAL COMMANDS
     coralFirstBeamBreak.onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
@@ -286,8 +291,11 @@ public class RobotContainer {
     c_driveStick.povUp().onTrue(elevator.stateUp());
     c_driveStick.povDown().onTrue(elevator.stateDown());
 
-  //  c_driveStick.povRight().onTrue(elevator.manualUp());
-  //  c_driveStick.povLeft().onTrue(elevator.manualDown());
+    c_driveStick.povRight().onTrue(elevator.manualUp());
+    c_driveStick.povLeft().onTrue(elevator.manualDown());
+
+    c_driveStick.leftBumper().onTrue(elevator.goToStateCommand(ElevatorState.DOWN));
+    c_driveStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L4));
    
 
     //DRIVE STUFF 
