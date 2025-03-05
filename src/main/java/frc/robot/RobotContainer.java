@@ -321,22 +321,15 @@ public class RobotContainer {
    * 
    */
 
-   public double[] noSpeed() {
-    double[] speeds = new double[2];
-    speeds[0] = 0.0;
-    speeds[1] = 0.0;
-    return speeds;
-
-   }
 
   public Command getAutonomousCommand() {
     /*L4*/
-   return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0), m_algae.AlgaeOuttake(Constants.Algae.motorSpin)), new SequentialCommandGroup( new WaitCommand(1), m_algae.AlgaeStop(), elevator.goToStateCommand(ElevatorState.L4), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(3), m_coral.CoralStop()));
+  // return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0), m_algae.AlgaeOuttake(Constants.Algae.motorSpin)), new SequentialCommandGroup( new WaitCommand(1), m_algae.AlgaeStop(), elevator.goToStateCommand(ElevatorState.L4), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop()));
 
     /*L1*/
-  //return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0), m_algae.AlgaeOuttake(Constants.Algae.motorSpin)), new SequentialCommandGroup( new WaitCommand(1), m_algae.AlgaeStop(), elevator.goToStateCommand(ElevatorState.L1), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(3), m_coral.CoralStop(), elevator.stateUp()));
+  //return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0)), new SequentialCommandGroup( elevator.goToStateCommand(ElevatorState.L1), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop(), elevator.stateUp()));
 
   /*just leave */
-  //return autoChooser.getSelected(); 
+  return autoChooser.getSelected(); 
   }
 }
