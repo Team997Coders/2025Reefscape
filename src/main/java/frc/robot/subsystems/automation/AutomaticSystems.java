@@ -69,7 +69,6 @@ public class AutomaticSystems extends SubsystemBase
         this.buttonBox.semiAutoCycles.onChange(this.switchSemiCommand());
         this.elevator.m_secondBeamBrake.onChange(this.switchBeamBrakeCommand());
 
-      //  this.buttonBox.go.onTrue(goPressCommand());
     }
 
     public void switchBeamBrake()
@@ -140,6 +139,7 @@ public class AutomaticSystems extends SubsystemBase
 
     public void runSubsystems()
     {
+        SmartDashboard.putBoolean("beam break", this.coralBeamBrake);
         if (this.coralBeamBrake)
         {
             if (fullAuto)
@@ -171,51 +171,21 @@ public class AutomaticSystems extends SubsystemBase
         }
         else
         {
-            if (semiAuto){
-                try
-                {
-                    if (autoDrive) {
-                        SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
-                        this.driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
-                        this.driveCommand.schedule();
-                    }
-                } catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                if (autoElevator) {
-                    this.elevator.setGoal(Constants.ElevatorConstants.kMinElevatorHeightRotations);
-                }
+            try
+            {
+            driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
+            driveCommand.schedule();
+            this.elevator.setGoal(0);
+            } catch(Exception e)
+            {
+                e.printStackTrace();
             }
         }
     }
-
-    public void Go() 
-    {
-        // if (this.driveCommand != null)
-        // {
-        //     if (this.driveCommand.isFinished())
-        //     {
-        //         runSubsystems();
-        //     } else 
-        //     {
-        //         this.driveCommand.cancel();
-        //     }
-        // } else {
-        //     runSubsystems();
-        // }
-        runSubsystems();
-    }
-
-    public Command goPressCommand()
-    {
-            return this.runOnce(() -> Go());
-    }
-
+    
     @Override
     public void periodic() {
         //loggers();
-        //SmartDashboard.putBoolean("Beam break", this.coralBeamBrake);
     }
 
     public void loggers()
@@ -227,24 +197,8 @@ public class AutomaticSystems extends SubsystemBase
 
         try{
         SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedBit().id);
-        } catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        try{
         SmartDashboard.putNumber("Elevator", this.buttonBox.elevatorLevel.selectedBit().id);
-        } catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        try{
         SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
-        } catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        try{
         SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
         } catch(Exception e)
         {
