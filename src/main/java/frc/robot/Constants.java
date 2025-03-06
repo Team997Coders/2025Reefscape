@@ -56,6 +56,11 @@ public final class Constants {
       public static final double kP = 0.125;
       public static final double kI = 0;
       public static final double kD = 0;
+
+      public static final double maxVelocity = 10;
+      public static final double maxAcceleration = 5;
+
+      public static final double IZone = 5;
     }
 
     public static final class FeedForward{
