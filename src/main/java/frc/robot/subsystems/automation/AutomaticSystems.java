@@ -69,7 +69,7 @@ public class AutomaticSystems extends SubsystemBase
         this.buttonBox.semiAutoCycles.onChange(this.switchSemiCommand());
         this.elevator.m_secondBeamBrake.onChange(this.switchBeamBrakeCommand());
 
-        this.buttonBox.go.onTrue(goPressCommand());
+      //  this.buttonBox.go.onTrue(goPressCommand());
     }
 
     public void switchBeamBrake()

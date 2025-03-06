@@ -300,17 +300,20 @@ public class RobotContainer {
 
     c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.L4));
     c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
-    
-   
-    //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
-    //DRIVE STUFF 
-    c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
 
     c_buttonStick.a().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
     c_buttonStick.x().onTrue(elevator.goToStateCommand(ElevatorState.L2));
     c_buttonStick.y().onTrue(elevator.goToStateCommand(ElevatorState.L3));
     c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
     c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+    
+   
+    //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
+    //DRIVE STUFF 
+    c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
+    c_driveStick.leftTrigger().onTrue(drivebase.switchDriveModeCommand());
+
+    
   }
 
   /**
