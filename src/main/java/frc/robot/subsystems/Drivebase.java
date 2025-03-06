@@ -259,6 +259,13 @@ public class Drivebase extends SubsystemBase {
     return this.runOnce(() -> changeDriveMultiplier(newDriveMultiplier));
   }
 
+  public SwerveModulePosition[] getInvertedPositions(SwerveModulePosition[] positions) {
+    for (int i = 0; i < positions.length; i++) {
+      positions[i].distanceMeters *= -1;
+    }
+    return positions;
+  } 
+
   @Override
   public void periodic() {
     var positions = getPositions();
@@ -266,7 +273,7 @@ public class Drivebase extends SubsystemBase {
 
     odometry.update(rotation, positions);
 
-    poseEstimator.update(rotation, positions);
+    poseEstimator.update(rotation, getInvertedPositions(positions));
 
     this.cameraBlock.update(poseEstimator);
 
