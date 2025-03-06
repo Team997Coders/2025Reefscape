@@ -176,7 +176,7 @@ public class Drivebase extends SubsystemBase {
       fieldOrientedDrive(speedX, speedY, rot);
       isFieldOriented = true;
     } else {
-      robotOrientedDrive(speedX, speedY, rot);
+      robotOrientedDrive(-speedX, -speedY, rot);
       isFieldOriented = false;
     }
   }
