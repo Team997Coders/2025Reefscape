@@ -69,7 +69,7 @@ public class Elevator extends SubsystemBase{
         m_firstBeamBrake = firstBeamBrake;
        m_secondBeamBrake = SecondBeamBreak;
 
-        setState(ElevatorState.DOWN);
+        setState(ElevatorState.SOURCE);
 
     }
 
@@ -89,12 +89,11 @@ public class Elevator extends SubsystemBase{
 
    //elevator states
     public enum ElevatorState {
-        DOWN("DOWN", Constants.ElevatorConstants.SetpointRotations.DOWN, 0),
-        SOURCE("SOURCE", Constants.ElevatorConstants.SetpointRotations.SOURCE, 1),
-        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 2),
-        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 3),
-        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 4),
-        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 5);
+        SOURCE("SOURCE", Constants.ElevatorConstants.SetpointRotations.SOURCE, 0),
+        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 1),
+        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 2),
+        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 3),
+        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 4);
 
         double rotations; 
         String name;
@@ -183,7 +182,7 @@ public class Elevator extends SubsystemBase{
         double position = getEncoderPosition();
         double diff1;
         double currentClosestDiff = 0;
-        ElevatorState closestState = ElevatorState.DOWN;
+        ElevatorState closestState = ElevatorState.SOURCE;
         
         for (int i = 0; i<=ElevatorState.values().length; i++) {
             diff1 = Math.abs(position - ElevatorState.findByIndex(i).rotations);
@@ -211,7 +210,7 @@ public class Elevator extends SubsystemBase{
     public void moveStateUp() {
         int state = elevatorState.index;
 
-        if (state < 5) {
+        if (state < 4) {
             state += 1; 
         }
 

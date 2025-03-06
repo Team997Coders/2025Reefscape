@@ -117,13 +117,13 @@ public class Drivebase extends SubsystemBase {
 
     // Configure AutoBuilder last
     AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
+            () -> odometry.getPoseMeters(), // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> drive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(0.1, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(.1, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(.1, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -154,7 +154,7 @@ public class Drivebase extends SubsystemBase {
         builder.addDoubleProperty("Back Right Angle", () -> backRight.getEncoderRadians(), null);
         builder.addDoubleProperty("Back Right Velocity", () -> backRight.getState().speedMetersPerSecond, null);
     
-        builder.addDoubleProperty("Robot Angle", () -> gyro.getRotation2d().getRadians(), null);
+        builder.addDoubleProperty("Robot Angle", () -> getFieldAngle(), null);
       }
     });
   }
@@ -166,10 +166,6 @@ public class Drivebase extends SubsystemBase {
 
   public double getFieldAngle() {
     return gyro.getYaw()*(Constants.Gyro.gyroYawConversionFactor);
-  }
-
-  public void driveWithChassisSpeeds(ChassisSpeeds speeds){
-    this.drive(speeds);
   }
 
   public void fieldOrientedDrive(double speedX, double speedY, double rot) {
@@ -216,10 +212,6 @@ public class Drivebase extends SubsystemBase {
     this.frontRight.drive(moduleStates[1]);
     this.backLeft.drive(moduleStates[2]);
     this.backRight.drive(moduleStates[3]);
-
-    SmartDashboard.putNumber("BL Target Angle", moduleStates[2].angle.getDegrees());
-    SmartDashboard.putNumber("BL angle", backLeft.getEncoderRadians());
-
   }
 
   public double getMaxVelocity() {
@@ -266,8 +258,6 @@ public class Drivebase extends SubsystemBase {
   public Command setDriveMultiplier(double newDriveMultiplier) {
     return this.runOnce(() -> changeDriveMultiplier(newDriveMultiplier));
   }
- 
-
 
   @Override
   public void periodic() {
@@ -280,7 +270,7 @@ public class Drivebase extends SubsystemBase {
 
     this.cameraBlock.update(poseEstimator);
 
-    field.setRobotPose(poseEstimator.getEstimatedPosition());
+    field.setRobotPose(getPose());
 
   
     SmartDashboard.putData("fieldOriented", fieldOrientedChooser);
