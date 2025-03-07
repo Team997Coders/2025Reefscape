@@ -1,12 +1,18 @@
-name: FRC Build & Test
-on: [push, pull_request]
+name: Build
+
+on:
+  push:
+  pull_request:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    name: Build
+    runs-on: ubuntu-latest
+    container: wpilib/roborio-cross-ubuntu:2024-22.04
     steps:
-    - uses: actions/checkout@v2-beta
-    - name: FRC Build & Test
-      uses: ewpratten/FRC-actions@v1
-      with:
-        build_mode: 'build'
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Grant execute permission
+        run: chmod +x gradlew
+      - name: Build robot code
+        run: ./gradlew build
