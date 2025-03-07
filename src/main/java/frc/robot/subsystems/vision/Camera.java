@@ -82,6 +82,10 @@ public class Camera
                 Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
                 if (tagPose.isPresent())
                 {
+                    double targetYaw = target.getYaw();
+                    int targetId = target.fiducialId;
+                    SmartDashboard.putNumber("target yaw", targetYaw);
+                    SmartDashboard.putNumber("target Id", targetId);
                     return PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.getDistanceToPose(drivebase.getPose(), tagPose.orElseThrow().toPose2d()), Rotation2d.fromDegrees(-target.getYaw()));
                 }
             }
