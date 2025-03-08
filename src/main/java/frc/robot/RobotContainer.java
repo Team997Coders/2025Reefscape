@@ -283,7 +283,7 @@ public class RobotContainer {
   private void configureBindings() {   
     //ALGAE COMMANDS
     c_driveStick.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
-    algaeBeamBreak.whileTrue(m_algae.AlgaeHold());
+    algaeBeamBreak.whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
     c_driveStick.b().and(algaeBeamBreak).whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     c_driveStick.a().and(c_driveStick.b()).and(algaeBeamBreak).whileFalse(m_algae.AlgaeStop());
 

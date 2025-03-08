@@ -38,13 +38,13 @@ public class Algae extends SubsystemBase{
     }
     
     public boolean getBeamBreakStatus() {
-        return beamBreak.get();
+        return !beamBreak.get();
     }
 
     public Command AlgaeIntake(double speed) {
         spinnyMotorConfig.smartCurrentLimit(Constants.Algae.spinnyMotorConfig);
         spinnyMotor.configure(spinnyMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        return this.runOnce(() -> SpinMotor(speed));
+        return this.startEnd(() -> SpinMotor(speed), () -> SpinMotor(0));
     }
 
     public Command AlgaeHold() {
@@ -56,7 +56,7 @@ public class Algae extends SubsystemBase{
     public Command AlgaeOuttake(double speed) {
         spinnyMotorConfig.smartCurrentLimit(Constants.Algae.spinnyMotorConfig);
         spinnyMotor.configure(spinnyMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        return this.runOnce(() -> SpinMotor(-speed));
+        return this.startEnd(() -> SpinMotor(-speed), () -> SpinMotor(0));
     }
 
     public Command AlgaeStop() {
