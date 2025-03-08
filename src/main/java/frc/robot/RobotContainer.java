@@ -312,8 +312,6 @@ public class RobotContainer {
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
     c_driveStick.leftTrigger().onTrue(drivebase.switchDriveModeCommand());
-
-    
   }
 
   /**

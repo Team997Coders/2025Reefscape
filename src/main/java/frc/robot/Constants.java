@@ -54,11 +54,11 @@ public final class Constants {
 
     public static final class PID {
       public static final double kP = 0.125;
-      public static final double kI = 0;
-      public static final double kD = 0;
+      public static final double kI = 0.005;
+      public static final double kD = .0025;
 
-      public static final double maxVelocity = 10;
-      public static final double maxAcceleration = 5;
+      public static final double maxVelocity = 200;
+      public static final double maxAcceleration = 225;
 
       public static final double IZone = 5;
     }
