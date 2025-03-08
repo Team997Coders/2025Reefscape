@@ -45,17 +45,22 @@ public final class Constants {
     public static final class SetpointRotations {
       public static final double MAX = kMaxElevatorHeightRotations;
       public static final double DOWN = kMinElevatorHeightRotations;
-      public static final double SOURCE = 30;
+      public static final double SOURCE = 1;
       public static final double L1 = 19;
-      public static final double L2 = 38;
-      public static final double L3 = 72;
+      public static final double L2 = 36;
+      public static final double L3 = 71;
       public static final double L4 = kMaxElevatorHeightRotations; 
     }
 
     public static final class PID {
       public static final double kP = 0.125;
-      public static final double kI = 0;
-      public static final double kD = 0;
+      public static final double kI = 0.005;
+      public static final double kD = .0025;
+
+      public static final double maxVelocity = 200;
+      public static final double maxAcceleration = 225;
+
+      public static final double IZone = 5;
     }
 
     public static final class FeedForward{

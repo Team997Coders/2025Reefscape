@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import java.security.spec.EncodedKeySpec;
-import java.util.function.BooleanSupplier;
-
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,8 +8,9 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,7 +32,8 @@ public class Elevator extends SubsystemBase{
 
     private final DigitalInput bottomSwitch;
 
-    private final PIDController pid;
+    //private final PIDController pid;
+    private final ProfiledPIDController profiledPid;
     public ElevatorState elevatorState;
 
     public Trigger m_firstBeamBrake;
@@ -62,14 +60,18 @@ public class Elevator extends SubsystemBase{
 
         bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
 
-        pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
-        pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
-        pid.setIZone(5);
+        // pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
+        // pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
+        // pid.setIZone(Constants.ElevatorConstants.PID.IZone);
+
+        profiledPid = new ProfiledPIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD, new TrapezoidProfile.Constraints(Constants.ElevatorConstants.PID.maxVelocity, Constants.ElevatorConstants.PID.maxAcceleration));
+        profiledPid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
+        profiledPid.setIZone(Constants.ElevatorConstants.PID.IZone);
 
         m_firstBeamBrake = firstBeamBrake;
-       m_secondBeamBrake = SecondBeamBreak;
+        m_secondBeamBrake = SecondBeamBreak;
 
-        setState(ElevatorState.DOWN);
+        setState(ElevatorState.SOURCE);
 
     }
 
@@ -79,22 +81,21 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic() {
         loggers();
-        setOutput(pid.calculate(getEncoderPosition(), goal));
+        setOutput(profiledPid.calculate(getEncoderPosition(), goal));
     }
 
     public void pidControl()
     {
-        setOutput(pid.calculate(encoderPosition, goal));
+        setOutput(profiledPid.calculate(encoderPosition, goal));
     }
 
    //elevator states
     public enum ElevatorState {
-        DOWN("DOWN", Constants.ElevatorConstants.SetpointRotations.DOWN, 0),
-        SOURCE("SOURCE", Constants.ElevatorConstants.SetpointRotations.SOURCE, 1),
-        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 2),
-        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 3),
-        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 4),
-        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 5);
+        SOURCE("SOURCE", Constants.ElevatorConstants.SetpointRotations.SOURCE, 0),
+        L1("L1", Constants.ElevatorConstants.SetpointRotations.L1, 1),
+        L2("L2", Constants.ElevatorConstants.SetpointRotations.L2, 2),
+        L3("L3", Constants.ElevatorConstants.SetpointRotations.L3, 3),
+        L4("L4", Constants.ElevatorConstants.SetpointRotations.L4, 4);
 
         double rotations; 
         String name;
@@ -183,7 +184,7 @@ public class Elevator extends SubsystemBase{
         double position = getEncoderPosition();
         double diff1;
         double currentClosestDiff = 0;
-        ElevatorState closestState = ElevatorState.DOWN;
+        ElevatorState closestState = ElevatorState.SOURCE;
         
         for (int i = 0; i<=ElevatorState.values().length; i++) {
             diff1 = Math.abs(position - ElevatorState.findByIndex(i).rotations);
@@ -211,7 +212,7 @@ public class Elevator extends SubsystemBase{
     public void moveStateUp() {
         int state = elevatorState.index;
 
-        if (state < 5) {
+        if (state < 4) {
             state += 1; 
         }
 
@@ -255,7 +256,7 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("elevator ki", Constants.ElevatorConstants.PID.kI);
         SmartDashboard.putNumber("elevator kd", Constants.ElevatorConstants.PID.kD);
         SmartDashboard.putBoolean("elevator bottom switch", getBottomSwitch());
-        SmartDashboard.putBoolean("pid at goal", pid.atSetpoint());
+        SmartDashboard.putBoolean("pid at goal", profiledPid.atSetpoint());
     }
 
 /*RUNNABLE ACTIONS FOR BUTTON BOX*/

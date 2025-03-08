@@ -40,6 +40,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -64,10 +67,11 @@ public class RobotContainer {
   
   //CONTROLLERS
   //private static XboxController driveStick = new XboxController(0);
-  private static XboxController box = new XboxController(1);
+  //private static XboxController box = new XboxController(1);
   
     private static CommandXboxController c_driveStick;
     // final CommandXboxController m_driverController;
+    private static CommandXboxController c_buttonStick;
   
   
   //AUTOCHOOSER
@@ -96,7 +100,7 @@ public class RobotContainer {
   public Trigger algaeBeamBreak;
     
   // AUTOMATIC SYSTEMS
-  private final AutomaticSystems systems;
+  //private final AutomaticSystems systems;
     
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
@@ -113,6 +117,8 @@ public class RobotContainer {
       c_driveStick = new CommandXboxController(0);
       final CommandXboxController m_driverController =
           new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
+      c_buttonStick = new CommandXboxController(1);
     
     
      //CAMERA STUFF
@@ -139,7 +145,7 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
+      //systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       
       //TRIGGERS   
       // CONFIGURE THE TRIGGER BINDINGS
@@ -163,7 +169,7 @@ public class RobotContainer {
 
       NamedCommands.registerCommand("Pick Up Coral", m_coral.manualMoveCoralMotorsIntake());
       NamedCommands.registerCommand("Place Coral", m_coral.manualMoveCoralMotorsOutake());
-      NamedCommands.registerCommand("Elevator Down", elevator.goToStateCommand(ElevatorState.DOWN));
+      NamedCommands.registerCommand("Elevator Source", elevator.goToStateCommand(ElevatorState.SOURCE));
       NamedCommands.registerCommand("Elevator L1", elevator.goToStateCommand(ElevatorState.L1));
       NamedCommands.registerCommand("Elevator L2", elevator.goToStateCommand(ElevatorState.L2));
       NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
@@ -288,26 +294,48 @@ public class RobotContainer {
     coralSecondBeamBreak.and(c_driveStick.y()).onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
    
     //ELEVATOR COMMANDS
-    c_driveStick.povUp().onTrue(elevator.stateUp());
-    c_driveStick.povDown().onTrue(elevator.stateDown());
+    // c_driveStick.povUp().onTrue(elevator.stateUp());
+    // c_driveStick.povDown().onTrue(elevator.stateDown());
 
-    c_driveStick.povRight().onTrue(elevator.manualUp());
-    c_driveStick.povLeft().onTrue(elevator.manualDown());
+    c_driveStick.povUp().whileTrue(elevator.manualUp());
+    c_driveStick.povDown().whileTrue(elevator.manualDown());
 
-    c_driveStick.leftBumper().onTrue(elevator.goToStateCommand(ElevatorState.DOWN));
-    c_driveStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L4));
+    c_driveStick.rightBumper().onTrue(elevator.stateUp());
+    c_driveStick.leftBumper().onTrue(elevator.stateDown());
+
+    c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.L4));
+    c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
+
+    c_buttonStick.a().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
+    c_buttonStick.x().onTrue(elevator.goToStateCommand(ElevatorState.L2));
+    c_buttonStick.y().onTrue(elevator.goToStateCommand(ElevatorState.L3));
+    c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
+    c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+    
    
-
+    //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
+    c_driveStick.leftTrigger().onTrue(drivebase.switchDriveModeCommand());
   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
+   * 
+   * 
    */
+
+
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    /*L4*/
+  // return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0), m_algae.AlgaeOuttake(Constants.Algae.motorSpin)), new SequentialCommandGroup( new WaitCommand(1), m_algae.AlgaeStop(), elevator.goToStateCommand(ElevatorState.L4), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop()));
+
+    /*L1*/
+  //return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0)), new SequentialCommandGroup( elevator.goToStateCommand(ElevatorState.L1), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop(), elevator.stateUp()));
+
+  /*just leave */
+  return autoChooser.getSelected(); 
   }
 }
