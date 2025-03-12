@@ -232,18 +232,22 @@ public class Elevator extends SubsystemBase{
     }
 
 //for automatic subsystems
-    public boolean elevatorAtTarget() throws unfilledConstant
+    public boolean elevatorAtTarget() //throws unfilledConstant
     {
         double offset = Constants.ElevatorConstants.atTargetOffset;
-        if (offset == 0)
-        {
-            throw new unfilledConstant("The atTargetOffset elevator constants is set to zero meaning nothing will work ever");
-        }
+        // if (offset == 0)
+        // {
+        //     //throw new unfilledConstant("The atTargetOffset elevator constants is set to zero meaning nothing will work ever");
+        // }
         if (encoderPosition > goal-offset && encoderPosition < goal+offset)
         {
             return true;
         }
         return false;
+    }
+
+    public boolean pidAtTarget() {
+        return profiledPid.atGoal();
     }
 
 /*LOGGERS*/

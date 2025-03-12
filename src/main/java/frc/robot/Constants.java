@@ -35,7 +35,7 @@ public final class Constants {
 
     public static final int bottomSwitchID = 0; //DIO
 
-    public static final double atTargetOffset = 0.3; //The encoder ticks to determine whether the elevator is at the target position
+    public static final double atTargetOffset = 0.5; //The encoder ticks to determine whether the elevator is at the target position
 
      // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
      public static final double kMinElevatorHeightRotations = 1;

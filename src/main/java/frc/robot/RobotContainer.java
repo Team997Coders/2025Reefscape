@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorGoToState;
 import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Drivebase;
 //import frc.robot.subsystems.automation.AutomaticSystems;
@@ -40,6 +41,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -238,6 +240,8 @@ public class RobotContainer {
     SmartDashboard.putNumber("Scaled_X", getScaledXY()[0]);
     SmartDashboard.putNumber("Scaled_Y", getScaledXY()[1]);
     SmartDashboard.putNumber("Rotation", scaleRotationAxis(c_driveStick.getRawAxis(4)));
+
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
   @SuppressWarnings("unused")
@@ -305,6 +309,9 @@ public class RobotContainer {
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
 
+    c_driveStick.povRight().onTrue(new ElevatorGoToState(elevator, ElevatorState.L4));
+    c_driveStick.povLeft().onTrue(new ElevatorGoToState(elevator, ElevatorState.L2));
+
     c_driveStick.rightBumper().onTrue(elevator.stateUp());
     c_driveStick.leftBumper().onTrue(elevator.stateDown());
 
@@ -342,10 +349,12 @@ public class RobotContainer {
 
   /*just leave */
 //  return autoChooser.getSelected(); 
+
+    return new goToLocation(drivebase, new Pose2d(3.175-0.03, 4.191+.0254,new Rotation2d(0)));
     
-    return new SequentialCommandGroup(
-      new ParallelDeadlineGroup( new goToLocation(drivebase, new Pose2d(3.175+0.225, 4.191+.0254,new Rotation2d(0))), elevator.goToStateCommand(ElevatorState.L2),m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(2)), 
-      elevator.goToStateCommand(ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(2),  m_coral.CoralStop());
+    // return new SequentialCommandGroup(
+    //   new ParallelDeadlineGroup( new goToLocation(drivebase, new Pose2d(3.175+0.225, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(2)), 
+    //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(2),  m_coral.CoralStop());
 
   }
 } 
