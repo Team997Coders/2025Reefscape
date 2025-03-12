@@ -350,7 +350,7 @@ public class RobotContainer {
   /*just leave */
 //  return autoChooser.getSelected(); 
 
-    return new goToLocation(drivebase, new Pose2d(3.175-0.03, 4.191+.0254,new Rotation2d(0)));
+    return new goToLocation(drivebase, new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)));
     
     // return new SequentialCommandGroup(
     //   new ParallelDeadlineGroup( new goToLocation(drivebase, new Pose2d(3.175+0.225, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(2)), 
