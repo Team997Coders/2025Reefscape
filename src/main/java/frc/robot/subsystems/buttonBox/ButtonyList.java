@@ -25,12 +25,21 @@ public class ButtonyList
         return buttonyList.get(selectedIdx);
     }
 
+    public int selectedIdx() throws noSelectedButton
+    {
+        if (selectedIdx == -1)
+        {
+            throw new noSelectedButton("Currently no button selected in buttonyList: " + this);
+        }
+        return selectedIdx;
+    }
+
     public void selectBit(int bit) throws outOfBounds
     {
-        if (bit > buttonyList.size()-1)
+        if (bit > buttonyList.size()-1 || bit < 0)
         {
             throw new outOfBounds("Idx out of bounds for buttonyList: " + buttonyList);
-        }
+        } 
         selectedIdx = bit;
     }
 
