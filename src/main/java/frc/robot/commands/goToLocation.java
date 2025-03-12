@@ -95,15 +95,18 @@ public class goToLocation extends Command {
     SmartDashboard.putNumber("thetaController goal location", goalPose.getRotation().getRadians());
   }
 
+  public double xSpeed;
+  public double ySpeed;
+  public double thetaSpeed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
     Pose2d robotPose = drivebase.getPose();
 
-    var xSpeed = -xController.calculate(robotPose.getX());
-    var ySpeed = -yController.calculate(robotPose.getY());
-    var thetaSpeed = -thetaController.calculate(robotPose.getRotation().getRadians());
+    xSpeed = -xController.calculate(robotPose.getX());
+    ySpeed = -yController.calculate(robotPose.getY());
+    thetaSpeed = -thetaController.calculate(robotPose.getRotation().getRadians());
 
     SmartDashboard.putNumber("current estimated x", robotPose.getX());
     SmartDashboard.putNumber("current estimated y", robotPose.getY());
@@ -134,7 +137,13 @@ public class goToLocation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean finished;
+    if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
+      finished = true;
+    } else {
+      finished = false;
+    }
+    return finished;
   }
   
 }

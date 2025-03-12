@@ -40,6 +40,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -339,6 +341,11 @@ public class RobotContainer {
   //return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0)), new SequentialCommandGroup( elevator.goToStateCommand(ElevatorState.L1), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop(), elevator.stateUp()));
 
   /*just leave */
-  return autoChooser.getSelected(); 
+//  return autoChooser.getSelected(); 
+    
+    return new SequentialCommandGroup(
+      new ParallelDeadlineGroup( new goToLocation(drivebase, new Pose2d(3.175+0.225, 4.191+.0254,new Rotation2d(0))), elevator.goToStateCommand(ElevatorState.L2),m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(2)), 
+      elevator.goToStateCommand(ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(2),  m_coral.CoralStop());
+
   }
-}
+} 
