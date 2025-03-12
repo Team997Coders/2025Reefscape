@@ -41,17 +41,21 @@ public class goToLocation extends Command {
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1); 
   private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(8, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(8, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(6, 0, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(6, 0, 0, Y_CONSTRAINTS);
   private final ProfiledPIDController thetaController = new ProfiledPIDController(6, 0, 0, THETA_CONSTRAINTS);
+
+  private double xStart = 0;
+  private double yStart = 0;
+  private double thetaStart = 0;
 
   public goToLocation(Drivebase drivebase, Pose2d pose) {
     this.drivebase = drivebase;
     this.goalPose = pose;
 
-    xController.setTolerance(0.05);
-    yController.setTolerance(0.05);
-    thetaController.setTolerance(Units.degreesToRadians(5));
+    xController.setTolerance(0.02);
+    yController.setTolerance(0.02);
+    thetaController.setTolerance(Units.degreesToRadians(2));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivebase);
@@ -65,6 +69,10 @@ public class goToLocation extends Command {
     xController.reset(robotPose.getX());
     yController.reset(robotPose.getY());
     thetaController.reset(robotPose.getRotation().getRadians());
+
+    xStart = robotPose.getX();
+    yStart = robotPose.getY();
+    thetaStart = robotPose.getRotation().getRadians();
 
     xController.setGoal(goalPose.getX());
     yController.setGoal(goalPose.getY());
@@ -97,7 +105,13 @@ public class goToLocation extends Command {
     var ySpeed = -yController.calculate(robotPose.getY());
     var thetaSpeed = -thetaController.calculate(robotPose.getRotation().getRadians());
 
-    SmartDashboard.putNumber("current rotation", robotPose.getRotation().getRadians());
+    SmartDashboard.putNumber("current estimated x", robotPose.getX());
+    SmartDashboard.putNumber("current estimated y", robotPose.getY());
+    SmartDashboard.putNumber("current estimated rotation", robotPose.getRotation().getRadians());
+
+    SmartDashboard.putNumber("x error", robotPose.getX()-goalPose.getX());
+    SmartDashboard.putNumber("y error", robotPose.getY()-goalPose.getY());
+    SmartDashboard.putNumber("theta error", robotPose.getRotation().getRadians()-goalPose.getRotation().getRadians());
 
     if (xController.atGoal()) {xSpeed = 0;}
     if (yController.atGoal()) {ySpeed = 0;}

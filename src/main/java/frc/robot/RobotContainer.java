@@ -293,7 +293,7 @@ public class RobotContainer {
     // c_driveStick.povDown().onTrue(elevator.stateDown());
 
     //(1.13, 1.05,
-    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(0.7, 0.75, new Rotation2d(.9425))));
+    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.175+0.225, 4.191,new Rotation2d(0))));
 
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
