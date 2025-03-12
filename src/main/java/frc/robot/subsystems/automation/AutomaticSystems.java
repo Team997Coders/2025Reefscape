@@ -139,7 +139,6 @@ public class AutomaticSystems extends SubsystemBase
 
     public void runSubsystems()
     {
-        SmartDashboard.putBoolean("beam break", this.coralBeamBrake);
         if (this.coralBeamBrake)
         {
             if (fullAuto)
