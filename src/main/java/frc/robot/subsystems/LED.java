@@ -15,7 +15,9 @@ public class LED extends SubsystemBase{
 
     private final LEDPattern red;
     private final AddressableLEDBuffer m_buffer;
+    @SuppressWarnings("unused")
     private final AddressableLEDBufferView m_left;
+    @SuppressWarnings("unused")
     private final AddressableLEDBufferView m_right;
     private final AddressableLED m_led;
     private final LEDPattern blue;

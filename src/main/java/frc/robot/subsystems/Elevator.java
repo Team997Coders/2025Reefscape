@@ -7,7 +7,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.exceptions.unfilledConstant;
-
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class Elevator extends SubsystemBase{
@@ -32,7 +29,6 @@ public class Elevator extends SubsystemBase{
 
     private final DigitalInput bottomSwitch;
 
-    //private final PIDController pid;
     private final ProfiledPIDController profiledPid;
     public ElevatorState elevatorState;
 
@@ -51,18 +47,13 @@ public class Elevator extends SubsystemBase{
 
         leftConfig.smartCurrentLimit(40);
         rightConfig.smartCurrentLimit(40);
-        
-
+    
         leftSparkMax.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         rightSparkMax.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         relativeEncoder = leftSparkMax.getEncoder();
 
         bottomSwitch = new DigitalInput(Constants.ElevatorConstants.bottomSwitchID);
-
-        // pid = new PIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD);
-        // pid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
-        // pid.setIZone(Constants.ElevatorConstants.PID.IZone);
 
         profiledPid = new ProfiledPIDController(Constants.ElevatorConstants.PID.kP, Constants.ElevatorConstants.PID.kI, Constants.ElevatorConstants.PID.kD, new TrapezoidProfile.Constraints(Constants.ElevatorConstants.PID.maxVelocity, Constants.ElevatorConstants.PID.maxAcceleration));
         profiledPid.setTolerance(Constants.ElevatorConstants.atTargetOffset);
@@ -231,20 +222,6 @@ public class Elevator extends SubsystemBase{
         setGoal(elevatorState.rotations);
     }
 
-//for automatic subsystems
-    public boolean elevatorAtTarget() //throws unfilledConstant
-    {
-        double offset = Constants.ElevatorConstants.atTargetOffset;
-        // if (offset == 0)
-        // {
-        //     //throw new unfilledConstant("The atTargetOffset elevator constants is set to zero meaning nothing will work ever");
-        // }
-        if (encoderPosition > goal-offset && encoderPosition < goal+offset)
-        {
-            return true;
-        }
-        return false;
-    }
 
     public boolean pidAtTarget() {
         return profiledPid.atGoal();

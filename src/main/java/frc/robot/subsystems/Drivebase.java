@@ -87,8 +87,6 @@ public class Drivebase extends SubsystemBase {
 
     poseEstimator = new SwerveDrivePoseEstimator(kinematics, gyro.getRotation2d(), getPositions(), odometry.getPoseMeters());
 
-    //ModuleConfig ModuleConfig = new ModuleConfig(WHEEL_DIAMETER/2, 3, WHEEL_DIAMETER, DCMotor.getNEO(2), 1.8, 0);
-    //RobotConfig config = new RobotConfig(15, 11.25, ModuleConfig, 0.66);
      try{
        config = RobotConfig.fromGUISettings();
      } catch (Exception e) {

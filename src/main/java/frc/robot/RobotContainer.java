@@ -25,7 +25,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
@@ -103,11 +102,7 @@ public class RobotContainer {
       //GYRO
       gyro = new Canandgyro(Constants.Gyro.gyroID);
 
-  
-      c_driveStick = new CommandXboxController(0);
-      final CommandXboxController m_driverController =
-          new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+      
       c_buttonStick = new CommandXboxController(1);
     
     
@@ -157,20 +152,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
       NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
 
-
-    //LEDS
-    //   m_led = new AddressableLED(9);
-
-    // // Reuse buffer
-    // // Default to a length of 60, start empty output
-    // // Length is expensive to set, so only set it once, then just update data
-    //   m_ledBuffer = new AddressableLEDBuffer(60);
-    //   m_led.setLength(m_ledBuffer.getLength());
-
-    // // Set the data
-    //   m_led.setData(m_ledBuffer);
-    //   m_led.start();
-    
 
     configureBindings();
   }
@@ -277,10 +258,6 @@ public class RobotContainer {
     coralFirstBeamBreak.and(coralSecondBeamBreak).onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
     coralSecondBeamBreak.and(c_driveStick.y()).onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
    
-    //ELEVATOR COMMANDS
-    // c_driveStick.povUp().onTrue(elevator.stateUp());
-    // c_driveStick.povDown().onTrue(elevator.stateDown());
-
     //(3.175+0.195, 4.191+.0254,
     c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.69,2.971,new Rotation2d(1.047))));
 
@@ -303,7 +280,6 @@ public class RobotContainer {
     c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
     
    
-    //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
     c_driveStick.leftTrigger().onTrue(drivebase.switchDriveModeCommand());

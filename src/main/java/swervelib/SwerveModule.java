@@ -19,13 +19,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.SwervePID;
-import frc.robot.subsystems.Drivebase;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -43,8 +38,6 @@ public class SwerveModule {
     this.angleMotor = new SparkMax(angleMotorId, MotorType.kBrushless);
     this.speedMotor = new SparkMax(speedMotorId, MotorType.kBrushless);
 
-    //this.angleMotor.restoreFactoryDefaults();
-    //this.speedMotor.restoreFactoryDefaults();
 
     this.pidController = new PIDController(SwervePID.p, SwervePID.i, SwervePID.d);
     this.encoder = this.angleMotor.getAbsoluteEncoder();
@@ -80,10 +73,6 @@ public class SwerveModule {
 
     this.speedEncoder = this.speedMotor.getEncoder();
     
-    //angleMotor.setSmartCurrentLimit(DriveConstants.currentLimit);
-    //speedMotor.setSmartCurrentLimit(DriveConstants.currentLimit);
-
-    //this.encoder.setZeroOffset(angleEncoderOffset);
   }
 
   public SwerveModule(SwerveModuleConfig config, double maxVelocity, double maxVoltage) {
