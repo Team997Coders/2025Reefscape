@@ -21,8 +21,11 @@ public class goToLocation extends Command {
   private final ProfiledPIDController yController = new ProfiledPIDController(6, 0, 0, Y_CONSTRAINTS);
   private final ProfiledPIDController thetaController = new ProfiledPIDController(6, 0, 0, THETA_CONSTRAINTS);
 
+  @SuppressWarnings("unused")
   private double xStart = 0;
+  @SuppressWarnings("unused")
   private double yStart = 0;
+  @SuppressWarnings("unused")
   private double thetaStart = 0;
 
   public goToLocation(Drivebase drivebase, Pose2d pose) {

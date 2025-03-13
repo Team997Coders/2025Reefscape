@@ -9,7 +9,6 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorGoToState;
 import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Drivebase;
-//import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
@@ -27,24 +26,19 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AlgaeToggleIntake;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.automation.AutomaticSystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -69,13 +63,10 @@ public class RobotContainer {
   //GYRO
   private Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
   
+
   //CONTROLLERS
-  //private static XboxController driveStick = new XboxController(0);
-  //private static XboxController box = new XboxController(1);
-  
-    private static CommandXboxController c_driveStick;
-    // final CommandXboxController m_driverController;
-    private static CommandXboxController c_buttonStick;
+  private static CommandXboxController c_driveStick;
+  private static CommandXboxController c_buttonStick;
   
   
   //AUTOCHOOSER
@@ -102,9 +93,7 @@ public class RobotContainer {
   public Trigger coralFirstBeamBreak;
   public Trigger coralSecondBeamBreak;
   public Trigger algaeBeamBreak;
-    
-  // AUTOMATIC SYSTEMS
-  //private final AutomaticSystems systems;
+
     
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
@@ -113,10 +102,7 @@ public class RobotContainer {
     
       //GYRO
       gyro = new Canandgyro(Constants.Gyro.gyroID);
-  
-      //CONTROLLERS
-    // driveStick = new XboxController(0);
-      //box = new XboxController(1);
+
   
       c_driveStick = new CommandXboxController(0);
       final CommandXboxController m_driverController =
@@ -149,8 +135,7 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      //systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
-      
+
       //TRIGGERS   
       // CONFIGURE THE TRIGGER BINDINGS
       drivebase.setDefaultCommand(
@@ -159,13 +144,6 @@ public class RobotContainer {
             () -> getScaledXY(),
             () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
 
-
-  
-
-      // m_coral.setDefaultCommand(new CoralAutomatic(m_coral, m_driverController.y(), coralFirstBeamBreak, coralSecondBeamBreak));
-
-      // //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp(), c_driveStick.povDown()));
-      // elevator.setDefaultCommand(new ElevatorManualControl(elevator, m_driverController.povRight(), m_driverController.povLeft()));
 
       //AUTOCHOOSER
       autoChooser = AutoBuilder.buildAutoChooser("moveForward");
