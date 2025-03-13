@@ -71,7 +71,7 @@ public class RobotContainer {
   
   //CONTROLLERS
   //private static XboxController driveStick = new XboxController(0);
-  //private static XboxController box = new XboxController(1);
+  private static XboxController box = new XboxController(1);
   
     private static CommandXboxController c_driveStick;
     // final CommandXboxController m_driverController;
@@ -104,7 +104,7 @@ public class RobotContainer {
   public Trigger algaeBeamBreak;
     
   // AUTOMATIC SYSTEMS
-  //private final AutomaticSystems systems;
+  private final AutomaticSystems systems;
     
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
@@ -116,7 +116,7 @@ public class RobotContainer {
   
       //CONTROLLERS
     // driveStick = new XboxController(0);
-      //box = new XboxController(1);
+      box = new XboxController(1);
   
       c_driveStick = new CommandXboxController(0);
       final CommandXboxController m_driverController =
@@ -149,7 +149,7 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      //systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
+      systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       
       //TRIGGERS   
       // CONFIGURE THE TRIGGER BINDINGS
@@ -303,8 +303,9 @@ public class RobotContainer {
     // c_driveStick.povUp().onTrue(elevator.stateUp());
     // c_driveStick.povDown().onTrue(elevator.stateDown());
 
-    //(3.175+0.195, 4.191+.0254,
-    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.69,2.971,new Rotation2d(1.047))));
+    //LEFT REEF 0: (3.175+0.195, 4.191+.0254, rotation 0
+    //LEFT REEF 5: new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047)
+    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))));
 
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
@@ -318,11 +319,11 @@ public class RobotContainer {
     c_driveStick.povRight().onTrue(elevator.goToStateCommand(ElevatorState.L4));
     c_driveStick.povLeft().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
 
-    c_buttonStick.a().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
-    c_buttonStick.x().onTrue(elevator.goToStateCommand(ElevatorState.L2));
-    c_buttonStick.y().onTrue(elevator.goToStateCommand(ElevatorState.L3));
-    c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
-    c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+    // c_buttonStick.a().onTrue(elevator.goToStateCommand(ElevatorState.SOURCE));
+    // c_buttonStick.x().onTrue(elevator.goToStateCommand(ElevatorState.L2));
+    // c_buttonStick.y().onTrue(elevator.goToStateCommand(ElevatorState.L3));
+    // c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
+    // c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
     
    
     //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
@@ -358,9 +359,13 @@ public class RobotContainer {
     //   new ParallelCommandGroup( new goToLocation(drivebase, new Pose2d(3.69, 2.971,new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
     //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
 
-
+    //LEFT POLE AUTO
+    // return new SequentialCommandGroup(
+    //   new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+    //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
+    
     return new SequentialCommandGroup(
-      new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+      new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
       new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
   }
 } 

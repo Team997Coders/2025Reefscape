@@ -95,7 +95,8 @@ public class Pathplanning
                     return new Pose2d(5.003,5.246,new Rotation2d(4.189));
                     case 3:
                     //side 4
-                    return new Pose2d(5.803,4.191,new Rotation2d(3.142));
+                    //return new Pose2d(5.803,4.191,new Rotation2d(3.142));
+                    return new Pose2d(3.175+0.195, 4.191+.0254, new Rotation2d(0));
                     case 4:
                     //side 5
                     return new Pose2d(5.29,2.971,new Rotation2d(2.094));

@@ -2,6 +2,7 @@ package frc.robot.subsystems.automation;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,19 +29,18 @@ public class AutomaticSystems extends SubsystemBase
     private Drivebase drivebase;
     private Elevator elevator;
 
-    private Boolean autoDrive = false;
-    private Boolean autoElevator = false;
-    private Boolean fullAuto = false;
-    private Boolean semiAuto = false;
-    private Boolean coralBeamBrake = true;
-    
+    private Boolean autoDrive;
+    private Boolean autoElevator;
+    private Boolean fullAuto;
+    private Boolean semiAuto;
+    private Boolean coralBeamBrake;
     private Command driveCommand;
     
     public AutomaticSystems(XboxController buttonBox, Drivebase drivebase, Elevator elevator, CommandXboxController c_driveController)
     {
         this.buttonBox = new ButtonBox(buttonBox);
         this.pathplanning = new Pathplanning(this.buttonBox.reefSide, this.buttonBox.rightScore, this.buttonBox.leftScore, this.buttonBox.rightSource, this.buttonBox.leftSource);
-        this.alliance = Alliance.Red;
+        this.alliance = DriverStation.getAlliance().orElseThrow();
 
         this.drivebase = drivebase;
         this.elevator = elevator;
@@ -69,6 +69,13 @@ public class AutomaticSystems extends SubsystemBase
         this.buttonBox.semiAutoCycles.onChange(this.switchSemiCommand());
         this.elevator.m_secondBeamBrake.onChange(this.switchBeamBrakeCommand());
 
+        coralBeamBrake = this.elevator.m_secondBeamBrake.getAsBoolean();
+        autoDrive = this.buttonBox.autoDrive.Flipped();
+        autoElevator = this.buttonBox.fullAutoElevator.Flipped();
+        fullAuto = this.buttonBox.fullAutoCycles.Flipped();
+        semiAuto = this.buttonBox.semiAutoCycles.Flipped();
+
+        this.buttonBox.go.onTrue(this.runOnce(() -> runSubsystems()));
     }
 
     public void switchBeamBrake()
@@ -150,6 +157,7 @@ public class AutomaticSystems extends SubsystemBase
                 if (autoElevator) {
                     try 
                     {
+                        SmartDashboard.putNumber("Elevator move to level ", this.buttonBox.elevatorLevel.selectedBit().id - 6);
                         this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 6);
                     } catch (noSelectedButton e) {
                         e.printStackTrace();
@@ -172,9 +180,13 @@ public class AutomaticSystems extends SubsystemBase
         {
             try
             {
-            driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
-            driveCommand.schedule();
-            this.elevator.setGoal(0);
+            if (autoDrive){
+                driveCommand = new goToLocation(drivebase, pathplanning.getSourceLocation(this.alliance, this.buttonBox.sourceSide.selectedBit().id));
+                driveCommand.schedule();
+            }
+            if (autoElevator) {
+                this.elevator.setGoal(0);
+            }
             } catch(Exception e)
             {
                 e.printStackTrace();
@@ -184,7 +196,7 @@ public class AutomaticSystems extends SubsystemBase
     
     @Override
     public void periodic() {
-        //loggers();
+        loggers();
     }
 
     public void loggers()
@@ -193,15 +205,31 @@ public class AutomaticSystems extends SubsystemBase
         SmartDashboard.putBoolean("Auto Elevator", autoElevator);
         SmartDashboard.putBoolean("Semi Cycles", semiAuto);
         SmartDashboard.putBoolean("Full Cycles", fullAuto);
+        SmartDashboard.putBoolean("Beam Break", coralBeamBrake);
 
-        try{
-        SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedBit().id);
-        SmartDashboard.putNumber("Elevator", this.buttonBox.elevatorLevel.selectedBit().id);
-        SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
-        SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
-        } catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        // try{
+        // SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedBit().id);
+        // } catch(Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
+        // try{
+        //     SmartDashboard.putNumber("Elevator", this.buttonBox.elevatorLevel.selectedBit().id);
+        // } catch(Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
+        // try{
+        //     SmartDashboard.putNumber("Source", this.buttonBox.sourceSide.selectedBit().id);
+        // } catch(Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
+        // try{
+        //     SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
+        // } catch(Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
     }
 }
