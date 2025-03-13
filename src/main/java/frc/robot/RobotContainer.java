@@ -5,11 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorGoToState;
 import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Drivebase;
-//import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
@@ -26,8 +26,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AlgaeToggleIntake;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
@@ -36,15 +34,13 @@ import frc.robot.subsystems.automation.AutomaticSystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -69,6 +65,7 @@ public class RobotContainer {
   //GYRO
   private Canandgyro gyro = new Canandgyro(Constants.Gyro.gyroID);
   
+
   //CONTROLLERS
   //private static XboxController driveStick = new XboxController(0);
   private static XboxController box = new XboxController(1);
@@ -76,7 +73,6 @@ public class RobotContainer {
     private static CommandXboxController c_driveStick;
     // final CommandXboxController m_driverController;
     private static CommandXboxController c_buttonStick;
-  
   
   //AUTOCHOOSER
   private SendableChooser<Command> autoChooser;
@@ -105,6 +101,7 @@ public class RobotContainer {
     
   // AUTOMATIC SYSTEMS
   private final AutomaticSystems systems;
+
     
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
@@ -122,6 +119,8 @@ public class RobotContainer {
       final CommandXboxController m_driverController =
           new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+
+      
       c_buttonStick = new CommandXboxController(1);
     
     
@@ -151,6 +150,7 @@ public class RobotContainer {
 
       systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       
+
       //TRIGGERS   
       // CONFIGURE THE TRIGGER BINDINGS
       drivebase.setDefaultCommand(
@@ -159,13 +159,6 @@ public class RobotContainer {
             () -> getScaledXY(),
             () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
 
-
-  
-
-      // m_coral.setDefaultCommand(new CoralAutomatic(m_coral, m_driverController.y(), coralFirstBeamBreak, coralSecondBeamBreak));
-
-      // //elevator.setDefaultCommand(new ElevatorAutomaticControl(elevator, c_driveStick.povUp(), c_driveStick.povDown()));
-      // elevator.setDefaultCommand(new ElevatorManualControl(elevator, m_driverController.povRight(), m_driverController.povLeft()));
 
       //AUTOCHOOSER
       autoChooser = AutoBuilder.buildAutoChooser("moveForward");
@@ -179,20 +172,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
       NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
 
-
-    //LEDS
-    //   m_led = new AddressableLED(9);
-
-    // // Reuse buffer
-    // // Default to a length of 60, start empty output
-    // // Length is expensive to set, so only set it once, then just update data
-    //   m_ledBuffer = new AddressableLEDBuffer(60);
-    //   m_led.setLength(m_ledBuffer.getLength());
-
-    // // Set the data
-    //   m_led.setData(m_ledBuffer);
-    //   m_led.start();
-    
 
     configureBindings();
   }
@@ -299,10 +278,6 @@ public class RobotContainer {
     coralFirstBeamBreak.and(coralSecondBeamBreak).onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
     coralSecondBeamBreak.and(c_driveStick.y()).onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
    
-    //ELEVATOR COMMANDS
-    // c_driveStick.povUp().onTrue(elevator.stateUp());
-    // c_driveStick.povDown().onTrue(elevator.stateDown());
-
     //LEFT REEF 0: (3.175+0.195, 4.191+.0254, rotation 0
     //LEFT REEF 5: new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047)
     c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))));
@@ -326,7 +301,6 @@ public class RobotContainer {
     // c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
     
    
-    //c_driveStick.rightBumper().onTrue(new goToLocation(drivebase, new Pose2d(2, 2, new Rotation2d(0))));
     //DRIVE STUFF 
     c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
     c_driveStick.leftTrigger().onTrue(drivebase.switchDriveModeCommand());

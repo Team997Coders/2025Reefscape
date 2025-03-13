@@ -7,17 +7,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.commands.goToLocation;
 import frc.robot.exceptions.allianceNotInitialized;
 import frc.robot.exceptions.noSelectedButton;
 import frc.robot.exceptions.outOfBounds;
-import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.buttonBox.ButtonBox;
-import frc.robot.subsystems.buttonBox.ButtonyBit;
 import frc.robot.subsystems.buttonBox.ButtonyList;
 
 public class AutomaticSystems extends SubsystemBase

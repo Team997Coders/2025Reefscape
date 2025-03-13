@@ -7,23 +7,16 @@ import frc.robot.exceptions.allianceNotInitialized;
 import frc.robot.exceptions.noSelectedButton;
 import frc.robot.subsystems.buttonBox.ButtonyBit;
 import frc.robot.subsystems.buttonBox.ButtonyList;
-import frc.robot.subsystems.buttonBox.FlippySwitch;
 
 public class Pathplanning 
 {
-    private ButtonyList reefy;
     private ButtonyBit rightScorey;
     private ButtonyBit leftScorey;
-    private ButtonyBit rightSourcey;
-    private ButtonyBit leftSourcey;
 
     public Pathplanning(ButtonyList reef, ButtonyBit rightScore, ButtonyBit leftScore, ButtonyBit rightSource, ButtonyBit leftSource)
     {
-        reefy = reef;
         rightScorey = rightScore;
         leftScorey = leftScore;
-        rightSourcey = rightSource;
-        leftSourcey = leftSource;
     }    
 
     public Pose2d getSourceLocation(Alliance alliance, int sourceId) throws allianceNotInitialized, noSelectedButton
