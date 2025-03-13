@@ -303,8 +303,8 @@ public class RobotContainer {
     // c_driveStick.povUp().onTrue(elevator.stateUp());
     // c_driveStick.povDown().onTrue(elevator.stateDown());
 
-    //(1.13, 1.05,
-    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0))));
+    //(3.175+0.195, 4.191+.0254,
+    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(3.69,2.971,new Rotation2d(1.047))));
 
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
@@ -362,8 +362,5 @@ public class RobotContainer {
     return new SequentialCommandGroup(
       new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
       new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
-
-
-     
   }
 } 
