@@ -1,36 +1,12 @@
 package frc.robot.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathfindThenFollowPath;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.controllers.PathFollowingController;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivebase;
-import frc.robot.subsystems.vision.Camera;
 
 public class goToLocation extends Command {
   
@@ -140,6 +116,12 @@ public class goToLocation extends Command {
     boolean finished;
     if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
       finished = true;
+    } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
+      if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
+        return true;
+      } else {
+        return false;
+      }
     } else {
       finished = false;
     }
