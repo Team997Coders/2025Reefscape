@@ -1,0 +1,54 @@
+package frc.robot.commands;
+
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
+import frc.robot.subsystems.Algae;
+import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorState;
+
+public class Autos {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+
+    private Drivebase drivebase; 
+    private Elevator elevator;
+    private Coral coral;
+    private Algae algae;
+
+    public Autos(Drivebase drivebase, Elevator elevator, Coral coral, Algae algae) {
+        this.drivebase = drivebase;
+        this.elevator = elevator;
+        this.coral = coral;
+        this.algae = algae;
+
+    }
+
+    public Command taxi() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.taxi) : new goToLocation(drivebase, Constants.Auto.Red.taxi);
+       
+        return goTo;
+    }
+
+    public Command L4() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4) : new goToLocation(drivebase, Constants.Auto.Red.side4);
+
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),  
+            coral.CoralStop());
+    }
+    
+}

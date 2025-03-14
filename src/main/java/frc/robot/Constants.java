@@ -5,7 +5,8 @@
 package frc.robot;
 
 import swervelib.SwerveModuleConfig;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -262,4 +263,30 @@ public final class Constants {
     public static final int gyroID = 30;
     public static final double gyroYawConversionFactor = 360;
   }
+
+
+  public static final class Auto {
+    public static final class Blue {
+      public static final Pose2d side1 = new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)); //in front of the driver station
+      public static final Pose2d side2 = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
+      public static final Pose2d side3 = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d side4 = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) + .0254, new Rotation2d(0)); //in front of the barge
+      public static final Pose2d side5 = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d side6 = new Pose2d(0, 0, new Rotation2d(0));
+
+      public static final Pose2d taxi = new Pose2d(Units.inchesToMeters(44), Units.inchesToMeters(158.50), new Rotation2d(0));
+    }
+
+    public static final class Red {
+      public static final Pose2d side1 = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
+      public static final Pose2d side2 = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
+      public static final Pose2d side3 = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d side4 = new Pose2d(0, 0, new Rotation2d(0)); //in front of the barge
+      public static final Pose2d side5 = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d side6 = new Pose2d(0, 0, new Rotation2d(0));
+
+      public static final Pose2d taxi = new Pose2d(0, 0, new Rotation2d(0));
+    }
+  }
+
 }
