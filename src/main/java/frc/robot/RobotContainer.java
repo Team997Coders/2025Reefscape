@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.Autos;
-
+import frc.robot.subsystems.Climber;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
@@ -42,9 +42,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -96,6 +93,8 @@ public class RobotContainer {
   public final Algae m_algae;
     
   private final Elevator elevator;
+
+  private final Climber m_climber;
     
   //TRIGGERS
   public Trigger coralFirstBeamBreak;
@@ -153,6 +152,8 @@ public class RobotContainer {
       algaeBeamBreak = new Trigger(() -> m_algae.getBeamBreakStatus());
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
+
+      m_climber = new Climber();
 
       systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       
@@ -282,6 +283,10 @@ public class RobotContainer {
     c_driveStick.b().and(algaeBeamBreak).whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     c_driveStick.a().and(c_driveStick.b()).and(algaeBeamBreak).whileFalse(m_algae.AlgaeStop());
 
+    //CLIMB COMMAND
+    c_driveStick.povRight().whileTrue(m_climber.climb());
+    c_driveStick.povLeft().whileTrue(m_climber.unclimb());
+    c_driveStick.povLeft().and(c_driveStick.povRight()).whileFalse(m_climber.stopClimb());
 
     //CORAL COMMANDS
     coralFirstBeamBreak.onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
@@ -295,8 +300,8 @@ public class RobotContainer {
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
 
-    c_driveStick.povRight().onTrue(new ElevatorGoToState(elevator, ElevatorState.L4));
-    c_driveStick.povLeft().onTrue(new ElevatorGoToState(elevator, ElevatorState.L2));
+    // c_driveStick.povRight().onTrue(new ElevatorGoToState(elevator, ElevatorState.L4));
+    // c_driveStick.povLeft().onTrue(new ElevatorGoToState(elevator, ElevatorState.L2));
 
     c_driveStick.rightBumper().onTrue(elevator.stateUp());
     c_driveStick.leftBumper().onTrue(elevator.stateDown());

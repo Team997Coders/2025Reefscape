@@ -106,17 +106,8 @@ public final class Constants {
   }
 
   public static final class Climber {
-    public static final int climberFlipperID= 0;
-
-    public static final int climberFlipperUpAngle = 0;
-    public static final int climberFlipperDownAngle = 0;
-
-    public static final int coralFlipper1ID = 9;
-    public static final int coralFlipper2ID = 0;
-
-    public static double coralFlipperHoldAngle = 0;
-    public static double coralFlipperDropAngle = 80;
-
+    public static final int climbMotorID = 0; 
+    public static final double climbSpeed = 0.3;
     
   }
 
