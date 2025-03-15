@@ -269,5 +269,8 @@ public class Drivebase extends SubsystemBase {
 
   
     SmartDashboard.putBoolean("fieldOriented", fieldOriented);
+    SmartDashboard.putNumber("current estimated x", getPose().getX());
+    SmartDashboard.putNumber("current estimated y", getPose().getY());
+    SmartDashboard.putNumber("current estimated rotation", getPose().getRotation().getRadians());
   }
 }

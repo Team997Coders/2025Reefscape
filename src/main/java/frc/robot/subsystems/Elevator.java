@@ -125,6 +125,10 @@ public class Elevator extends SubsystemBase{
     public void setGoal(double newgoal) {
         if (!m_firstBeamBrake.getAsBoolean())
         {
+            if (newgoal < Constants.ElevatorConstants.kMinElevatorHeightRotations) {
+                newgoal = Constants.ElevatorConstants.kMinElevatorHeightRotations;
+            }
+
             goal = newgoal;
         }
     }
