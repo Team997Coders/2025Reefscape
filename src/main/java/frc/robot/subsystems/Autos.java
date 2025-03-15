@@ -30,14 +30,16 @@ public class Autos extends SubsystemBase {
 
     }
 
+    
     public Command taxi() {
         Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.taxi) : new goToLocation(drivebase, Constants.Auto.Red.taxi);
        
         return goTo;
     }
 
-    public Command L4() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4) : new goToLocation(drivebase, Constants.Auto.Red.side4);
+
+    public Command L4Left() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Left) : new goToLocation(drivebase, Constants.Auto.Red.side4Left);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -48,6 +50,52 @@ public class Autos extends SubsystemBase {
             coral.manualMoveCoralMotorsOutake(), 
             new WaitCommand(.5),  
             coral.CoralStop());
+    }
+
+
+    public Command L4Right() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right) : new goToLocation(drivebase, Constants.Auto.Red.side4Right);
+
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),  
+            coral.CoralStop()
+            );
+    }
+
+
+    public Command goToSourceRight() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.sourceRight) : new goToLocation(drivebase, Constants.Auto.Red.sourceRight);
+
+        return new SequentialCommandGroup(
+            new ElevatorGoToState(elevator, ElevatorState.SOURCE),
+            goTo
+        );
+    }
+
+    
+    public Command goToSourceLeft() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.sourceLeft) : new goToLocation(drivebase, Constants.Auto.Red.sourceLeft);
+
+        return new SequentialCommandGroup(
+            new ElevatorGoToState(elevator, ElevatorState.SOURCE),
+            goTo
+        );
+    }
+
+
+    public Command TwoL4() {
+        
+        return new SequentialCommandGroup(
+            L4Left(), 
+            goToSourceRight(),
+            L4Right()
+        );
     }
     
 }
