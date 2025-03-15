@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.Autos;
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
@@ -76,6 +78,7 @@ public class RobotContainer {
   
   //AUTOCHOOSER
   private SendableChooser<Command> autoChooser;
+
   
   //CAMERA STUFF
   private static Camera RIGHT_CAMERA;
@@ -101,6 +104,9 @@ public class RobotContainer {
     
   // AUTOMATIC SYSTEMS
   private final AutomaticSystems systems;
+
+  //AUTOS
+  private frc.robot.subsystems.Autos autos;
 
     
   //CONSTRUCTOR
@@ -171,6 +177,10 @@ public class RobotContainer {
       NamedCommands.registerCommand("Elevator L2", elevator.goToStateCommand(ElevatorState.L2));
       NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
       NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
+
+      
+      //AUTOS
+      autos = new Autos(drivebase, elevator, m_coral, m_algae);
 
 
     configureBindings();
@@ -338,8 +348,10 @@ public class RobotContainer {
     //   new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
     //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
     
-    return new SequentialCommandGroup(
-      new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-      new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
+    // return new SequentialCommandGroup(
+    //   new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+    //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
+
+    return autos.taxi();
   }
 } 
