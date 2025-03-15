@@ -239,12 +239,20 @@ public class Drivebase extends SubsystemBase {
     return this.runOnce(() -> changeDriveMultiplier(newDriveMultiplier));
   }
 
-  public void switchDriveMode() {
-   fieldOriented = !fieldOriented;
+  public void setFieldOriented() {
+   fieldOriented = true;
   }
 
-  public Command switchDriveModeCommand() {
-    return this.runOnce(() -> switchDriveMode());
+  public void setRobotCentric() {
+    fieldOriented = false;
+  }
+
+  public Command fieldOriented() {
+    return this.runOnce(() -> setFieldOriented());
+  }
+
+  public Command robotCentric() {
+    return this.runOnce(() -> setRobotCentric());
   }
 
   public SwerveModulePosition[] getInvertedPositions(SwerveModulePosition[] positions) {
