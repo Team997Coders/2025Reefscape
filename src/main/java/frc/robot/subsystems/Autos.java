@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.ElevatorGoToState;
 import frc.robot.commands.goToLocation;
+import frc.robot.commands.goToTag;
 import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class Autos extends SubsystemBase {
@@ -34,6 +35,12 @@ public class Autos extends SubsystemBase {
     public Command taxi() {
         Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.taxi) : new goToLocation(drivebase, Constants.Auto.Red.taxi);
        
+        return goTo;
+    }
+
+    public Command taxi2() {
+        // Command goTo = ally.get() == Alliance.Blue ? new goToTag(drivebase, 21, 0) : new goToTag(drivebase, 10, 0);
+        Command goTo = new goToTag(drivebase, 18, 0);
         return goTo;
     }
 

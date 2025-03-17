@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.Autos;
-import frc.robot.subsystems.Climber;
+//import frc.robot.subsystems.Climber;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
@@ -94,7 +94,7 @@ public class RobotContainer {
     
   private final Elevator elevator;
 
-  private final Climber m_climber;
+  //private final Climber m_climber;
     
   //TRIGGERS
   public Trigger coralFirstBeamBreak;
@@ -153,7 +153,7 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      m_climber = new Climber();
+      //m_climber = new Climber();
 
       systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       
@@ -283,11 +283,6 @@ public class RobotContainer {
     c_driveStick.b().and(algaeBeamBreak).whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     c_driveStick.a().and(c_driveStick.b()).and(algaeBeamBreak).whileFalse(m_algae.AlgaeStop());
 
-    //CLIMB COMMAND
-    // c_driveStick.povRight().whileTrue(m_climber.climb());
-    // c_driveStick.povLeft().whileTrue(m_climber.unclimb());
-    // c_driveStick.povLeft().and(c_driveStick.povRight()).whileFalse(m_climber.stopClimb());
-
     //CORAL COMMANDS
     coralFirstBeamBreak.onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
     coralFirstBeamBreak.and(coralSecondBeamBreak).onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
@@ -357,6 +352,6 @@ public class RobotContainer {
     //   new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
     //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
 
-    return autos.taxi();
+    return autos.taxi2();
   }
 } 

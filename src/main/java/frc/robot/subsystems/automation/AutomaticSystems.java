@@ -36,7 +36,7 @@ public class AutomaticSystems extends SubsystemBase
     {
         this.buttonBox = new ButtonBox(buttonBox);
         this.pathplanning = new Pathplanning(this.buttonBox.reefSide, this.buttonBox.rightScore, this.buttonBox.leftScore, this.buttonBox.rightSource, this.buttonBox.leftSource);
-        this.alliance = DriverStation.getAlliance().orElseThrow();
+        this.alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
 
         this.drivebase = drivebase;
         this.elevator = elevator;

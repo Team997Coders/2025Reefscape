@@ -30,8 +30,8 @@ public class Coral extends SubsystemBase{
         leftConfig.inverted(Constants.Coral.leftMotorInverted);
         rightConfig.inverted(Constants.Coral.rightMotorInverted);
 
-        leftMotor.configure(leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        rightMotor.configure(rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        rightMotor.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         firstSensor = new DigitalInput(Constants.Coral.coralFirstSensor);
         secondSensor = new DigitalInput(Constants.Coral.coralSecondSensor);
@@ -74,7 +74,6 @@ public class Coral extends SubsystemBase{
         SmartDashboard.putBoolean("beam brake 1", BeamBrake1());
         SmartDashboard.putBoolean("beam brake 2", BeamBrake2());
     }
-
 
     @Override
     public void periodic() {
