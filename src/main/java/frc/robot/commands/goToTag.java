@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivebase;
 
 public class goToTag extends Command {
@@ -78,6 +79,8 @@ public class goToTag extends Command {
     System.out.println("Offset Pose (inches): " + gGoal2d);
     Pose2d finalPose2d = inch2meters(gGoal2d);
     System.out.println("Final Pose (meters): " + finalPose2d);
+
+    //new goToLocation(drivebase, finalPose2d);
   }
 
   // Called once the command ends or is interrupted.
