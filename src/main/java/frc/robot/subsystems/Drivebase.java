@@ -188,7 +188,8 @@ public class Drivebase extends SubsystemBase {
     SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds, new Translation2d(0, 0));
     SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, MAX_VELOCITY);
 
-    this.frontLeft.drive(moduleStates[0]);
+    this.frontLeft.driv
+    e(moduleStates[0]);
     this.frontRight.drive(moduleStates[1]);
     this.backLeft.drive(moduleStates[2]);
     this.backRight.drive(moduleStates[3]);
@@ -210,7 +211,8 @@ public class Drivebase extends SubsystemBase {
     odometry.resetPosition(gyro.getRotation2d(), getPositions(), pose2d);
   }
 
-  public ChassisSpeeds getCurrentSpeeds() {
+  pu
+  blic ChassisSpeeds getCurrentSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
