@@ -11,6 +11,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorGoToState;
 import frc.robot.commands.goToLocation;
+import frc.robot.commands.goToLocationNoDrive;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
@@ -296,7 +297,8 @@ public class RobotContainer {
    
     //LEFT REEF 0: (3.175+0.195, 4.191+.0254, rotation 0
     //LEFT REEF 5: new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047)
-    c_driveStick.x().whileTrue(new goToLocation(drivebase,  new Pose2d(5.57, 3.82, new Rotation2d(Math.PI))));
+    c_driveStick.x().whileTrue(new goToLocation(drivebase,  new Pose2d(6, 1, new Rotation2d(-Math.PI/2))));
+    c_driveStick.y().whileTrue(new goToLocationNoDrive(drivebase,  new Pose2d(6, 1, new Rotation2d(-Math.PI/2))));
 
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
