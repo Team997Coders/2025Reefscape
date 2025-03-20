@@ -5,13 +5,9 @@
 package frc.robot;
 
 import frc.robot.subsystems.Autos;
-import frc.robot.subsystems.Climber;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
-import frc.robot.commands.ElevatorGoToState;
-import frc.robot.commands.goToLocation;
-import frc.robot.commands.goToLocationNoDrive;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
@@ -23,10 +19,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import com.reduxrobotics.canand.CanandEventLoop;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -58,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
   
   //LEDS
   AddressableLED m_led;
@@ -95,8 +89,6 @@ public class RobotContainer {
   public final Algae m_algae;
     
   private final Elevator elevator;
-
-  private final Climber m_climber;
     
   //TRIGGERS
   public Trigger coralFirstBeamBreak;
@@ -113,7 +105,7 @@ public class RobotContainer {
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
-      CanandEventLoop.getInstance();
+     CanandEventLoop.getInstance();
     
       //GYRO
       gyro = new Canandgyro(Constants.Gyro.gyroID);
@@ -155,13 +147,9 @@ public class RobotContainer {
 
       elevator = new Elevator(coralFirstBeamBreak, coralSecondBeamBreak);
 
-      m_climber = new Climber();
-
       systems = new AutomaticSystems(box, drivebase, elevator, c_driveStick);
       
-
-      //TRIGGERS   
-      // CONFIGURE THE TRIGGER BINDINGS
+      
       drivebase.setDefaultCommand(
         new Drive(
             drivebase,
@@ -169,8 +157,16 @@ public class RobotContainer {
             () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
 
 
+                
+      //AUTOS
+      autos = new Autos(drivebase, elevator, m_coral, m_algae);
+
+
       //AUTOCHOOSER
       autoChooser = AutoBuilder.buildAutoChooser("moveForward");
+      autoChooser.addOption("l4 left pole side 3 ", autos.L4LeftPoleRightStart());
+      autoChooser.addOption("l4 left pole side 4", autos.L4LeftPoleMiddleStart());
+      
       SmartDashboard.putData("Auto Choser", autoChooser);
 
       NamedCommands.registerCommand("Pick Up Coral", m_coral.manualMoveCoralMotorsIntake());
@@ -180,11 +176,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("Elevator L2", elevator.goToStateCommand(ElevatorState.L2));
       NamedCommands.registerCommand("Elevator L3", elevator.goToStateCommand(ElevatorState.L3));
       NamedCommands.registerCommand("Elevator L4", elevator.goToStateCommand(ElevatorState.L4));
-
-      
-      //AUTOS
-      autos = new Autos(drivebase, elevator, m_coral, m_algae);
-
 
     configureBindings();
   }
@@ -285,25 +276,16 @@ public class RobotContainer {
     c_driveStick.b().and(algaeBeamBreak).whileTrue(m_algae.AlgaeOuttake(Constants.Algae.motorSpin));
     c_driveStick.a().and(c_driveStick.b()).and(algaeBeamBreak).whileFalse(m_algae.AlgaeStop());
 
-    //CLIMB COMMAND
-    c_driveStick.povRight().whileTrue(m_climber.climb());
-    c_driveStick.povLeft().whileTrue(m_climber.unclimb());
-    c_driveStick.povLeft().and(c_driveStick.povRight()).whileFalse(m_climber.stopClimb());
 
     //CORAL COMMANDS
     coralFirstBeamBreak.onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
     coralFirstBeamBreak.and(coralSecondBeamBreak).onTrue(m_coral.manualMoveCoralMotorsIntake()).onFalse(m_coral.CoralStop());
     coralSecondBeamBreak.and(c_driveStick.y()).onTrue(m_coral.manualMoveCoralMotorsOutake()).onFalse(m_coral.CoralStop());
    
-    //LEFT REEF 0: (3.175+0.195, 4.191+.0254, rotation 0
-    //LEFT REEF 5: new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047)
-    c_driveStick.x().whileTrue(new goToLocation(drivebase, new Pose2d(5.6, 3.8, new Rotation2d(Math.PI))));
 
+    //ELEVATOR COMMANDS
     c_driveStick.povUp().whileTrue(elevator.manualUp());
     c_driveStick.povDown().whileTrue(elevator.manualDown());
-
-    // c_driveStick.povRight().onTrue(new ElevatorGoToState(elevator, ElevatorState.L4));
-    // c_driveStick.povLeft().onTrue(new ElevatorGoToState(elevator, ElevatorState.L2));
 
     c_driveStick.rightBumper().onTrue(elevator.stateUp());
     c_driveStick.leftBumper().onTrue(elevator.stateDown());
@@ -333,32 +315,8 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    /*L4*/
-  // return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0), m_algae.AlgaeOuttake(Constants.Algae.motorSpin)), new SequentialCommandGroup( new WaitCommand(1), m_algae.AlgaeStop(), elevator.goToStateCommand(ElevatorState.L4), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop()));
 
-    /*L1*/
-  //return new SequentialCommandGroup(autoChooser.getSelected(), new ParallelRaceGroup(drivebase.setDriveMultiplier(0)), new SequentialCommandGroup( elevator.goToStateCommand(ElevatorState.L1), new WaitCommand(3), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(1), m_coral.CoralStop(), elevator.stateUp()));
+    return autoChooser.getSelected(); 
 
-  /*just leave */
-//  return autoChooser.getSelected(); 
-
-  //  return new goToLocation(drivebase, new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)));
-
-  // RIGHT POLE SECTION 1 new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0)))
-    
-    // return new SequentialCommandGroup(
-    //   new ParallelCommandGroup( new goToLocation(drivebase, new Pose2d(3.69, 2.971,new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-    //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
-
-    //LEFT POLE AUTO
-    // return new SequentialCommandGroup(
-    //   new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-    //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
-    
-    // return new SequentialCommandGroup(
-    //   new ParallelCommandGroup( new goToLocation(drivebase,  new Pose2d(3.69 + 0.03 + 0.19 * Math.cos(1.047),2.971 + 0.19 * Math.sin(1.047), new Rotation2d(1.047))), new ElevatorGoToState(elevator, ElevatorState.L2), m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-    //   new ElevatorGoToState(elevator, ElevatorState.L4), m_coral.manualMoveCoralMotorsOutake(), new WaitCommand(.5),  m_coral.CoralStop());
-
-    return autos.L4LeftPoleRightStart();
   }
 } 
