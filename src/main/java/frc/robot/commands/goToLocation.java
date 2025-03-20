@@ -13,8 +13,8 @@ public class goToLocation extends Command {
   private Drivebase drivebase;
   private Pose2d goalPose;
 
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1); 
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(0.5, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(0.5, 2); 
   private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
   
   private final ProfiledPIDController xController = new ProfiledPIDController(6, 0, 0, X_CONSTRAINTS);
@@ -105,7 +105,7 @@ public class goToLocation extends Command {
 
     if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){this.cancel();}
 
-    drivebase.defaultDrive(xSpeed, ySpeed, thetaSpeed);
+    drivebase.autoDrive(xSpeed, ySpeed, thetaSpeed, goalPose.getRotation());
   }
 
   // Called once the command ends or is interrupted.
@@ -116,19 +116,20 @@ public class goToLocation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean finished;
-    if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
-      finished = true;
-    } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
-      if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      finished = false;
-    }
-    return finished;
+    // boolean finished;
+    // if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
+    //   finished = true;
+    // } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
+    //   if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // } else {
+    //   finished = false;
+    // }
+    // return finished;
+    return false;
   }
   
 }

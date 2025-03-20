@@ -13,13 +13,13 @@ public class goToLocationNoDrive extends Command {
   private Drivebase drivebase;
   private Pose2d goalPose;
 
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1); 
-  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); 
+  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(6, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(6, 0, 0, Y_CONSTRAINTS);
-  private final ProfiledPIDController thetaController = new ProfiledPIDController(6, 0, 0, THETA_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController thetaController = new ProfiledPIDController(1, 0, 0, THETA_CONSTRAINTS);
 
   @SuppressWarnings("unused")
   private double xStart = 0;
@@ -114,19 +114,20 @@ public class goToLocationNoDrive extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean finished;
-    if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
-      finished = true;
-    } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
-      if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      finished = false;
-    }
-    return finished;
+    // boolean finished;
+    // if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
+    //   finished = true;
+    // } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
+    //   if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // } else {
+    //   finished = false;
+    // }
+    // return finished;
+    return false;
   }
   
 }
