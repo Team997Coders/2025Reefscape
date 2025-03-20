@@ -38,8 +38,8 @@ public class Autos extends SubsystemBase {
     }
 
 
-    public Command L4Left() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Left) : new goToLocation(drivebase, Constants.Auto.Red.side4Left);
+    public Command L4LeftPoleMiddleStart() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Left).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Left).withTimeout(8);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -53,8 +53,8 @@ public class Autos extends SubsystemBase {
     }
 
 
-    public Command L4Right() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right) : new goToLocation(drivebase, Constants.Auto.Red.side4Right);
+    public Command L4RightPoleMiddleStart() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -66,6 +66,20 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),  
             coral.CoralStop()
             );
+    }
+
+    public Command L4LeftPoleRightStart() {
+        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side3Left).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side3Left).withTimeout(8);
+
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),  
+            coral.CoralStop());
     }
 
 
@@ -89,13 +103,13 @@ public class Autos extends SubsystemBase {
     }
 
 
-    public Command TwoL4() {
+    // public Command TwoL4() {
         
-        return new SequentialCommandGroup(
-            L4Left(), 
-            goToSourceRight(),
-            L4Right()
-        );
-    }
+    //     return new SequentialCommandGroup(
+    //         L4Left(), 
+    //         goToSourceRight(),
+    //         L4Right()
+    //     );
+    // }
     
 }

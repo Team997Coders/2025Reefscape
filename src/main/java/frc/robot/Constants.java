@@ -260,8 +260,8 @@ public final class Constants {
     public static final class Blue { //from the blue side's driverstation's perspective
       public static final Pose2d side1Left = new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)); //in front of the driver station
       public static final Pose2d side2Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Left = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Left = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) + .0254, new Rotation2d(0)); //in front of the barge
+      public static final Pose2d side3Left = new Pose2d(5.22, 4.9, new Rotation2d(4.189));
+      public static final Pose2d side4Left = new Pose2d(5.37, 3.8, new Rotation2d(Math.PI)); //in front o  ;ppf the barge
       public static final Pose2d side5Left = new Pose2d(0, 0, new Rotation2d(0));
       public static final Pose2d side6Left = new Pose2d(0, 0, new Rotation2d(0));
 
@@ -282,8 +282,8 @@ public final class Constants {
     public static final class Red { //from the red side's driverstation's perspective
       public static final Pose2d side1Left = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
       public static final Pose2d side2Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Left = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Left = new Pose2d(0, 0, new Rotation2d(0)); //in front of the barge
+      public static final Pose2d side3Left = new Pose2d(12.33, 3.18, new Rotation2d(1.08));
+      public static final Pose2d side4Left = new Pose2d(11.95, 4.25, new Rotation2d(0)); //in front of the barge
       public static final Pose2d side5Left = new Pose2d(0, 0, new Rotation2d(0));
       public static final Pose2d side6Left = new Pose2d(0, 0, new Rotation2d(0));
 

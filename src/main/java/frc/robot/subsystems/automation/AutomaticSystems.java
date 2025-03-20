@@ -71,7 +71,8 @@ public class AutomaticSystems extends SubsystemBase
         fullAuto = this.buttonBox.fullAutoCycles.Flipped();
         semiAuto = this.buttonBox.semiAutoCycles.Flipped();
 
-        this.buttonBox.go.onTrue(this.runOnce(() -> runSubsystems()));
+        //this.buttonBox.go.onTrue(this.runOnce(() -> runSubsystems()));
+        this.buttonBox.go.onTrue(this.runOnce(() -> basicElevatorMove()));
     }
 
     public void switchBeamBrake()
@@ -138,6 +139,23 @@ public class AutomaticSystems extends SubsystemBase
     public Command elevatorGoToCommand(int index)
     {
         return this.runOnce(() -> this.elevator.setStateByIndex(index));
+    }
+
+    public void basicElevatorMove()
+    {
+        if (this.coralBeamBrake)
+        {
+            try 
+            {
+                SmartDashboard.putNumber("Elevator move to level ", this.buttonBox.elevatorLevel.selectedBit().id - 6);
+                this.elevator.setStateByIndex(this.buttonBox.elevatorLevel.selectedBit().id - 6);
+            } catch (noSelectedButton e) {
+                e.printStackTrace();
+            }
+        } else 
+        {
+            this.elevator.setGoal(0);
+        }
     }
 
     public void runSubsystems()
