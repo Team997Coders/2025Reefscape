@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.subsystems.Autos;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.vision.Camera;
@@ -113,13 +112,7 @@ public class RobotContainer {
       //CONTROLLERS
     // driveStick = new XboxController(0);
       box = new XboxController(1);
-  
-      c_driveStick = new CommandXboxController(0);
-      final CommandXboxController m_driverController =
-          new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-
-      
+      c_driveStick = new CommandXboxController(0);      
       c_buttonStick = new CommandXboxController(1);
     
     
