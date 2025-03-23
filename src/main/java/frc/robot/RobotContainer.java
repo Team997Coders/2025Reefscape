@@ -18,6 +18,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import com.reduxrobotics.canand.CanandEventLoop;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -104,6 +106,11 @@ public class RobotContainer {
   //CONSTRUCTOR
   //The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
+    UsbCamera drivercamera = CameraServer.startAutomaticCapture();
+    drivercamera.setResolution(640, 480);
+    drivercamera.setFPS(15);
+
+    
      CanandEventLoop.getInstance();
     
       //GYRO

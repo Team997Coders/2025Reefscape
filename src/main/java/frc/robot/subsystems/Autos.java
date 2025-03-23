@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants;
 import frc.robot.commands.ElevatorGoToState;
 import frc.robot.commands.goToLocation;
@@ -58,12 +59,12 @@ public class Autos extends SubsystemBase {
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
                 goTo, 
-                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
                 algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-            new ElevatorGoToState(elevator, ElevatorState.L4),
+            new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
             coral.manualMoveCoralMotorsOutake(), 
             new WaitCommand(.5),  
-            coral.CoralStop());
+            coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
     public Command L4LeftPoleMiddleStartRed() {
@@ -72,12 +73,12 @@ public class Autos extends SubsystemBase {
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
                 goTo, 
-                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
                 algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-            new ElevatorGoToState(elevator, ElevatorState.L4),
+            new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
             coral.manualMoveCoralMotorsOutake(), 
             new WaitCommand(.5),  
-            coral.CoralStop());
+            coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
 
