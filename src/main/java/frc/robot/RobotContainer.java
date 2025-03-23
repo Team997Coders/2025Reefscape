@@ -157,8 +157,10 @@ public class RobotContainer {
 
       //AUTOCHOOSER
       autoChooser = AutoBuilder.buildAutoChooser("moveForward");
-      autoChooser.addOption("l4 left pole side 3 ", autos.L4LeftPoleRightStart());
-      autoChooser.addOption("l4 left pole side 4", autos.L4LeftPoleMiddleStart());
+      //autoChooser.addOption("l4 left pole side 3 ", autos.L4LeftPoleRightStart());
+      autoChooser.addOption("l4 left pole side 4 blue", autos.L4LeftPoleMiddleStartBlue());
+      autoChooser.addOption("l4 left pole side 4 red", autos.L4LeftPoleMiddleStartRed());
+      
       
       SmartDashboard.putData("Auto Choser", autoChooser);
 

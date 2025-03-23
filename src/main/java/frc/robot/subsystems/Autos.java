@@ -52,6 +52,34 @@ public class Autos extends SubsystemBase {
             coral.CoralStop());
     }
 
+    public Command L4LeftPoleMiddleStartBlue() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.side4Left).withTimeout(8);
+        
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),  
+            coral.CoralStop());
+    }
+
+    public Command L4LeftPoleMiddleStartRed() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side4Left).withTimeout(8);
+
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),  
+            coral.CoralStop());
+    }
+
 
     public Command L4RightPoleMiddleStart() {
         Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
