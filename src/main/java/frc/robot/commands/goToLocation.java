@@ -128,7 +128,8 @@ public class goToLocation extends Command {
     } else {
       finished = false;
     }
-    return finished;
+    // TODO: look into this :3  
+    return false;
   }
   
 }
