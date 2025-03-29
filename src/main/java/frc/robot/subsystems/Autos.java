@@ -53,13 +53,11 @@ public class Autos extends SubsystemBase {
             coral.CoralStop());
     }
 
+
+    //use this
     public Command L4LeftPoleMiddleStartBlue() {
         Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.side4Left).withTimeout(8);
-        
-
-
-
-        //use these
+    
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
                 goTo, 
@@ -71,6 +69,8 @@ public class Autos extends SubsystemBase {
             coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
+
+    //use this
     public Command L4LeftPoleMiddleStartRed() {
         Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side4Left).withTimeout(8);
 
@@ -87,7 +87,25 @@ public class Autos extends SubsystemBase {
             new goToLocation(drivebase, Constants.Auto.Red.side4leftBackup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-    //use these
+
+    
+    public Command L4RightPoleMiddleStartRed() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
+
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),
+            coral.CoralStop(),
+            new WaitCommand(1),
+            new goToLocation(drivebase, Constants.Auto.Red.side4leftBackup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+
     public Command L4RightPoleMiddleStart() {
         Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
 

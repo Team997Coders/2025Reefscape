@@ -292,7 +292,7 @@ public final class Constants {
       public static final Pose2d side1Right = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
       public static final Pose2d side2Right = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
       public static final Pose2d side3Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Right = new Pose2d(0, 0, new Rotation2d(0)); //in front of the barge
+      public static final Pose2d side4Right = new Pose2d(11.95, 4.002855 - Units.inchesToMeters(7), new Rotation2d(0)); //in front of the barge
       public static final Pose2d side5Right = new Pose2d(0, 0, new Rotation2d(0));
       public static final Pose2d side6Right = new Pose2d(0, 0, new Rotation2d(0));
 
