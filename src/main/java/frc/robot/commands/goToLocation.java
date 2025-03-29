@@ -116,20 +116,28 @@ public class goToLocation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean finished;
-    if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
+    boolean finished = false;
+    if (xController.atGoal() && yController.atGoal() && thetaController.atGoal()) {
       finished = true;
-    } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
-      if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
-        return true;
-      } else {
-        return false;
-      }
     } else {
       finished = false;
     }
-    // TODO: look into this :3  
-    return false;
+
+    return finished;
+
+
+    //ismael's end thing
+    // if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
+    //   finished = true;
+    // } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
+    //   if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // } else {
+    //   finished = false;
+    // }
   }
   
 }
