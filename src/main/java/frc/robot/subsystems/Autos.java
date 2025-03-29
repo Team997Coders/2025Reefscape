@@ -84,7 +84,7 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),
             coral.CoralStop(),
             new WaitCommand(1),
-            new goToLocation(drivebase, Constants.Auto.Red.side4leftBackup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            new goToLocation(drivebase, Constants.Auto.Red.side4Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
 
@@ -102,24 +102,51 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),
             coral.CoralStop(),
             new WaitCommand(1),
-            new goToLocation(drivebase, Constants.Auto.Red.side4leftBackup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            new goToLocation(drivebase, Constants.Auto.Red.side4Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
 
-    public Command L4RightPoleMiddleStart() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
+    public Command L4LeftPoleRightSideRed() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side3Left).withTimeout(8);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
                 goTo, 
-                new ElevatorGoToState(elevator, ElevatorState.L2), 
+                new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
                 algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-            new ElevatorGoToState(elevator, ElevatorState.L4),
+            new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
             coral.manualMoveCoralMotorsOutake(), 
-            new WaitCommand(.5),  
-            coral.CoralStop()
-            );
+            new WaitCommand(.5),
+            coral.CoralStop(),
+            new WaitCommand(1),
+            new goToLocation(drivebase, Constants.Auto.Red.side3Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    // public Command L4RightPoleMiddleStart() {
+    //     Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
+
+    //     return new SequentialCommandGroup( 
+    //         new ParallelCommandGroup(
+    //             goTo, 
+    //             new ElevatorGoToState(elevator, ElevatorState.L2), 
+    //             algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+    //         new ElevatorGoToState(elevator, ElevatorState.L4),
+    //         coral.manualMoveCoralMotorsOutake(), 
+    //         new WaitCommand(.5),  
+    //         coral.CoralStop()
+    //         );
+    // }
 
 
 

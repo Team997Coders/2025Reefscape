@@ -283,16 +283,18 @@ public final class Constants {
     public static final class Red { //from the red side's driverstation's perspective
       public static final Pose2d side1Left = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
       public static final Pose2d side2Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Left = new Pose2d(12.33, 3.18, new Rotation2d(1.08));
-      public static final Pose2d side4Left = new Pose2d(11.95, 4.25 + .00635 - Units.inchesToMeters(3), new Rotation2d(0)); //in front of the barge
-      public static final Pose2d side4leftBackup = new Pose2d(11, 4.25, new Rotation2d(0));
+      public static final Pose2d side3Left = new Pose2d(12.34, 3.1, new Rotation2d(1.13)); // tag 11 left
+      public static final Pose2d side3Backup = new Pose2d(12, 2.5, new Rotation2d(1.13));
+
+      public static final Pose2d side4Left = new Pose2d(11.95, 4.25 + .00635 - Units.inchesToMeters(3), new Rotation2d(0)); //in front of the barge tag 10 left
+      public static final Pose2d side4Backup = new Pose2d(11, 4.25, new Rotation2d(0));
       public static final Pose2d side5Left = new Pose2d(0, 0, new Rotation2d(0));
       public static final Pose2d side6Left = new Pose2d(0, 0, new Rotation2d(0));
 
       public static final Pose2d side1Right = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
       public static final Pose2d side2Right = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
       public static final Pose2d side3Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Right = new Pose2d(11.95, 4.002855 - Units.inchesToMeters(7), new Rotation2d(0)); //in front of the barge
+      public static final Pose2d side4Right = new Pose2d(11.95, 4.002855 - Units.inchesToMeters(7), new Rotation2d(0)); //in front of the barge tag ten right
       public static final Pose2d side5Right = new Pose2d(0, 0, new Rotation2d(0));
       public static final Pose2d side6Right = new Pose2d(0, 0, new Rotation2d(0));
 
