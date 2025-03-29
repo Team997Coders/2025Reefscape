@@ -13,13 +13,13 @@ public class goToLocation extends Command {
   private Drivebase drivebase;
   private Pose2d goalPose;
 
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(0.5, 2);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(0.5, 2); 
-  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2); 
+  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(60, 60);
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(6, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(6, 0, 0, Y_CONSTRAINTS);
-  private final ProfiledPIDController thetaController = new ProfiledPIDController(6, 0, 0, THETA_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(/*6*/ 5, 0, .2, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(/*6*/5, 0, .2, Y_CONSTRAINTS);
+  private final ProfiledPIDController thetaController = new ProfiledPIDController(/*6*/ 3, 0, 0, THETA_CONSTRAINTS);
 
   @SuppressWarnings("unused")
   private double xStart = 0;
@@ -32,8 +32,8 @@ public class goToLocation extends Command {
     this.drivebase = drivebase;
     this.goalPose = pose;
 
-    xController.setTolerance(0.02);
-    yController.setTolerance(0.02);
+    xController.setTolerance(0.04);
+    yController.setTolerance(0.04);
     thetaController.setTolerance(Units.degreesToRadians(2));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Use addRequirements() here to declare subsystem dependencies.
