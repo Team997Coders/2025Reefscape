@@ -17,9 +17,9 @@ public class goToLocation extends Command {
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2); 
   private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(60, 60);
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(/*6*/ 5, 0, .2, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(/*6*/5, 0, .2, Y_CONSTRAINTS);
-  private final ProfiledPIDController thetaController = new ProfiledPIDController(/*6*/ 3, 0, 0, THETA_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(5, 0, .2, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(5, 0, .2, Y_CONSTRAINTS);
+  private final ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, THETA_CONSTRAINTS);
 
   @SuppressWarnings("unused")
   private double xStart = 0;
@@ -124,20 +124,6 @@ public class goToLocation extends Command {
     }
 
     return finished;
-
-
-    //ismael's end thing
-    // if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
-    //   finished = true;
-    // } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
-    //   if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // } else {
-    //   finished = false;
-    // }
   }
   
 }

@@ -39,24 +39,9 @@ public class Autos extends SubsystemBase {
     }
 
 
-    public Command L4LeftPoleMiddleStart() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Left).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Left).withTimeout(8);
-
-        return new SequentialCommandGroup( 
-            new ParallelCommandGroup(
-                goTo, 
-                new ElevatorGoToState(elevator, ElevatorState.L2), 
-                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-            new ElevatorGoToState(elevator, ElevatorState.L4),
-            coral.manualMoveCoralMotorsOutake(), 
-            new WaitCommand(.5),  
-            coral.CoralStop());
-    }
-
-
     //use this
-    public Command L4LeftPoleMiddleStartBlue() {
-        Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.side4Left).withTimeout(8);
+    public Command LeftTag21Blue() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.tag21Left).withTimeout(8);
     
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -69,10 +54,26 @@ public class Autos extends SubsystemBase {
             coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
+    //coordinates may or may not work 
+    public Command LeftTag20Blue() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.tag20Left).withTimeout(8);
+
+        return new SequentialCommandGroup( 
+            new ParallelCommandGroup(
+                goTo, 
+                new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
+                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+            new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
+            coral.manualMoveCoralMotorsOutake(), 
+            new WaitCommand(.5),
+            coral.CoralStop(),
+            new WaitCommand(1),
+            new goToLocation(drivebase, Constants.Auto.Blue.tag20Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
 
     //use this
-    public Command L4LeftPoleMiddleStartRed() {
-        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side4Left).withTimeout(8);
+    public Command LeftTag10Red() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.tag10Left).withTimeout(8);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -84,13 +85,12 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),
             coral.CoralStop(),
             new WaitCommand(1),
-            new goToLocation(drivebase, Constants.Auto.Red.side4Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            new goToLocation(drivebase, Constants.Auto.Red.tag10Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-
-    
-    public Command L4RightPoleMiddleStartRed() {
-        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
+    //use this
+    public Command RightTag10Red() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.tag10Right).withTimeout(8);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -102,12 +102,12 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),
             coral.CoralStop(),
             new WaitCommand(1),
-            new goToLocation(drivebase, Constants.Auto.Red.side4Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            new goToLocation(drivebase, Constants.Auto.Red.tag10Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-
-    public Command L4LeftPoleRightSideRed() {
-        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.side3Left).withTimeout(8);
+    //use this
+    public Command LeftTag11Red() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.tag11Left).withTimeout(8);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -119,81 +119,7 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),
             coral.CoralStop(),
             new WaitCommand(1),
-            new goToLocation(drivebase, Constants.Auto.Red.side3Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            new goToLocation(drivebase, Constants.Auto.Red.tag11Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    // public Command L4RightPoleMiddleStart() {
-    //     Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side4Right).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side4Right).withTimeout(8);
-
-    //     return new SequentialCommandGroup( 
-    //         new ParallelCommandGroup(
-    //             goTo, 
-    //             new ElevatorGoToState(elevator, ElevatorState.L2), 
-    //             algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-    //         new ElevatorGoToState(elevator, ElevatorState.L4),
-    //         coral.manualMoveCoralMotorsOutake(), 
-    //         new WaitCommand(.5),  
-    //         coral.CoralStop()
-    //         );
-    // }
-
-
-
-
-
-    public Command L4LeftPoleRightStart() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.side3Left).withTimeout(8) : new goToLocation(drivebase, Constants.Auto.Red.side3Left).withTimeout(8);
-
-        return new SequentialCommandGroup( 
-            new ParallelCommandGroup(
-                goTo, 
-                new ElevatorGoToState(elevator, ElevatorState.L2), 
-                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-            new ElevatorGoToState(elevator, ElevatorState.L4),
-            coral.manualMoveCoralMotorsOutake(), 
-            new WaitCommand(.5),  
-            coral.CoralStop());
-    }
-
-
-    public Command goToSourceRight() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.sourceRight) : new goToLocation(drivebase, Constants.Auto.Red.sourceRight);
-
-        return new SequentialCommandGroup(
-            new ElevatorGoToState(elevator, ElevatorState.SOURCE),
-            goTo
-        );
-    }
-
-    
-    public Command goToSourceLeft() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.sourceLeft) : new goToLocation(drivebase, Constants.Auto.Red.sourceLeft);
-
-        return new SequentialCommandGroup(
-            new ElevatorGoToState(elevator, ElevatorState.SOURCE),
-            goTo
-        );
-    }
-
-
-    // public Command TwoL4() {
-        
-    //     return new SequentialCommandGroup(
-    //         L4Left(), 
-    //         goToSourceRight(),
-    //         L4Right()
-    //     );
-    // }
-    
 }

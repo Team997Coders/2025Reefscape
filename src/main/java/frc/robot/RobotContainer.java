@@ -71,7 +71,7 @@ public class RobotContainer {
     private static CommandXboxController c_buttonStick;
   
   //AUTOCHOOSER
-  private SendableChooser<Command> autoChooser;
+ // private SendableChooser<Command> autoChooser;
 
   
   //CAMERA STUFF
@@ -101,6 +101,7 @@ public class RobotContainer {
 
   //AUTOS
   private frc.robot.subsystems.Autos autos;
+  private final SendableChooser<Command> autoChooser;
 
     
   //CONSTRUCTOR
@@ -160,18 +161,29 @@ public class RobotContainer {
                 
       //AUTOS
       autos = new Autos(drivebase, elevator, m_coral, m_algae);
+      autoChooser = new SendableChooser<>();
 
+      //blue
+      autoChooser.setDefaultOption("taxi blue", autos.taxiBlue());
+      autoChooser.addOption("left front blue", autos.LeftTag21Blue());
+      autoChooser.addOption("left barge side blue", autos.LeftTag20Blue());
 
-      //AUTOCHOOSER
-      autoChooser = AutoBuilder.buildAutoChooser("moveForward");
-      //autoChooser.addOption("l4 left pole side 3 ", autos.L4LeftPoleRightStart());
-      autoChooser.addOption("l4 left pole side 4 blue", autos.L4LeftPoleMiddleStartBlue());
-      autoChooser.addOption("l4 left pole side 4 red", autos.L4LeftPoleMiddleStartRed());
-      autoChooser.addOption("l4 right pole side 4 red", autos.L4RightPoleMiddleStartRed());
-      autoChooser.addOption("l4 left pole side 3 red", autos.L4LeftPoleRightSideRed());
+      //red
+      autoChooser.addOption("left front red", autos.LeftTag10Red());
+      autoChooser.addOption("right front red", autos.RightTag10Red());
+      autoChooser.addOption("left barge side red", autos.LeftTag11Red());
+
+      // AUTOCHOOSER
+      // autoChooser = AutoBuilder.buildAutoChooser("moveForward");
+      // //autoChooser.addOption("l4 left pole side 3 ", autos.L4LeftPoleRightStart());
+      // autoChooser.addOption("left front blue", autos.LeftTag20Blue());
+      // autoChooser.addOption("l4 left pole side 4 red", autos.L4LeftPoleMiddleStartRed());
+      // autoChooser.addOption("l4 right pole side 4 red", autos.L4RightPoleMiddleStartRed());
+      // autoChooser.addOption("l4 left pole side 3 red", autos.L4LeftPoleRightSideRed());
       
       
-      SmartDashboard.putData("Auto Choser", autoChooser);
+      
+      //SmartDashboard.putData("Auto Choser", autoChooser);
 
       NamedCommands.registerCommand("Pick Up Coral", m_coral.manualMoveCoralMotorsIntake());
       NamedCommands.registerCommand("Place Coral", m_coral.manualMoveCoralMotorsOutake());
@@ -320,7 +332,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-    return autoChooser.getSelected(); 
+   return autoChooser.getSelected(); 
 
   }
 } 
