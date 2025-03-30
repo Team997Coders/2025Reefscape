@@ -32,8 +32,13 @@ public class Autos extends SubsystemBase {
     }
 
     
-    public Command taxi() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToLocation(drivebase, Constants.Auto.Blue.taxi) : new goToLocation(drivebase, Constants.Auto.Red.taxi);
+    public Command taxiBlue() {
+        Command goTo =  new goToLocation(drivebase, Constants.Auto.Blue.taxi);
+        return goTo;
+    }
+
+    public Command taxiRed() {
+        Command goTo = new goToLocation(drivebase, Constants.Auto.Red.taxi);
        
         return goTo;
     }
