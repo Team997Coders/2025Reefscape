@@ -6,22 +6,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Drivebase;
 
 public class goToTag extends Command {
-
-  private Drivebase drivebase;
   private int tagId;
   private int side;
   private AprilTagFieldLayout aprilTagFieldLayout;
 
-  public goToTag(Drivebase drivebase, int TagId, int side) {
-    this.drivebase = drivebase;
+  public goToTag(int TagId, int side) {
     this.tagId = TagId;
     this.side = side;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivebase);
   }
 
   private Pose2d goalPose(int TagId, int side) {

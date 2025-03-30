@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivebase;
 
-public class goToLocation extends Command {
+public class goToLocationNoDrive extends Command {
   
   private Drivebase drivebase;
   private Pose2d goalPose;
 
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2); 
-  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(60, 60);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); 
+  private static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(5, 0, .2, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(5, 0, .2, Y_CONSTRAINTS);
-  private final ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, THETA_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController thetaController = new ProfiledPIDController(1, 0, 0, THETA_CONSTRAINTS);
 
   @SuppressWarnings("unused")
   private double xStart = 0;
@@ -28,12 +28,12 @@ public class goToLocation extends Command {
   @SuppressWarnings("unused")
   private double thetaStart = 0;
 
-  public goToLocation(Drivebase drivebase, Pose2d pose) {
+  public goToLocationNoDrive(Drivebase drivebase, Pose2d pose) {
     this.drivebase = drivebase;
     this.goalPose = pose;
 
-    xController.setTolerance(0.04);
-    yController.setTolerance(0.04);
+    xController.setTolerance(0.02);
+    yController.setTolerance(0.02);
     thetaController.setTolerance(Units.degreesToRadians(2));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -104,8 +104,6 @@ public class goToLocation extends Command {
     SmartDashboard.putNumber("theta Speed", thetaSpeed);
 
     if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){this.cancel();}
-
-    drivebase.autoDrive(xSpeed, ySpeed, thetaSpeed, goalPose.getRotation());
   }
 
   // Called once the command ends or is interrupted.
@@ -116,14 +114,20 @@ public class goToLocation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean finished = false;
-    if (xController.atGoal() && yController.atGoal() && thetaController.atGoal()) {
-      finished = true;
-    } else {
-      finished = false;
-    }
-
-    return finished;
+    // boolean finished;
+    // if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){ 
+    //   finished = true;
+    // } else if (xSpeed == 0 && ySpeed == 0 || ySpeed == 0 && thetaSpeed == 0 || xSpeed == 0 && thetaSpeed == 0){
+    //   if (Math.abs(xSpeed) < 0.175 && Math.abs(ySpeed) < 0.175 && Math.abs(thetaSpeed) < 0.175){
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // } else {
+    //   finished = false;
+    // }
+    // return finished;
+    return false;
   }
   
 }

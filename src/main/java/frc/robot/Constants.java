@@ -257,20 +257,38 @@ public final class Constants {
 
 
   public static final class Auto {
-    public static final class Blue { //from the blue side's driverstation's perspective
-      public static final Pose2d side1Left = new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)); //in front of the driver station
-      public static final Pose2d side2Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Left = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Left = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) + .0254, new Rotation2d(0)); //in front of the barge
-      public static final Pose2d side5Left = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side6Left = new Pose2d(0, 0, new Rotation2d(0));
+    public static final class Blue {
+    //tag 18
+      public static final Pose2d tag18Left = new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)); //in front of the driver station
+      public static final Pose2d tag18Right = new Pose2d(3.175+0.195, 4.191-.0254,new Rotation2d(0)); //in front of the driver station
+      public static final Pose2d tag18Backup = new Pose2d();
 
-      public static final Pose2d side1Right = new Pose2d(3.175+0.195, 4.191-.0254,new Rotation2d(0)); //in front of the driver station
-      public static final Pose2d side2Right = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Right = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) - .0254, new Rotation2d(0)); //in front of the barge
-      public static final Pose2d side5Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side6Right = new Pose2d(0, 0, new Rotation2d(0));
+
+    //tag 19
+      public static final Pose2d tag19Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
+      public static final Pose2d tag19Right = new Pose2d(0, 0, new Rotation2d(0)); 
+      public static final Pose2d tag19Backup = new Pose2d();
+
+    //tag 20
+      public static final Pose2d tag20Left = new Pose2d(5.22, 4.9, new Rotation2d(4.189));
+      public static final Pose2d tag20Right = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag20Backup = new Pose2d(6, 5.5, new Rotation2d(4.189));
+
+    //tag 21
+      public static final Pose2d tag21Left = new Pose2d(5.37, 3.8-.00635, new Rotation2d(Math.PI)); 
+      public static final Pose2d tag21Right = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) - .0254, new Rotation2d(0)); //in front of the barge
+      public static final Pose2d tag21Backup = new Pose2d(6.5, Units.inchesToMeters(158.5), new Rotation2d(Math.PI));
+
+    //tag 22
+      public static final Pose2d tag22Left = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag22Right = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag22Backup = new Pose2d();
+
+    //tag 17
+      public static final Pose2d tag17Left = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag17Right = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag17Backup = new Pose2d();
+    
 
       public static final Pose2d taxi = new Pose2d(Units.inchesToMeters(44), Units.inchesToMeters(158.50), new Rotation2d(0));
 
@@ -279,24 +297,39 @@ public final class Constants {
   }
     
 
-    public static final class Red { //from the red side's driverstation's perspective
-      public static final Pose2d side1Left = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
-      public static final Pose2d side2Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Left = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Left = new Pose2d(0, 0, new Rotation2d(0)); //in front of the barge
-      public static final Pose2d side5Left = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side6Left = new Pose2d(0, 0, new Rotation2d(0));
+    public static final class Red { 
+    //tag 7
+      public static final Pose2d tag7Left = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
+      public static final Pose2d tag7Right = new Pose2d(0, 0, new Rotation2d(0)); 
+      public static final Pose2d tag7Backup = new Pose2d();
 
-      public static final Pose2d side1Right = new Pose2d(0, 0, new Rotation2d(0)); //in front of the driver station
-      public static final Pose2d side2Right = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
-      public static final Pose2d side3Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side4Right = new Pose2d(0, 0, new Rotation2d(0)); //in front of the barge
-      public static final Pose2d side5Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d side6Right = new Pose2d(0, 0, new Rotation2d(0));
+    //tag 6
+      public static final Pose2d tag6Left = new Pose2d(0, 0, new Rotation2d(0)); //next clockwise
+      public static final Pose2d tag6Right = new Pose2d(0, 0, new Rotation2d(0)); 
+      public static final Pose2d tag6Backup = new Pose2d();
+
+    //tag 11
+      public static final Pose2d tag11Left = new Pose2d(12.34, 3.1, new Rotation2d(1.13)); 
+      public static final Pose2d tag11Right = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag11Backup = new Pose2d(12, 2.5, new Rotation2d(1.13));
+
+    //tag10
+      public static final Pose2d tag10Left = new Pose2d(11.95, 4.25 + .00635 - Units.inchesToMeters(3), new Rotation2d(0)); 
+      public static final Pose2d tag10Right = new Pose2d(11.95, 4.002855 - Units.inchesToMeters(7), new Rotation2d(0)); 
+      public static final Pose2d tag10Backup = new Pose2d(11, 4.25, new Rotation2d(0));
+
+    //tag 9
+      public static final Pose2d tag9Left = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag9Right = new Pose2d(0, 0, new Rotation2d(0));
+
+    //tag 8
+      public static final Pose2d tag8Left = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d tag8Right = new Pose2d(0, 0, new Rotation2d(0));
+
 
       public static final Pose2d taxi = new Pose2d(0, 0, new Rotation2d(0));
 
-      public static final Pose2d sourceLeft = new Pose2d(0, 0, new Rotation2d(0));
+      public static final Pose2d sourceLeft = new Pose2d(0, 0, new Rotation2d(0)); 
       public static final Pose2d sourceRight = new Pose2d(0, 0, new Rotation2d(0));
     }
   }

@@ -162,6 +162,9 @@ public class Drivebase extends SubsystemBase {
   public void defaultDrive(double speedX, double speedY, double rot) {
     defaultDrive(speedX, speedY, rot, true);
   }
+  public void autoDrive(double speedX, double speedY, double rot, Rotation2d goalAngle) {
+    defaultAutoDrive(speedX, speedY, rot, true, goalAngle);
+  }
   public boolean isFieldOriented;
   public void defaultDrive(double speedX, double speedY, double rot, boolean slew) {
    
@@ -177,6 +180,16 @@ public class Drivebase extends SubsystemBase {
       robotOrientedDrive(-speedX, -speedY, rot);
       isFieldOriented = false;
     }
+  }
+  public void defaultAutoDrive(double speedX, double speedY, double rot, boolean slew, Rotation2d goalAngle) {
+   
+    if (slew) {
+      speedX = slewRateX.calculate(speedX);
+      speedY = slewRateY.calculate(speedY);
+    }
+
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, rot, goalAngle);
+    this.drive(speeds);
   }
 
   /** drive:
