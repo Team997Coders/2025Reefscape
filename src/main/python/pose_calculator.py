@@ -19,7 +19,10 @@ class ReefScoringPose:
         :param side: The side of the scoring branch (1 for left, -1 for right).
         :return: The Pose2d of the robot in front of the scoring branch.
         """
+        print(f"goal rotation: {goal_pose.rotation().degrees()} degrees")
+
         angle = goal_pose.rotation().radians()
+
         offset_x = goal_pose.x + (6.5 if side == 1 else -6.5) * math.sin(angle)  # Offset in inches
         offset_y = goal_pose.y + (6.5 if side == 1 else -6.5) * math.cos(angle)
 
@@ -73,12 +76,13 @@ if __name__ == "__main__":
     april_tag_field_layout = AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeWelded)
 
     # tag information
-    tagId = 10
+    tagId = 21
     # Example usage: Get the pose of a specific AprilTag by its ID
-    tag_pose = april_tag_field_layout.getTagPose(tagId)
+    tag_pose = april_tag_field_layout.getTagPose(tagId).toPose2d()
 
     if tag_pose is not None:
-        print(f"Pose of AprilTag {tagId}: {tag_pose.toPose2d()}")
+        print(f"Pose of AprilTag meters for tag {tagId}: {tag_pose}")
+        print(f"X: {tag_pose.X()/0.0254}, Y: {tag_pose.Y()/0.0254} inches")
     else:
         print(f"AprilTag {tagId} not found in the field layout.")
 
