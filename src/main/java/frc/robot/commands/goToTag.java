@@ -4,6 +4,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -12,31 +14,67 @@ public class goToTag extends Command {
   private int side;
   private AprilTagFieldLayout aprilTagFieldLayout;
 
+  // front back offsert is half of length of the robot + the width of the bumper
+  //     = 29in / 2 + 4in = 18.5in
+  // left right offset is the distance from the center of the tag to the left or right side scoring branch
+  //     = 6.5in
+  private static final double frontOffset = Units.inchesToMeters(29.0/2.0 + 4.0);
+  private static final double leftRightShift = Units.inchesToMeters(6.5);
+
+  // Drive to the scoring branch of a tag.
   public goToTag(int TagId, int side) {
     this.tagId = TagId;
     this.side = side;
+
+    // FIRST provided layout of the AprilTags on the field
+    // The bottom left corner of the field:
+    //   X = 0: Bottom left of the blue alliance wall, X is increasing to the right
+    //   Y = 0: Bottom left of the red alliance wall, Y is increasing up
+    // NOTE: The measurements on the drawing are in inches, but the file provided returns meters
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   }
 
-  private Pose2d goalPose(int TagId, int side) {
-    Pose3d tagInFieldFrame;
-
+  /**
+   * @param TagId The id of the Target tag to get the pose
+   * @return Pose2d of the tag in the field frame
+   *
+   * Get the pose of the target tag
+   */
+  private Pose2d goalTagPose(int TagId) {
+    Pose2d tagInFieldFrame;
     
     if (aprilTagFieldLayout.getTagPose(tagId).isPresent()) // margin < 20 seems bad > 140 are good maybe > 50 a limit?
     {
-      tagInFieldFrame = aprilTagFieldLayout.getTagPose(tagId).get();
-      System.out.println("tagInFieldFrame: " + tagInFieldFrame);
-      Pose2d tempPose2d = new Pose2d(Units.metersToInches(tagInFieldFrame.getX()), 
-          Units.metersToInches(tagInFieldFrame.getY()),
-          tagInFieldFrame.getRotation().toRotation2d());
-      System.out.println("Tag: " + tagId +", tagInFieldFrame: " + tempPose2d);
-      return tempPose2d;
+      tagInFieldFrame = aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
+      return tagInFieldFrame;
     } else {
       System.out.println("bad id " + tagId);
       return null;
     }
   }
 
-  //
+  /**
+   * 
+   * @param goalPose2d Pose of the tag in the field frame
+   * @param side Which side (left or right) to offset the robot to align with the target branch (1 = left, -1 = right)
+   * @return targetPose Final pose of the robot to drive to
+   * 
+   * Create a transform for the goal pose to align with the target brandh and offset for the length 
+   * of the robot and width of the bumpers
+  */
+  private Pose2d goalTransform2d(Pose2d goalPose2d, int side) {
+    Transform2d leftside = new Transform2d(new Pose2d(), 
+      new Pose2d(
+        frontOffset, 
+        (side == 1? 1 : -1) * leftRightShift, 
+        new Rotation2d()));
+    // This pose is now the desired position and orientation to drive to
+    Pose2d targetPose = goalPose2d.transformBy(leftside);
+    System.out.println("Transform: targetPose: " + targetPose);
+    return targetPose;
+  }
+
+  // Transform the goal pose using direct geometry
   private Pose2d offset2Goal(Pose2d goalPose2d, int side) {
     // offset position to the left or right to align with the goal branch.
     double angle = goalPose2d.getRotation().getRadians();
@@ -50,28 +88,20 @@ public class goToTag extends Command {
     return new Pose2d(offsetX, offsetY, goalPose2d.getRotation());
   }
 
-  //
-  private Pose2d inch2meters(Pose2d in_pose2d) {
-    // convert inches to meters
-    return new Pose2d(Units.inchesToMeters(in_pose2d.getX()), Units.inchesToMeters(in_pose2d.getY()),
-        in_pose2d.getRotation());
-  }
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d gPose2d = goalPose(tagId, side);
-    System.out.println("goalPose (inches): " + gPose2d);
-    Pose2d gGoal2d = offset2Goal(gPose2d, side);
-    System.out.println("Offset Pose (inches): " + gGoal2d);
-    Pose2d finalPose2d = inch2meters(gGoal2d);
-    System.out.println("Final Pose (meters): " + finalPose2d);
+    Pose2d gPose2d = goalTagPose(tagId);
+    System.out.println("Raw Goal Pose: " + gPose2d);
+    Pose2d finalPose2d = offset2Goal(gPose2d, side);
+    System.out.println("Offset Pose: " + finalPose2d);
+    Pose2d TransformPose2d = goalTransform2d(gPose2d, side);
+    System.out.println("Transformed Pose: " + TransformPose2d);
 
     //new goToLocation(drivebase, finalPose2d);
   }
