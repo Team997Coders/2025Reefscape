@@ -23,8 +23,10 @@ class ReefScoringPose:
 
         angle = goal_pose.rotation().radians()
 
-        offset_x = goal_pose.x + (6.5 if side == 1 else -6.5) * math.sin(angle)  # Offset in inches
-        offset_y = goal_pose.y + (6.5 if side == 1 else -6.5) * math.cos(angle)
+        # 6.5in = 0.1651m
+        offset_x = goal_pose.x + (6.5 if side == 1 else -6.5) * 0.0254 * math.sin(angle)  # Offset in meters
+        offset_y = goal_pose.y + (6.5 if side == 1 else -6.5) * 0.0254 * math.cos(angle)
+        print(f"offset x: {offset_x}, offset y: {offset_y}")
 
         # Adjust for the robot's width (14.5 inches is half the robot's width)
         offset_x += 14.5 * math.cos(angle)
