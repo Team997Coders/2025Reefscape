@@ -33,7 +33,7 @@ class ReefScoringPose:
         offset_x += 18.5 * 0.0254 * math.cos(angle)
         offset_y += 18.5 * 0.0254 * math.sin(angle)
 
-        return Pose2d(offset_x, offset_y, goal_pose.rotation())
+        return Pose2d(offset_x, offset_y, angle)
 
     def goal_transform(self, goal_pose: Pose2d, side: int) -> Pose2d:
         """
@@ -43,8 +43,8 @@ class ReefScoringPose:
         :param side: The side of the scoring branch (1 for left, -1 for right).
         :return: The transformed Pose2d of the robot.
         """
-        front_offset = 14.5  # Offset for the front of the robot
-        left_right_shift = 6.5  # Offset for the left or right alignment
+        front_offset = (14.5 + 4)*0.0254  # Offset for the front of the robot
+        left_right_shift = 6.5*0.0254  # Offset for the left or right alignment
 
         transform_x = front_offset
         transform_y = (1 if side == 1 else -1) * left_right_shift
@@ -53,7 +53,7 @@ class ReefScoringPose:
         transformed_pose = Pose2d(
             goal_pose.x + transform_x,
             goal_pose.y + transform_y,
-            goal_pose.rotation()
+            goal_pose.rotation().radians()
         )
         return transformed_pose
 
