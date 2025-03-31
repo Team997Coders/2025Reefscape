@@ -3,15 +3,18 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import frc.robot.subsystems.Autos;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ElevatorGoToState;
+import frc.robot.commands.goToLocation;
+import frc.robot.commands.goToTag;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
 
 import java.util.Arrays;
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
@@ -25,6 +28,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
+import frc.robot.subsystems.Autos;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.automation.AutomaticSystems;
@@ -36,7 +40,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -109,7 +117,6 @@ public class RobotContainer {
     UsbCamera drivercamera = CameraServer.startAutomaticCapture();
     drivercamera.setResolution(640, 480);
     drivercamera.setFPS(15);
-
     
      CanandEventLoop.getInstance();
     
@@ -240,6 +247,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Rotation", scaleRotationAxis(c_driveStick.getRawAxis(4)));
 
     SmartDashboard.putData(CommandScheduler.getInstance());
+    SmartDashboard.putNumber("Best Left Target ID", CameraBlock.TargetId);
   }
 
   @SuppressWarnings("unused")
@@ -329,8 +337,19 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    Command goTo = ally.get() == Alliance.Blue ? new goToTag(21, 0) : new goToTag(10, 0);
+    return new SequentialCommandGroup(
+        new ParallelCommandGroup(
+            goTo,
+            new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3),
+            m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)),
+        new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
+        m_coral.manualMoveCoralMotorsOutake(),
+        new WaitCommand(.5),
+        m_coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-   return autoChooser.getSelected(); 
+  // return autoChooser.getSelected();
 
   /*just leave */
 //  return autoChooser.getSelected(); 

@@ -63,7 +63,7 @@ public class Drivebase extends SubsystemBase {
 
   private SwerveDriveOdometry odometry;
 
-  private Field2d field = new Field2d();
+  public Field2d field = new Field2d();
 
   private SlewRateLimiter slewRateX = new SlewRateLimiter(DriveConstants.slewRate);
   private SlewRateLimiter slewRateY = new SlewRateLimiter(DriveConstants.slewRate);

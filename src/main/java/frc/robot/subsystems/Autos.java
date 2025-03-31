@@ -45,7 +45,7 @@ public class Autos extends SubsystemBase {
     }
 
     public Command taxi2() {
-        Command goTo = ally.get() == Alliance.Blue ? new goToTag(drivebase, 21, 0) : new goToTag(drivebase, 10, 0);
+        Command goTo = ally.get() == Alliance.Blue ? new goToTag(21, 0) : new goToTag(10, 0);
         return goTo;
     }
 
