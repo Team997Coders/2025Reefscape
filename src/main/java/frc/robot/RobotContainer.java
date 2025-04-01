@@ -340,17 +340,18 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    Command goTo = ally.get() == Alliance.Blue ? new goToTag(21, 0) : new goToTag(10, 0);
-    return new SequentialCommandGroup(
-        new ParallelCommandGroup(
-            goTo,
-            new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3),
-            m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)),
-        new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
-        m_coral.manualMoveCoralMotorsOutake(),
-        new WaitCommand(.5),
-        m_coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    // Optional<Alliance> ally = DriverStation.getAlliance();
+    // Command goTo = ally.get() == Alliance.Blue ? new goToTag(21, 0) : new goToTag(10, 0);
+    // return new SequentialCommandGroup(
+    //     new ParallelCommandGroup(
+    //         goTo,
+    //         new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3),
+    //         m_algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)),
+    //     new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
+    //     m_coral.manualMoveCoralMotorsOutake(),
+    //     new WaitCommand(.5),
+    //     m_coral.CoralStop()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    return null;
 
   // return autoChooser.getSelected();
 
