@@ -24,14 +24,16 @@ class ReefScoringPose:
         angle = goal_pose.rotation().radians()
 
         # 6.5in = 0.1651m
-        offset_x = goal_pose.x + (6.5 if side == 1 else -6.5) * 0.0254 * math.sin(angle)  # Offset in meters
-        offset_y = goal_pose.y + (6.5 if side == 1 else -6.5) * 0.0254 * math.cos(angle)
-        print(f"offset x: {offset_x}, offset y: {offset_y}")
-
+        offset_x = goal_pose.x + (6.5 if side == -1 else -6.5) * 0.0254 * math.sin(angle)  # Offset in meters
+        offset_y = goal_pose.y + (6.5 if side == -1 else -6.5) * 0.0254 * math.cos(angle)
         # Adjust for the robot's width (14.5 inches is half the robot's width + 4in for the bumper)
         # 18.5in = 0.4699m
         offset_x += 18.5 * 0.0254 * math.cos(angle)
         offset_y += 18.5 * 0.0254 * math.sin(angle)
+
+        print(f"offset x: {offset_x}, offset y: {offset_y}")
+
+        
 
         return Pose2d(offset_x, offset_y, angle)
 
@@ -66,9 +68,9 @@ class ReefScoringPose:
         print(f"Raw Goal Pose: {self.tag_pose}")
         offset_pose = self.offset_to_goal(self.tag_pose, self.side)
         print(f"Offset Pose: {offset_pose}")
-        transformed_pose = self.goal_transform(self.tag_pose, self.side)
-        print(f"Transformed Pose: {transformed_pose}")
-        return transformed_pose
+        #transformed_pose = self.goal_transform(self.tag_pose, self.side)
+        #print(f"Transformed Pose: {transformed_pose}")
+        return offset_pose
 
 
 # Example usage
@@ -79,7 +81,7 @@ if __name__ == "__main__":
     april_tag_field_layout = AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeWelded)
 
     # tag information
-    tagId = 21
+    tagId = 10
     # Example usage: Get the pose of a specific AprilTag by its ID
     tag_pose = april_tag_field_layout.getTagPose(tagId).toPose2d()
 

@@ -12,6 +12,7 @@ public class CameraBlock
 {
     List<Camera> cameraList;
     public static int TargetId = -1;
+    public static double goodness = -1;
 
     public CameraBlock(List<Camera> cameraList)
     {
@@ -20,14 +21,18 @@ public class CameraBlock
 
     public void update(SwerveDrivePoseEstimator poseEstimator)
     {
-        int TargetId = -1;
-        double goodness = -1;
         for (Camera camera: this.cameraList){
             List<PhotonPipelineResult> result = camera.getResults();
             if (!result.isEmpty()) {
                 if (result.get(0).getBestTarget() != null)
                 {
                     PhotonTrackedTarget result0 = result.get(0).getBestTarget();
+
+                    if (TargetId != result0.getFiducialId())
+                    {
+                        goodness = -1;
+                        TargetId = -1;
+                    }
 
                     if (goodness == -1 && TargetId != -1) {
                         TargetId = result0.getFiducialId();

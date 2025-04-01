@@ -6,6 +6,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorGoToState;
+import frc.robot.commands.goToClosestTag;
 import frc.robot.commands.goToLocation;
 import frc.robot.commands.goToTag;
 import frc.robot.subsystems.Drivebase;
@@ -247,7 +248,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Rotation", scaleRotationAxis(c_driveStick.getRawAxis(4)));
 
     SmartDashboard.putData(CommandScheduler.getInstance());
-    SmartDashboard.putNumber("Best Left Target ID", CameraBlock.TargetId);
+    SmartDashboard.putNumber("Best Target ID", cameraBlock.TargetId);
   }
 
   @SuppressWarnings("unused")
@@ -320,6 +321,8 @@ public class RobotContainer {
     // c_buttonStick.y().onTrue(elevator.goToStateCommand(ElevatorState.L3));
     // c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
     // c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+
+    c_driveStick.x().whileTrue(new goToClosestTag(drivebase, systems, cameraBlock));
     
    
     //DRIVE STUFF 
