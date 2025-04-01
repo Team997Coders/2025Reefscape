@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Elevator;
@@ -69,10 +70,6 @@ public class RobotContainer {
     private static CommandXboxController c_driveStick;
     // final CommandXboxController m_driverController;
     private static CommandXboxController c_buttonStick;
-  
-  //AUTOCHOOSER
- // private SendableChooser<Command> autoChooser;
-
   
   //CAMERA STUFF
   private static Camera RIGHT_CAMERA;
@@ -172,18 +169,9 @@ public class RobotContainer {
       autoChooser.addOption("left front red", autos.LeftTag10Red());
       autoChooser.addOption("right front red", autos.RightTag10Red());
       autoChooser.addOption("left barge side red", autos.LeftTag11Red());
-
-      // AUTOCHOOSER
-      // autoChooser = AutoBuilder.buildAutoChooser("moveForward");
-      // //autoChooser.addOption("l4 left pole side 3 ", autos.L4LeftPoleRightStart());
-      // autoChooser.addOption("left front blue", autos.LeftTag20Blue());
-      // autoChooser.addOption("l4 left pole side 4 red", autos.L4LeftPoleMiddleStartRed());
-      // autoChooser.addOption("l4 right pole side 4 red", autos.L4RightPoleMiddleStartRed());
-      // autoChooser.addOption("l4 left pole side 3 red", autos.L4LeftPoleRightSideRed());
       
       
-      
-      //SmartDashboard.putData("Auto Choser", autoChooser);
+      SmartDashboard.putData("Auto Choser", autoChooser);
 
       NamedCommands.registerCommand("Pick Up Coral", m_coral.manualMoveCoralMotorsIntake());
       NamedCommands.registerCommand("Place Coral", m_coral.manualMoveCoralMotorsOutake());
