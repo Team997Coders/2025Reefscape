@@ -91,19 +91,16 @@ public class goToTag extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Pose2d gPose2d = goalTagPose(tagId);
+    System.out.println("Raw Goal Pose: " + gPose2d);
+    Pose2d finalPose2d = offset2Goal(gPose2d, side);
+    System.out.println("Offset Pose: " + finalPose2d);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d gPose2d = goalTagPose(tagId);
-    System.out.println("Raw Goal Pose: " + gPose2d);
-    Pose2d finalPose2d = offset2Goal(gPose2d, side);
-    System.out.println("Offset Pose: " + finalPose2d);
-    Pose2d TransformPose2d = goalTransform2d(gPose2d, side);
-    System.out.println("Transformed Pose: " + TransformPose2d);
-
-    //new goToLocation(drivebase, finalPose2d);
+    
   }
 
   // Called once the command ends or is interrupted.

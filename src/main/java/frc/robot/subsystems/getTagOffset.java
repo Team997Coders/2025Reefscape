@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class goToTag extends Command {
+public class getTagOffset{
   private int tagId;
   private int side;
   private AprilTagFieldLayout aprilTagFieldLayout;
@@ -22,7 +22,7 @@ public class goToTag extends Command {
   private static final double leftRightShift = Units.inchesToMeters(6.5);
 
   // Drive to the scoring branch of a tag.
-  public goToTag(int TagId, int side) {
+  public getTagOffset(int TagId, int side) {
     this.tagId = TagId;
     this.side = side;
 
@@ -62,17 +62,6 @@ public class goToTag extends Command {
    * Create a transform for the goal pose to align with the target brandh and offset for the length 
    * of the robot and width of the bumpers
   */
-  private Pose2d goalTransform2d(Pose2d goalPose2d, int side) {
-    Transform2d leftside = new Transform2d(new Pose2d(), 
-      new Pose2d(
-        frontOffset, 
-        (side == 1? 1 : -1) * leftRightShift, 
-        new Rotation2d()));
-    // This pose is now the desired position and orientation to drive to
-    Pose2d targetPose = goalPose2d.transformBy(leftside);
-    System.out.println("Transform: targetPose: " + targetPose);
-    return targetPose;
-  }
 
   // Transform the goal pose using direct geometry
   private Pose2d offset2Goal(Pose2d goalPose2d, int side) {
@@ -89,31 +78,11 @@ public class goToTag extends Command {
   }
 
   // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
+  public Pose2d getTargetLocation() {
     Pose2d gPose2d = goalTagPose(tagId);
     System.out.println("Raw Goal Pose: " + gPose2d);
     Pose2d finalPose2d = offset2Goal(gPose2d, side);
     System.out.println("Offset Pose: " + finalPose2d);
-    Pose2d TransformPose2d = goalTransform2d(gPose2d, side);
-    System.out.println("Transformed Pose: " + TransformPose2d);
-
-    //new goToLocation(drivebase, finalPose2d);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
+    return finalPose2d;
   }
 }

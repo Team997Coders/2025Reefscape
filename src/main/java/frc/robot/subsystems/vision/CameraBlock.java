@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class CameraBlock 
 {
     List<Camera> cameraList;
-    public static int TargetId = -1;
-    public static double goodness = -1;
+    public int TargetId = -1;
+    public double goodness = -1;
 
     public CameraBlock(List<Camera> cameraList)
     {

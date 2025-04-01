@@ -75,6 +75,25 @@ public class AutomaticSystems extends SubsystemBase
         this.buttonBox.go.onTrue(this.runOnce(() -> basicElevatorMove()));
     }
 
+    public int getSelectedScoreSide()
+    {
+        int selecetSide = 0;
+        try {
+            selecetSide = this.buttonBox.scoreSide.selectedBit().id;
+        } catch (noSelectedButton e) {
+            e.printStackTrace();
+        }
+        if (selecetSide == 11)
+        {
+            return 1;
+        } else if (selecetSide == 10)
+        {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
     public void switchBeamBrake()
     {
         this.coralBeamBrake = !this.coralBeamBrake;

@@ -7,8 +7,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivebase;
+import frc.robot.subsystems.getTagOffset;
+import frc.robot.subsystems.automation.AutomaticSystems;
+import frc.robot.subsystems.buttonBox.ButtonBox;
+import frc.robot.subsystems.vision.CameraBlock;
 
-public class goToLocation extends Command {
+public class goToClosestTag extends Command {
   
   private Drivebase drivebase;
   private Pose2d goalPose;
@@ -28,9 +32,25 @@ public class goToLocation extends Command {
   @SuppressWarnings("unused")
   private double thetaStart = 0;
 
-  public goToLocation(Drivebase drivebase, Pose2d pose) {
+  public goToClosestTag(Drivebase drivebase, AutomaticSystems autoController, CameraBlock cameras) {
     this.drivebase = drivebase;
-    this.goalPose = pose;
+    int scoreSide = autoController.getSelectedScoreSide();
+    if (scoreSide == 0)
+    {
+      this.cancel();
+      return;
+    }
+    int bestTagId = cameras.TargetId;
+    if (bestTagId == -1)
+    {
+      this.cancel();
+      return;
+    }
+
+    SmartDashboard.putNumber("bestTagID", bestTagId);
+    SmartDashboard.putNumber("scoreSide", scoreSide);
+    var offset = new getTagOffset(bestTagId, scoreSide);
+    this.goalPose = offset.getTargetLocation();
 
     xController.setTolerance(0.04);
     yController.setTolerance(0.04);
