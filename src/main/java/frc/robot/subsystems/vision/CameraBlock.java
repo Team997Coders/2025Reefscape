@@ -45,10 +45,7 @@ public class CameraBlock
             }
 
             SmartDashboard.putNumber("Best Target ID", TargetId);
-
-            {
-                camera.update(poseEstimator, result);
-            }
+            camera.update(poseEstimator, result);
         }
     }
 }

@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.exceptions.noNextAction;
+import frc.robot.exceptions.outOfBounds;
 
 public class getTagOffset{
   private int tagId;
@@ -40,7 +42,7 @@ public class getTagOffset{
    *
    * Get the pose of the target tag
    */
-  private Pose2d goalTagPose(int TagId) {
+  private Pose2d goalTagPose(int TagId) throws outOfBounds{
     Pose2d tagInFieldFrame;
     
     if (aprilTagFieldLayout.getTagPose(tagId).isPresent()) // margin < 20 seems bad > 140 are good maybe > 50 a limit?
@@ -48,8 +50,7 @@ public class getTagOffset{
       tagInFieldFrame = aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
       return tagInFieldFrame;
     } else {
-      System.out.println("bad id " + tagId);
-      return null;
+      throw new outOfBounds("Hey there is no tag with this id");
     }
   }
 
@@ -78,11 +79,16 @@ public class getTagOffset{
   }
 
   // Called when the command is initially scheduled.
-  public Pose2d getTargetLocation() {
-    Pose2d gPose2d = goalTagPose(tagId);
-    System.out.println("Raw Goal Pose: " + gPose2d);
-    Pose2d finalPose2d = offset2Goal(gPose2d, side);
-    System.out.println("Offset Pose: " + finalPose2d);
-    return finalPose2d;
+  public Pose2d getTargetLocation() throws noNextAction {
+    Pose2d gPose2d;
+    try {
+      gPose2d = goalTagPose(tagId);
+      Pose2d finalPose2d = offset2Goal(gPose2d, side);
+      System.out.println("Offset Pose: " + finalPose2d);
+      return finalPose2d;
+    } catch (outOfBounds e) {
+      e.printStackTrace();
+    }
+    throw new noNextAction("there is no pose something went wrong");
   }
 }

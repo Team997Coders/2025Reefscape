@@ -1,21 +1,26 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.exceptions.noNextAction;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.getTagOffset;
 import frc.robot.subsystems.automation.AutomaticSystems;
 import frc.robot.subsystems.buttonBox.ButtonBox;
 import frc.robot.subsystems.vision.CameraBlock;
 
-public class goToClosestTag extends Command {
+public class goToBoxCommand extends Command {
   
   private Drivebase drivebase;
   private Pose2d goalPose;
+  private Supplier<Integer> scoreSideSupplier;
+  private Supplier<Integer> reefSideSupplier;
 
   private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2);
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1.5, 2); 
@@ -32,25 +37,10 @@ public class goToClosestTag extends Command {
   @SuppressWarnings("unused")
   private double thetaStart = 0;
 
-  public goToClosestTag(Drivebase drivebase, AutomaticSystems autoController, CameraBlock cameras) {
+  public goToBoxCommand(Drivebase drivebase, Supplier<Integer> scoreSideSupplier, Supplier<Integer> reefSideSupplier) {
     this.drivebase = drivebase;
-    int scoreSide = autoController.getSelectedScoreSide();
-    if (scoreSide == 0)
-    {
-      this.cancel();
-      return;
-    }
-    int bestTagId = cameras.TargetId;
-    if (bestTagId == -1)
-    {
-      this.cancel();
-      return;
-    }
-
-    SmartDashboard.putNumber("bestTagID", bestTagId);
-    SmartDashboard.putNumber("scoreSide", scoreSide);
-    var offset = new getTagOffset(bestTagId, scoreSide);
-    //this.goalPose = offset.getTargetLocation();
+    this.scoreSideSupplier = scoreSideSupplier;
+    this.reefSideSupplier = reefSideSupplier;
 
     xController.setTolerance(0.04);
     yController.setTolerance(0.04);
@@ -63,6 +53,35 @@ public class goToClosestTag extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    int scoreSide = scoreSideSupplier.get();
+    SmartDashboard.putNumber("scoreSide", scoreSide);
+    if (scoreSide == 0)
+    {
+      this.cancel();
+      return;
+    }
+    //autoController.getTagFromBox()
+    int tagId = reefSideSupplier.get();
+    SmartDashboard.putNumber("bestTagID", tagId);
+    if (tagId == -1)
+    {
+      this.cancel();
+      return;
+    }
+
+    var offset = new getTagOffset(tagId, scoreSide);
+    try {
+      goalPose = offset.getTargetLocation();
+    } catch (noNextAction e) {
+      e.printStackTrace();
+      this.cancel();
+      return;
+    }
+    if (this.goalPose == null)
+    {
+      this.cancel();
+      return;
+    }
     Pose2d robotPose = drivebase.getPose();
     
     xController.reset(robotPose.getX());

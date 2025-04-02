@@ -6,6 +6,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevatorGoToState;
+import frc.robot.commands.goToBoxCommand;
 import frc.robot.commands.goToClosestTag;
 import frc.robot.commands.goToLocation;
 import frc.robot.commands.goToTag;
@@ -136,10 +137,10 @@ public class RobotContainer {
           new Transform3d(new Translation3d(Units.inchesToMeters(13.5), -Units.inchesToMeters(11.5), Units.inchesToMeters(8.5)), new Rotation3d(0, Units.degreesToRadians(20), 0)));
       LEFT_CAMERA = new Camera("leftBerry",
           new Transform3d(new Translation3d(Units.inchesToMeters(13.5), Units.inchesToMeters(11.5), Units.inchesToMeters(8.5)), new Rotation3d(0, Units.degreesToRadians(20), 0)));
-      BACK_CAMERA = new Camera("backBerry",
-          new Transform3d(new Translation3d(-Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(28.5)), new Rotation3d(0, Units.degreesToRadians(17.5), Math.PI)));
+      // BACK_CAMERA = new Camera("backBerry",
+      //     new Transform3d(new Translation3d(-Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(28.5)), new Rotation3d(0, Units.degreesToRadians(17.5), Math.PI)));
     
-      cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA, BACK_CAMERA));
+      cameraBlock = new CameraBlock(Arrays.asList(RIGHT_CAMERA, LEFT_CAMERA));
 
 
       //INITALIZE SUBSYSTEMS
@@ -322,7 +323,7 @@ public class RobotContainer {
     // c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
     // c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
 
-    c_driveStick.x().whileTrue(new goToClosestTag(drivebase, systems, cameraBlock));
+    c_driveStick.x().whileTrue(new goToBoxCommand(drivebase, () -> systems.getSelectedScoreSide(), () -> systems.getTagFromBox()));
     
    
     //DRIVE STUFF 
@@ -357,7 +358,6 @@ public class RobotContainer {
 
   /*just leave */
 //  return autoChooser.getSelected(); 
-
   //  return new goToLocation(drivebase, new Pose2d(3.175+0.195, 4.191+.0254,new Rotation2d(0)));
 
   // RIGHT POLE SECTION 1 new Pose2d(3.175+0.205, 4.191+.0254,new Rotation2d(0)))
