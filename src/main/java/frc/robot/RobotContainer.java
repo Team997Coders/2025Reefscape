@@ -164,6 +164,7 @@ public class RobotContainer {
       autoChooser.setDefaultOption("taxi blue", autos.taxiBlue());
       autoChooser.addOption("left front blue", autos.LeftTag21Blue());
       autoChooser.addOption("left barge side blue", autos.LeftTag20Blue());
+     // autoChooser.addOption("left processor side blue", autos.LeftTag22Blue());
 
       //red
       autoChooser.addOption("left front red", autos.LeftTag10Red());

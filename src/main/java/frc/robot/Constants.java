@@ -279,11 +279,11 @@ public final class Constants {
       public static final Pose2d tag21Left = new Pose2d(5.37, 3.8-.00635, new Rotation2d(Math.PI)); 
       public static final Pose2d tag21Right = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) - .0254, new Rotation2d(0)); //in front of the barge
       public static final Pose2d tag21Backup = new Pose2d(6.5, Units.inchesToMeters(158.5), new Rotation2d(Math.PI));
-
-    //tag 22
-      public static final Pose2d tag22Left = new Pose2d(0, 0, new Rotation2d(0));
+ 
+    //tag 22 maybe bad coordinates?
+      public static final Pose2d tag22Left = new Pose2d(4.30, 3.22, new Rotation2d(119.15));
       public static final Pose2d tag22Right = new Pose2d(0, 0, new Rotation2d(0));
-      public static final Pose2d tag22Backup = new Pose2d();
+      public static final Pose2d tag22Backup = new Pose2d(5.16, 2.23, new Rotation2d(119.15));
 
     //tag 17
       public static final Pose2d tag17Left = new Pose2d(0, 0, new Rotation2d(0));
