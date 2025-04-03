@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Radian;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -72,10 +74,10 @@ public class getTagOffset{
     double offsetY = goalPose2d.getY() + (side == -1 ? 6.5 : -6.5) * Math.cos(angle) * 0.0254; // 0 is the offset in inches
     System.out.println("offsetX: " + offsetX + ", offsetY: " + offsetY + ", angle: " + angle);
 
-    offsetX += 14.5 * Math.cos(angle) * 0.0254; // 14.5 half the width of the robot
-    offsetY += 14.5 * Math.sin(angle) * 0.0254; //
+    offsetX += 11.5 * Math.cos(angle) * 0.0254; // 14.5 half the width of the robot
+    offsetY += 11.5 * Math.sin(angle) * 0.0254; //
 
-    return new Pose2d(offsetX, offsetY, goalPose2d.getRotation());
+    return new Pose2d(offsetX, offsetY, new Rotation2d(goalPose2d.getRotation().getRadians() + Math.PI));
   }
 
   // Called when the command is initially scheduled.

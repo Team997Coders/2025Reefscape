@@ -19,7 +19,7 @@ import frc.robot.subsystems.buttonBox.ButtonyList;
 public class AutomaticSystems extends SubsystemBase
 {
     private Pathplanning pathplanning;
-    private ButtonBox buttonBox;
+    public ButtonBox buttonBox;
     private Alliance alliance;
 
     private Drivebase drivebase;
@@ -308,11 +308,11 @@ public class AutomaticSystems extends SubsystemBase
         // {
         //     e.printStackTrace();
         // }
-        try{
-            SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
-        } catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        // try{
+        //     SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
+        // } catch(Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
     }
 }

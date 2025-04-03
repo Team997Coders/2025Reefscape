@@ -32,8 +32,8 @@ public class goToLocation extends Command {
     this.drivebase = drivebase;
     this.goalPose = pose;
 
-    xController.setTolerance(0.04);
-    yController.setTolerance(0.04);
+    xController.setTolerance(0.05);
+    yController.setTolerance(0.05);
     thetaController.setTolerance(Units.degreesToRadians(2));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Use addRequirements() here to declare subsystem dependencies.
