@@ -161,18 +161,25 @@ public class RobotContainer {
       autos = new Autos(drivebase, elevator, m_coral, m_algae);
       autoChooser = new SendableChooser<>();
 
-      autoChooser.addOption("taxi", AutoBuilder.buildAuto("moveForward"));
+      /*ONE CORAL AUTOS*/
 
       //blue
-      autoChooser.addOption("left front blue", autos.LeftTag21Blue());
-      autoChooser.addOption("left barge side blue", autos.LeftTag20Blue());
-
+      autoChooser.addOption("left front blue", autos.oneCoral(Constants.Auto.Blue.tag21Left, Constants.Auto.Blue.tag21Backup));
+      autoChooser.addOption("left barge side blue", autos.oneCoral(Constants.Auto.Blue.tag20Left, Constants.Auto.Blue.tag22Backup));
 
       //red
-      autoChooser.addOption("left front red", autos.LeftTag10Red());
-      autoChooser.addOption("right front red", autos.RightTag10Red());
-      autoChooser.addOption("left barge side red", autos.LeftTag11Red());
-      
+      autoChooser.addOption("left front red", autos.oneCoral(Constants.Auto.Red.tag10Left, Constants.Auto.Red.tag10Backup));
+      autoChooser.addOption("right front red", autos.oneCoral(Constants.Auto.Red.tag10Right, Constants.Auto.Red.tag10Backup));
+      autoChooser.addOption("left barge side red", autos.oneCoral(Constants.Auto.Red.tag11Left, Constants.Auto.Red.tag11Backup));
+
+    /*TWO CORAL AUTOS */
+
+      //blue
+      autoChooser.addOption("two coral blue", autos.twoCoral(Constants.Auto.Red.tag11Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Red.tag6Right, Constants.Auto.Red.tag6Backup));
+
+      //red
+      autoChooser.addOption("two coral red", autos.twoCoral(Constants.Auto.Blue.tag20Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Blue.tag19Right, Constants.Auto.Blue.tag19Backup));
+
       
       SmartDashboard.putData("Auto Choser", autoChooser);
 
