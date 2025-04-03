@@ -163,14 +163,14 @@ public class RobotContainer {
       autoChooser.addOption("taxi", AutoBuilder.buildAuto("moveForward"));
 
       //blue
-      autoChooser.addOption("left front blue", autos.LeftTag21Blue());
-      autoChooser.addOption("left barge side blue", autos.LeftTag20Blue());
+      autoChooser.addOption("left front blue", autos.LeftTag21Blue);
+      autoChooser.addOption("left barge side blue", autos.LeftTag20Blue);
 
 
       //red
-      autoChooser.addOption("left front red", autos.LeftTag10Red());
-      autoChooser.addOption("right front red", autos.RightTag10Red());
-      autoChooser.addOption("left barge side red", autos.LeftTag11Red());
+      autoChooser.addOption("left front red", autos.LeftTag10Red);
+      autoChooser.addOption("right front red", autos.RightTag10Red);
+      autoChooser.addOption("left barge side red", autos.LeftTag11Red);
       
       
       SmartDashboard.putData("Auto Choser", autoChooser);
