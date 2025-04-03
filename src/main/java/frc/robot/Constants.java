@@ -295,6 +295,9 @@ public final class Constants {
 
       public static final Pose2d sourceLeft = new Pose2d();
       public static final Pose2d sourceRight = new Pose2d(33.51, 25.8, new Rotation2d(54));
+
+      public static final Pose2d midLocationLeft = new Pose2d(5.401, 6.503, new Rotation2d(Units.degreesToRadians(-54)));
+      public static final Pose2d midLocationRight = new Pose2d();
   }
     
 
@@ -332,6 +335,9 @@ public final class Constants {
 
       public static final Pose2d sourceLeft = new Pose2d(0, 0, new Rotation2d(0)); 
       public static final Pose2d sourceRight = new Pose2d(0, 0, new Rotation2d(0));
+
+      public static final Pose2d midLocationLeft = new Pose2d(12.463, 1.677, new Rotation2d(Units.degreesToRadians(126)));
+      public static final Pose2d midLocationRight = new Pose2d();
     }
   }
 

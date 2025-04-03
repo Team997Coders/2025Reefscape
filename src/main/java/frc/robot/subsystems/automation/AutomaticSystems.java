@@ -36,7 +36,7 @@ public class AutomaticSystems extends SubsystemBase
     {
         this.buttonBox = new ButtonBox(buttonBox);
         this.pathplanning = new Pathplanning(this.buttonBox.reefSide, this.buttonBox.rightScore, this.buttonBox.leftScore, this.buttonBox.rightSource, this.buttonBox.leftSource);
-        this.alliance = DriverStation.getAlliance().orElseThrow();
+        this.alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
 
         this.drivebase = drivebase;
         this.elevator = elevator;
@@ -73,6 +73,75 @@ public class AutomaticSystems extends SubsystemBase
 
         //this.buttonBox.go.onTrue(this.runOnce(() -> runSubsystems()));
         this.buttonBox.go.onTrue(this.runOnce(() -> basicElevatorMove()));
+    }
+
+    public int getTagFromBox()
+    {
+        int selectedSide = -1;
+        try {
+            selectedSide = this.buttonBox.reefSide.selectedBit().id;
+        } catch (noSelectedButton e) {
+            e.printStackTrace();
+        }
+        if (alliance == Alliance.Red){
+            switch(selectedSide){
+                case 1:
+                return 7;
+                case 2:
+                return 6;
+                case 3:
+                return 11;
+                case 4:
+                return 10;
+                case 5:
+                return 9;
+                case 6:
+                return 8;
+                default:
+                return -1;
+            }
+        } else if (alliance == Alliance.Blue)
+        {
+            switch(selectedSide){
+                case 1:
+                return 18;
+                case 2:
+                return 19;
+                case 3:
+                return 20;
+                case 4:
+                return 21;
+                case 5:
+                return 22;
+                case 6:
+                return 17;
+                default:
+                return -1;
+            }
+        } else {
+            return -1;
+        }
+    }
+
+    public int getSelectedScoreSide()
+    {
+        int selecetSide = 0;
+        
+        try {
+            selecetSide = this.buttonBox.scoreSide.selectedBit().id;
+        } catch (noSelectedButton e) {
+            e.printStackTrace();
+        }
+        SmartDashboard.putNumber("get score side", selecetSide);
+        if (selecetSide == 11)
+        {
+            return -1;
+        } else if (selecetSide == 12)
+        {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public void switchBeamBrake()
@@ -215,11 +284,11 @@ public class AutomaticSystems extends SubsystemBase
 
     public void loggers()
     {
-        SmartDashboard.putBoolean("Auto Drive", autoDrive);
-        SmartDashboard.putBoolean("Auto Elevator", autoElevator);
-        SmartDashboard.putBoolean("Semi Cycles", semiAuto);
-        SmartDashboard.putBoolean("Full Cycles", fullAuto);
-        SmartDashboard.putBoolean("Beam Break", coralBeamBrake);
+        // SmartDashboard.putBoolean("Auto Drive", autoDrive);
+        // SmartDashboard.putBoolean("Auto Elevator", autoElevator);
+        // SmartDashboard.putBoolean("Semi Cycles", semiAuto);
+        // SmartDashboard.putBoolean("Full Cycles", fullAuto);
+        // SmartDashboard.putBoolean("Beam Break", coralBeamBrake);
 
         // try{
         // SmartDashboard.putNumber("Reef", this.buttonBox.reefSide.selectedBit().id);
@@ -239,11 +308,11 @@ public class AutomaticSystems extends SubsystemBase
         // {
         //     e.printStackTrace();
         // }
-        // try{
-        //     SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
-        // } catch(Exception e)
-        // {
-        //     e.printStackTrace();
-        // }
+        try{
+            SmartDashboard.putNumber("Score", this.buttonBox.scoreSide.selectedBit().id);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
