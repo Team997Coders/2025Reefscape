@@ -127,23 +127,23 @@ public class Autos extends SubsystemBase {
             new goToLocation(drivebase, Constants.Auto.Red.tag11Backup)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-    public Command LeftTag22Blue() { /* DON'T USE */
+    // public Command LeftTag22Blue() { /* DON'T USE */
         
-        Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.tag22Left).withTimeout(8);
-        Command backup =  new goToLocation(drivebase, Constants.Auto.Blue.tag22Backup);
+    //     Command goTo = new goToLocation(drivebase, Constants.Auto.Blue.tag22Left).withTimeout(8);
+    //     Command backup =  new goToLocation(drivebase, Constants.Auto.Blue.tag22Backup);
 
-        return new SequentialCommandGroup( 
-            new ParallelCommandGroup(
-                goTo, 
-                new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
-                algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
-            new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
-            coral.manualMoveCoralMotorsOutake(), 
-            new WaitCommand(.5),
-            coral.CoralStop(),
-            new WaitCommand(1),
-            backup,
-            new ElevatorGoToState(elevator, ElevatorState.SOURCE)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-    }
+    //     return new SequentialCommandGroup( 
+    //         new ParallelCommandGroup(
+    //             goTo, 
+    //             new ElevatorGoToState(elevator, ElevatorState.L2).withTimeout(3), 
+    //             algae.AlgaeOuttake(Constants.Algae.spinnyMotorConfig).withTimeout(.25)), 
+    //         new ElevatorGoToState(elevator, ElevatorState.L4).withTimeout(3),
+    //         coral.manualMoveCoralMotorsOutake(), 
+    //         new WaitCommand(.5),
+    //         coral.CoralStop(),
+    //         new WaitCommand(1),
+    //         backup,
+    //         new ElevatorGoToState(elevator, ElevatorState.SOURCE)).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    // }
 
 }
