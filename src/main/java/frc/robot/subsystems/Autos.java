@@ -70,31 +70,5 @@ public class Autos extends SubsystemBase {
         ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     }
-
-
-
-
-// /*ONE CORAL AUTOS*/
-//     //use this
-//     public Command LeftTag21Blue = oneCoral(Constants.Auto.Blue.tag21Left, Constants.Auto.Blue.tag21Backup);
-
-//     //coordinates may or may not work 
-//     public Command LeftTag20Blue = oneCoral(Constants.Auto.Blue.tag20Left, Constants.Auto.Blue.tag22Backup);
-
-//     //use this
-//     public Command LeftTag10Red = oneCoral(Constants.Auto.Red.tag10Left, Constants.Auto.Red.tag10Backup);
-
-//     //use this
-//     public Command RightTag10Red = oneCoral(Constants.Auto.Red.tag10Right, Constants.Auto.Red.tag10Backup);
-
-//     //use this
-//     public Command LeftTag11Red = oneCoral(Constants.Auto.Red.tag11Left, Constants.Auto.Red.tag11Backup);
-
-
-
-// /*TWO CORAL*/
-//     public Command twoCoralRed = twoCoral(Constants.Auto.Red.tag11Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Red.tag6Right, Constants.Auto.Red.tag6Backup);
-
-//     public Command twoCoralBlue = twoCoral(Constants.Auto.Blue.tag20Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Blue.tag19Right, Constants.Auto.Blue.tag19Backup);
  
 }
