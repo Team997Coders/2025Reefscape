@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.subsystems.Autos;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.goToBoxCommand;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.vision.Camera;
 import frc.robot.subsystems.vision.CameraBlock;
@@ -304,6 +305,9 @@ public class RobotContainer {
     // c_buttonStick.y().onTrue(elevator.goToStateCommand(ElevatorState.L3));
     // c_buttonStick.b().onTrue(elevator.goToStateCommand(ElevatorState.L4));
     // c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
+    
+
+    c_driveStick.x().whileTrue(new goToBoxCommand(drivebase, () -> systems.getSelectedScoreSide(), () -> systems.getTagFromBox()));
     
    
     //DRIVE STUFF 
