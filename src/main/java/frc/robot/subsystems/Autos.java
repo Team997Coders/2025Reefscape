@@ -19,15 +19,14 @@ import frc.robot.commands.goToLocation;
 import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class Autos extends SubsystemBase {
-    Optional<Alliance> ally = DriverStation.getAlliance();
 
-    private Drivebase drivebase; 
+    private Drivebase m_drivebase; 
     private Elevator elevator;
     private Coral coral;
     private Algae algae;
 
     public Autos(Drivebase drivebase, Elevator elevator, Coral coral, Algae algae) {
-        this.drivebase = drivebase;
+        this.m_drivebase = drivebase;
         this.elevator = elevator;
         this.coral = coral;
         this.algae = algae;
@@ -36,8 +35,8 @@ public class Autos extends SubsystemBase {
 
 
     public Command oneCoral(Pose2d tagLocation, Pose2d backup) {
-        Command goTo = new goToLocation(drivebase, tagLocation);
-        Command backupGoTo = new goToLocation(drivebase, backup);
+        Command goTo = new goToLocation(m_drivebase, tagLocation);
+        Command backupGoTo = new goToLocation(m_drivebase, backup);
 
         return new SequentialCommandGroup( 
             new ParallelCommandGroup(
@@ -58,7 +57,7 @@ public class Autos extends SubsystemBase {
         Command firstCoral = oneCoral(tagLocation1, midLocation);
         Command secondCoral = oneCoral(tagLocation2, tagLocation2Backup);
 
-        Command goToSource = new goToLocation(drivebase, sourceLocation);
+        Command goToSource = new goToLocation(m_drivebase, sourceLocation);
 
         return new SequentialCommandGroup(
             firstCoral,
@@ -75,27 +74,27 @@ public class Autos extends SubsystemBase {
 
 
 
-/*ONE CORAL AUTOS*/
-    //use this
-    public Command LeftTag21Blue = oneCoral(Constants.Auto.Blue.tag21Left, Constants.Auto.Blue.tag21Backup);
+// /*ONE CORAL AUTOS*/
+//     //use this
+//     public Command LeftTag21Blue = oneCoral(Constants.Auto.Blue.tag21Left, Constants.Auto.Blue.tag21Backup);
 
-    //coordinates may or may not work 
-    public Command LeftTag20Blue = oneCoral(Constants.Auto.Blue.tag20Left, Constants.Auto.Blue.tag22Backup);
+//     //coordinates may or may not work 
+//     public Command LeftTag20Blue = oneCoral(Constants.Auto.Blue.tag20Left, Constants.Auto.Blue.tag22Backup);
 
-    //use this
-    public Command LeftTag10Red = oneCoral(Constants.Auto.Red.tag10Left, Constants.Auto.Red.tag10Backup);
+//     //use this
+//     public Command LeftTag10Red = oneCoral(Constants.Auto.Red.tag10Left, Constants.Auto.Red.tag10Backup);
 
-    //use this
-    public Command RightTag10Red = oneCoral(Constants.Auto.Red.tag10Right, Constants.Auto.Red.tag10Backup);
+//     //use this
+//     public Command RightTag10Red = oneCoral(Constants.Auto.Red.tag10Right, Constants.Auto.Red.tag10Backup);
 
-    //use this
-    public Command LeftTag11Red = oneCoral(Constants.Auto.Red.tag11Left, Constants.Auto.Red.tag11Backup);
+//     //use this
+//     public Command LeftTag11Red = oneCoral(Constants.Auto.Red.tag11Left, Constants.Auto.Red.tag11Backup);
 
 
 
-/*TWO CORAL*/
-    public Command twoCoralRed = twoCoral(Constants.Auto.Red.tag11Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Red.tag6Right, Constants.Auto.Red.tag6Backup);
+// /*TWO CORAL*/
+//     public Command twoCoralRed = twoCoral(Constants.Auto.Red.tag11Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Red.tag6Right, Constants.Auto.Red.tag6Backup);
 
-    public Command twoCoralBlue = twoCoral(Constants.Auto.Blue.tag20Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Blue.tag19Right, Constants.Auto.Blue.tag19Backup);
+//     public Command twoCoralBlue = twoCoral(Constants.Auto.Blue.tag20Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Blue.tag19Right, Constants.Auto.Blue.tag19Backup);
  
 }
