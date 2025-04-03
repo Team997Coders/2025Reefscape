@@ -160,7 +160,9 @@ public class RobotContainer {
       autos = new Autos(drivebase, elevator, m_coral, m_algae);
       autoChooser = new SendableChooser<>();
 
+      autoChooser.setDefaultOption("do nothing", new Command() {});
       autoChooser.addOption("taxi", AutoBuilder.buildAuto("moveForward"));
+      
 
       //blue
       autoChooser.addOption("left front blue", autos.LeftTag21Blue());
