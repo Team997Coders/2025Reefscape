@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants;
 import frc.robot.commands.ElevatorGoToState;
@@ -47,10 +49,33 @@ public class Autos extends SubsystemBase {
             new WaitCommand(.5),
             coral.CoralStop(),
             new WaitCommand(1),
-            backupGoTo).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            backupGoTo,
+            new ElevatorGoToState(elevator, ElevatorState.SOURCE)
+        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public Command twoCoral(Pose2d tagLocation1, Pose2d midLocation, Pose2d sourceLocation, Pose2d tagLocation2, Pose2d tagLocation2Backup) {
+        Command firstCoral = oneCoral(tagLocation1, midLocation);
+        Command secondCoral = oneCoral(tagLocation2, tagLocation2Backup);
+
+        Command goToSource = new goToLocation(drivebase, sourceLocation);
+
+        return new SequentialCommandGroup(
+            firstCoral,
+            goToSource.until(() -> coral.BeamBrake1()),
+            new ParallelCommandGroup(
+                new WaitUntilCommand(() -> coral.BeamBrake2()),
+                new WaitUntilCommand(() -> !coral.BeamBrake1())
+            ),
+            secondCoral
+        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+
     }
 
 
+
+
+/*ONE CORAL AUTOS*/
     //use this
     public Command LeftTag21Blue = oneCoral(Constants.Auto.Blue.tag21Left, Constants.Auto.Blue.tag21Backup);
 
@@ -66,5 +91,11 @@ public class Autos extends SubsystemBase {
     //use this
     public Command LeftTag11Red = oneCoral(Constants.Auto.Red.tag11Left, Constants.Auto.Red.tag11Backup);
 
+
+
+/*TWO CORAL*/
+    public Command twoCoralRed = twoCoral(Constants.Auto.Red.tag11Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Red.tag6Right, Constants.Auto.Red.tag6Backup);
+
+    public Command twoCoralBlue = twoCoral(Constants.Auto.Blue.tag20Right, Constants.Auto.Red.midLocationLeft, Constants.Auto.Red.sourceLeft, Constants.Auto.Blue.tag19Right, Constants.Auto.Blue.tag19Backup);
  
 }
