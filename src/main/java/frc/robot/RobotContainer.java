@@ -309,7 +309,7 @@ public class RobotContainer {
     // c_buttonStick.rightBumper().onTrue(elevator.goToStateCommand(ElevatorState.L1));
     
 
-    systems.buttonBox.go.whileTrue(new goToBoxCommand(drivebase, () -> systems.getSelectedScoreSide(), () -> systems.getTagFromBox()));
+    systems.buttonBox.go.whileTrue(new goToBoxCommand(drivebase, () -> systems.getSelectedScoreSide(), () -> systems.getTagFromBox(), systems));
     
    
     //DRIVE STUFF 

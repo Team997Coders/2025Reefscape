@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +20,7 @@ public class goToBoxCommand extends Command {
   
   private Drivebase drivebase;
   private Pose2d goalPose;
+  private AutomaticSystems systems;
   private Supplier<Integer> scoreSideSupplier;
   private Supplier<Integer> reefSideSupplier;
 
@@ -37,10 +39,11 @@ public class goToBoxCommand extends Command {
   @SuppressWarnings("unused")
   private double thetaStart = 0;
 
-  public goToBoxCommand(Drivebase drivebase, Supplier<Integer> scoreSideSupplier, Supplier<Integer> reefSideSupplier) {
+  public goToBoxCommand(Drivebase drivebase, Supplier<Integer> scoreSideSupplier, Supplier<Integer> reefSideSupplier, AutomaticSystems systems) {
     this.drivebase = drivebase;
     this.scoreSideSupplier = scoreSideSupplier;
     this.reefSideSupplier = reefSideSupplier;
+    this.systems = systems;
 
     xController.setTolerance(0.04);
     yController.setTolerance(0.04);
@@ -71,7 +74,7 @@ public class goToBoxCommand extends Command {
 
     var offset = new getTagOffset(tagId, scoreSide);
     try {
-      goalPose = offset.getTargetLocation();
+      goalPose = offset.getTargetLocation(systems.alliance);
     } catch (noNextAction e) {
       e.printStackTrace();
       this.cancel();
@@ -144,7 +147,7 @@ public class goToBoxCommand extends Command {
 
     if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){this.cancel();}
 
-    drivebase.autoDrive(xSpeed, ySpeed, thetaSpeed, goalPose.getRotation());
+    drivebase.autoDrive(xSpeed, ySpeed, thetaSpeed, new Rotation2d());
   }
 
   // Called once the command ends or is interrupted.

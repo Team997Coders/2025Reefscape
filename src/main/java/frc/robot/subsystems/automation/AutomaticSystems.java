@@ -20,7 +20,7 @@ public class AutomaticSystems extends SubsystemBase
 {
     private Pathplanning pathplanning;
     public ButtonBox buttonBox;
-    private Alliance alliance;
+    public Alliance alliance;
 
     private Drivebase drivebase;
     private Elevator elevator;
@@ -36,7 +36,7 @@ public class AutomaticSystems extends SubsystemBase
     {
         this.buttonBox = new ButtonBox(buttonBox);
         this.pathplanning = new Pathplanning(this.buttonBox.reefSide, this.buttonBox.rightScore, this.buttonBox.leftScore, this.buttonBox.rightSource, this.buttonBox.leftSource);
-        this.alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+        this.alliance = DriverStation.getAlliance().orElse(Alliance.Red);
 
         this.drivebase = drivebase;
         this.elevator = elevator;
@@ -135,10 +135,10 @@ public class AutomaticSystems extends SubsystemBase
         SmartDashboard.putNumber("get score side", selecetSide);
         if (selecetSide == 11)
         {
-            return -1;
+            return 1;
         } else if (selecetSide == 12)
         {
-            return 1;
+            return -1;
         } else {
             return 0;
         }

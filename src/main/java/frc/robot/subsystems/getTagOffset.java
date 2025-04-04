@@ -9,6 +9,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.exceptions.noNextAction;
 import frc.robot.exceptions.outOfBounds;
@@ -67,7 +70,7 @@ public class getTagOffset{
   */
 
   // Transform the goal pose using direct geometry
-  private Pose2d offset2Goal(Pose2d goalPose2d, int side) {
+  private Pose2d offset2Goal(Pose2d goalPose2d, int side, Alliance alliance) {
     // offset position to the left or right to align with the goal branch.
     double angle = goalPose2d.getRotation().getRadians();
     double offsetX = goalPose2d.getX() + (side == -1 ? 6.5 : -6.5) * Math.sin(angle) * 0.0254; // 6.5 is the offset in inches
@@ -77,15 +80,21 @@ public class getTagOffset{
     offsetX += 11.5 * Math.cos(angle) * 0.0254; // 14.5 half the width of the robot
     offsetY += 11.5 * Math.sin(angle) * 0.0254; //
 
-    return new Pose2d(offsetX, offsetY, new Rotation2d(goalPose2d.getRotation().getRadians() + Math.PI));
+    // if (Alliance.Blue == alliance)
+    // {
+    //   return new Pose2d(offsetX, offsetY, new Rotation2d(goalPose2d.getRotation().getRadians() + Math.PI));
+    // } else 
+    // {
+      return new Pose2d(offsetX, offsetY, new Rotation2d(goalPose2d.getRotation().getRadians() + Math.PI));
+    //}
   }
 
   // Called when the command is initially scheduled.
-  public Pose2d getTargetLocation() throws noNextAction {
+  public Pose2d getTargetLocation(Alliance alliance) throws noNextAction {
     Pose2d gPose2d;
     try {
       gPose2d = goalTagPose(tagId);
-      Pose2d finalPose2d = offset2Goal(gPose2d, side);
+      Pose2d finalPose2d = offset2Goal(gPose2d, side, alliance);
       System.out.println("Offset Pose: " + finalPose2d);
       return finalPose2d;
     } catch (outOfBounds e) {
