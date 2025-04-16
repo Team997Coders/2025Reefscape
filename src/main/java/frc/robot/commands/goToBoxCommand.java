@@ -147,7 +147,7 @@ public class goToBoxCommand extends Command {
 
     if (xSpeed == 0 && ySpeed == 0 && thetaSpeed == 0){this.cancel();}
 
-    drivebase.autoDrive(xSpeed, ySpeed, thetaSpeed, new Rotation2d());
+    drivebase.autoDrive(xSpeed, ySpeed, thetaSpeed, goalPose.getRotation());
   }
 
   // Called once the command ends or is interrupted.

@@ -276,7 +276,7 @@ public final class Constants {
       public static final Pose2d tag20Backup = new Pose2d(6, 5.5, new Rotation2d(4.189));
 
     //tag 21
-      public static final Pose2d tag21Left = new Pose2d(5.37, 3.8-.00635, new Rotation2d(Math.PI)); 
+      public static final Pose2d tag21Left = new Pose2d(5.37, 3.8-.00635 + Units.inchesToMeters(3), new Rotation2d(Math.PI)); 
       public static final Pose2d tag21Right = new Pose2d(Units.inchesToMeters(209.49 + 14.5 + 4), Units.inchesToMeters(158.50) - .0254, new Rotation2d(0)); //in front of the barge
       public static final Pose2d tag21Backup = new Pose2d(6.5, Units.inchesToMeters(158.5), new Rotation2d(Math.PI));
  
@@ -318,7 +318,7 @@ public final class Constants {
       public static final Pose2d tag11Backup = new Pose2d(12, 2.5, new Rotation2d(1.13));
 
     //tag10
-      public static final Pose2d tag10Left = new Pose2d(11.95, 4.25 + .00635 - Units.inchesToMeters(3), new Rotation2d(0)); 
+      public static final Pose2d tag10Left = new Pose2d(11.95, 4.25 + .00635 - Units.inchesToMeters(5), new Rotation2d(0)); 
       public static final Pose2d tag10Right = new Pose2d(11.95, 4.002855 - Units.inchesToMeters(7), new Rotation2d(0)); 
       public static final Pose2d tag10Backup = new Pose2d(11, 4.25, new Rotation2d(0));
 
