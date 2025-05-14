@@ -70,7 +70,7 @@ public class RobotContainer {
   
     private static CommandXboxController c_driveStick;
     // final CommandXboxController m_driverController;
-    private static CommandXboxController c_buttonStick;
+    private static CommandXboxController c_studentController;
   
   //CAMERA STUFF
   private static Camera RIGHT_CAMERA;
@@ -119,7 +119,8 @@ public class RobotContainer {
     // driveStick = new XboxController(0);
       box = new XboxController(1);
       c_driveStick = new CommandXboxController(0);      
-      c_buttonStick = new CommandXboxController(1);
+      c_studentController = new CommandXboxController(1);
+
     
     
      //CAMERA STUFF
@@ -152,10 +153,12 @@ public class RobotContainer {
       drivebase.setDefaultCommand(
         new Drive(
             drivebase,
-            () -> getScaledXY(),
-            () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
+            () -> getScaledXYStudentController(),
+            () -> scaleRotationAxis(c_studentController.getRawAxis(4))));
 
+    
 
+      drivebase.setDriveMultiplier(0.3);
                 
       //AUTOS
       autos = new Autos(drivebase, elevator, m_coral, m_algae);
@@ -207,8 +210,32 @@ public class RobotContainer {
     return xy;
   }
 
+
+  private double[] getXYStudentController() {
+    double[] xy = new double[2];
+    xy[0] = deadband(c_studentController.getLeftX(), DriveConstants.deadband);
+    xy[1] = deadband(c_studentController.getLeftY(), DriveConstants.deadband);
+    return xy;
+  }
   private double[] getScaledXY() {
     double[] xy = getXY();
+
+    // Convert to Polar coordinates
+    double r = Math.sqrt(xy[0] * xy[0] + xy[1] * xy[1]);
+    double theta = Math.atan2(xy[1], xy[0]);
+
+    // Square radius and scale by max velocity
+    r = r * r * drivebase.getMaxVelocity();
+
+    // Convert to Cartesian coordinates
+    xy[0] = r * Math.cos(theta);
+    xy[1] = r * Math.sin(theta);
+
+    return xy;
+  }
+
+  private double[] getScaledXYStudentController() {
+    double[] xy = getXYStudentController();
 
     // Convert to Polar coordinates
     double r = Math.sqrt(xy[0] * xy[0] + xy[1] * xy[1]);
@@ -279,6 +306,14 @@ public class RobotContainer {
    */
 
   private void configureBindings() {   
+
+
+    c_driveStick.x().whileTrue(new Drive(
+      drivebase,
+      () -> getScaledXY(),
+      () -> scaleRotationAxis(c_driveStick.getRawAxis(4))));
+
+
     //ALGAE COMMANDS
     c_driveStick.a().whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
     algaeBeamBreak.whileTrue(m_algae.AlgaeIntake(Constants.Algae.motorSpin));
@@ -313,8 +348,11 @@ public class RobotContainer {
     
    
     //DRIVE STUFF 
-    c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
+   // c_driveStick.rightTrigger().onTrue(drivebase.setDriveMultiplier(0.3)).onFalse(drivebase.setDriveMultiplier(1));
     c_driveStick.leftTrigger().whileTrue(drivebase.robotCentric()).whileFalse(drivebase.fieldOriented());
+
+    
+
   }
 
   /**
