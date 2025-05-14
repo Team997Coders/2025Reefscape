@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.Autos;
+//import frc.robot.subsystems.Autos;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.goToBoxCommand;
@@ -98,8 +98,8 @@ public class RobotContainer {
   private final AutomaticSystems systems;
 
   //AUTOS
-  private frc.robot.subsystems.Autos autos;
-  private final SendableChooser<Command> autoChooser;
+  //private frc.robot.subsystems.Autos autos;
+ // private final SendableChooser<Command> autoChooser;
 
     
   //CONSTRUCTOR
@@ -160,26 +160,25 @@ public class RobotContainer {
 
       drivebase.setDriveMultiplier(0.3);
                 
-      //AUTOS
-      autos = new Autos(drivebase, elevator, m_coral, m_algae);
-      autoChooser = new SendableChooser<>();
+    //   //AUTOS
+    // //  autos = new Autos(drivebase, elevator, m_coral, m_algae);
+    //   autoChooser = new SendableChooser<>();
 
-      autoChooser.setDefaultOption("do nothing", new Command() {});
-      autoChooser.addOption("taxi", AutoBuilder.buildAuto("moveForward"));
+    //   autoChooser.setDefaultOption("do nothing", new Command() {});
+    //   autoChooser.addOption("taxi", AutoBuilder.buildAuto("moveForward"));
       
 
-     // blue
-      autoChooser.addOption("left front blue", autos.LeftTag21Blue());
-      autoChooser.addOption("left barge side blue", autos.LeftTag20Blue());
+    //  // blue
+    //   autoChooser.addOption("left front blue", autos.LeftTag21Blue());
+    //   autoChooser.addOption("left barge side blue", autos.LeftTag20Blue());
 
 
-      //red
-      autoChooser.addOption("left front red", autos.LeftTag10Red());
-      autoChooser.addOption("right front red", autos.RightTag10Red());
-      autoChooser.addOption("left barge side red", autos.LeftTag11Red());
+    //   //red
+    //   autoChooser.addOption("left front red", autos.LeftTag10Red());
+    //   autoChooser.addOption("right front red", autos.RightTag10Red());
+    //   autoChooser.addOption("left barge side red", autos.LeftTag11Red());
       
-      
-      SmartDashboard.putData("Auto Choser", autoChooser);
+    //   SmartDashboard.putData("Auto Choser", autoChooser);
 
       NamedCommands.registerCommand("Pick Up Coral", m_coral.manualMoveCoralMotorsIntake());
       NamedCommands.registerCommand("Place Coral", m_coral.manualMoveCoralMotorsOutake());
@@ -366,7 +365,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-   return autoChooser.getSelected(); 
+   return null;
 
   }
 } 
